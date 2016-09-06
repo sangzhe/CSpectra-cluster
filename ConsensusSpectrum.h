@@ -16,10 +16,10 @@ class ConsensusSpectrum: public IConsensusSpectrumBuilder {
 public:
     ConsensusSpectrum();
 
-    static const int DEFAULT_PEAKS_TO_KEEP;
-    static const int SIZE_TO_ADD_EVERY_TIME;
-    static const float NOISE_FILTER_INCREMENT;
-    static const float FRACTION_OF_LOWEST_PEAK_TOKEEP;
+    static  int DEFAULT_PEAKS_TO_KEEP;
+    static  int SIZE_TO_ADD_EVERY_TIME;
+    static  float NOISE_FILTER_INCREMENT;
+    static  float FRACTION_OF_LOWEST_PEAK_TOKEEP;
     static ConsensusSpectrumBuilderFactory* FACTORY;
     static ConsensusSpectrumBuilderFactory* buildFactory();
 
@@ -38,9 +38,9 @@ public:
 
     int getSpectraCount();
 
-    string getName();
-
-    string getCurrentVersion();
+//    string getName();
+//
+//    string getCurrentVersion();
 
     int getSumCharge();
 
@@ -103,10 +103,10 @@ protected:
     ISpectrum* consensusSpectrum;
     const string methodName;
     const string methodVersion;
-    static const float FINAL_MZ_THRESHOLD;
-    static const float MZ_THRESHOLD_STEP;
-    static const bool USE_ROUNDING;
-    static const int MZ_PRECISION;
+    static  float FINAL_MZ_THRESHOLD;
+    static  float MZ_THRESHOLD_STEP;
+    static  bool USE_ROUNDING;
+    static  int MZ_PRECISION;
     void setDirty(bool isDirty);
 
     static list<IPeak*> mergeIdenticalPeaks(list<IPeak*>& inPeaks);

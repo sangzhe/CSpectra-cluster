@@ -12,7 +12,6 @@ public:
     ISpectrumQuality(){};
     virtual double getQualityScore() = 0;
     virtual IQualityScorer* getQualityScorer() = 0;
-    virtual ~ISpectrumQuality() = 0;
 
 };
 #endif //CSPECTRA_CLUSTER_ISPECTRUMQUALITY_H

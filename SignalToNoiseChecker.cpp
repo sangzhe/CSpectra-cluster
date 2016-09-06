@@ -4,9 +4,11 @@
 
 #include "SignalToNoiseChecker.h"
 
-static const string VERSION = "1.0";
+string SignalToNoiseChecker::VERSION = "1.0";
 
-static const int NUMBER_HIGH_PEAKS = 8;
+int SignalToNoiseChecker::NUMBER_HIGH_PEAKS = 8;
+
+SignalToNoiseChecker::SignalToNoiseChecker() {};
 
 string SignalToNoiseChecker::getCurrentVersion() {
     return VERSION;
@@ -16,7 +18,7 @@ double SignalToNoiseChecker::calculateQualityScore(ISpectrum& spectrum) {
     ISpectrum* highestNPeaks = spectrum.getHighestNPeaks(NUMBER_HIGH_PEAKS);
     if(highestNPeaks->getPeaksCount() < NUMBER_HIGH_PEAKS) return 0.0;
 
-    double totalIntensity = highestNPeaks->getTotalIntnesity();
+    double totalIntensity = highestNPeaks->getTotalIntensity();
     double highestPeak = 0;
     list<IPeak*> highestPeaks = highestNPeaks->getPeaks();
     list<IPeak*>::iterator iter;
@@ -67,8 +69,6 @@ double SignalToNoiseChecker::calculateQualityScore(ISpectrum& spectrum) {
         double intensity1 = iPeak1->getIntensity();
         double intensity2 =  iPeak2->getIntensity();
         median = (intensity1 + intensity2) / 2 ;
-        delete iPeak1,iPeak2;
-        iPeak1,iPeak2 = nullptr;
     }
     delete highestNPeaks;
     return meanHigh / median ;

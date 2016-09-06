@@ -21,7 +21,7 @@ class ISpectrum: public ISpectrumQuality{
         virtual string getId() = 0;
         virtual float getPrecursorMz() = 0;
         virtual int getPrecursorCharge() = 0;
-        virtual double getTotalIntnesity() = 0;
+        virtual double getTotalIntensity() = 0;
         virtual double getSumSquareIntensity() = 0;
         virtual list<IPeak*> getPeaks() = 0;
         virtual int getPeaksCount() = 0;
@@ -29,9 +29,8 @@ class ISpectrum: public ISpectrumQuality{
 //        virtual int asMajorPeaksMZs(int majorPeakCount) = 0;
         virtual string getProperty(string key) = 0;
         virtual void setProperty(string key,string value) = 0;
-        virtual Properties* getProperties();
+        virtual Properties* getProperties() = 0;
 
-        virtual ~ISpectrum()=0;
 
 
 };

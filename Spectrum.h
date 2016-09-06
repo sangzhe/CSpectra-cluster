@@ -16,7 +16,7 @@
 
 class Spectrum: public ISpectrum{
     private:
-        static const int BAD_QUALITY_MEASURE;
+        static int BAD_QUALITY_MEASURE;
         string id;
         int precursorCharge;
         float precursorMz;
@@ -41,10 +41,10 @@ class Spectrum: public ISpectrum{
 
 
 
-        ~Spectrum();
 
 
     public:
+
         Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, list<IPeak*>& inpeaks);
 
         Spectrum( ISpectrum& spectrum);
@@ -61,7 +61,7 @@ class Spectrum: public ISpectrum{
 
         float getPrecursorMz() ;
         int getPrecursorCharge() ;
-        double getTotalIntnesity();
+        double getTotalIntensity();
         double getSumSquareIntensity();
         list<IPeak*> getPeaks();
         int getPeaksCount();
@@ -70,6 +70,9 @@ class Spectrum: public ISpectrum{
         string getProperty(string key);
         void setProperty(string key,string value);
         Properties* getProperties();
+
+        ~Spectrum();
+
 
 };
 

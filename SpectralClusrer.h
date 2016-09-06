@@ -8,6 +8,7 @@
 
 #include "ICluster.h"
 #include "Properties.h"
+#include "algorithm"
 
 class SpectralCluster: public ICluster{
 private:

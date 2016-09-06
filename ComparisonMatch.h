@@ -13,8 +13,6 @@ public:
     string getSpectrumId();
     float getSimilarity();
     int compare(ComparisonMatch& o);
-    ~ComparisonMatch();
-
 
 private:
     string spectrumId;

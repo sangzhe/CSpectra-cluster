@@ -14,9 +14,5 @@ public:
     IQualityScorer(){};
     virtual double calculateQualityScore(ISpectrum& spectrum) = 0;
 
-    virtual ~IQualityScorer() = 0;
-
-private:
-    ISpectrum* spectrum;
 };
 #endif //CSPECTRA_CLUSTER_IQUALITYSCORER_H

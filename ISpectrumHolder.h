@@ -18,6 +18,5 @@ public:
     virtual void removeSpectra( ISpectrum& removed) = 0;
     virtual void removeSpectra( list<ISpectrum*> &spectra) = 0;
 
-    virtual ~ISpectrumHolder();
 };
 #endif //CSPECTRA_CLUSTER_ISPECTRUMHOLDER_H

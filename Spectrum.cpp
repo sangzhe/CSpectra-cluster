@@ -4,7 +4,7 @@
 
 #include "Spectrum.h"
 
-static const int BAD_QUALITY_MEASURE = -1;
+int Spectrum::BAD_QUALITY_MEASURE = -1;
 
 int currentMAjorPeakCount = 0;
 
@@ -139,5 +139,20 @@ string Spectrum::getProperty(string key) {
     return properties->getProperty(key);
 }
 
+void Spectrum::setProperty(string key, string value) {
+    properties->setProperty(key,value);
+}
+
+double Spectrum::getTotalIntensity() {
+    return  totalIntensity;
+}
+
+double Spectrum::getSumSquareIntensity() {
+    return sumSquareIntensity;
+}
+
+Spectrum::~Spectrum() {
+    delete properties,qualityScorer;
+}
 
 

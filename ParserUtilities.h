@@ -23,7 +23,7 @@ class ParserUtilities {
     public:
         ParserUtilities();
 
-        static const int MAX_NUMBER_BAD_MGF_LINES;
+        static int MAX_NUMBER_BAD_MGF_LINES;
 
 
         static list<ICluster*>* readSpectralCluster(string& clusterString);
@@ -36,25 +36,27 @@ class ParserUtilities {
 
         static double parsePepMassLine(string& pLine);
 
-    private:
-        static const string BEGIN_IONS;
-        static const string END_IONS;
-        static const string BEGIN_CLUSTER;
-        static const string END_CLUSTER;
+        ~ParserUtilities();
 
-        static const string titleTile;
-        static const string sequenceTitle;
-        static const string titleAndId;
-        static const string pepmassTitle;
-        static const string chargeTitle;
-        static const string rtinsecondsTitle;
-        static const string taxonomyTitle;
-        static const string taxonTitle;
-        static const string user02Title;
-        static const string user03Title;
+    private:
+        static  string BEGIN_IONS;
+        static  string END_IONS;
+        static  string BEGIN_CLUSTER;
+        static  string END_CLUSTER;
+
+        static  string titleTile;
+        static  string sequenceTitle;
+        static  string titleAndId;
+        static  string pepmassTitle;
+        static  string chargeTitle;
+        static  string rtinsecondsTitle;
+        static  string taxonomyTitle;
+        static  string taxonTitle;
+        static  string user02Title;
+        static  string user03Title;
         static string buildMGFTitle(string line);
 
-        static const string NOT_HANDLED_MGF_TAGS[18];
+        static  string NOT_HANDLED_MGF_TAGS[18];
         static int gNumberBadMGFLines;
 
         static Properties* parseProperties(string& line);

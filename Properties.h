@@ -33,9 +33,9 @@ class Properties {
 
 private:
 
-        map<string,string> propertyMap;
+        map<string,string>* propertyMap  = new map<string,string>;
 
-        set<string> keyName;
+        set<string>* keyName = new set<string>;
 
 
 };

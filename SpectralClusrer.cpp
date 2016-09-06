@@ -153,3 +153,7 @@ bool SpectralCluster::storesPeakLists() {
     return true;
 
 }
+
+SpectralCluster::~SpectralCluster() {
+    delete properties,consensusSpectrumBuilder;
+}

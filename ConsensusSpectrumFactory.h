@@ -17,7 +17,6 @@ public:
     ConsensusSpectrumFactory(){};
 
     IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
-    ~ConsensusSpectrumFactory();
 };
 
 

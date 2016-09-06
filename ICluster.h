@@ -27,7 +27,6 @@ class ICluster:public ISpectrumHolder{
         virtual string getProperty(string key) = 0;
         virtual void setProperty(string key,string value) = 0;
         virtual bool storesPeakLists() = 0;
-        virtual ~ICluster() = 0 ;
 
 
 };

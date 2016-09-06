@@ -12,7 +12,7 @@
 
 class IConsensusSpectrumBuilder: public ISpectrumHolder{
     public:
-    IConsensusSpectrumBuilder();
+    IConsensusSpectrumBuilder(){};
 
     virtual ISpectrum* getConsensusSpectrum() = 0;
     virtual ISpectrum* internalGetConcensusSpectrum() = 0;
@@ -23,6 +23,5 @@ class IConsensusSpectrumBuilder: public ISpectrumHolder{
     virtual double getSumPrecursorIntensity() = 0;
 //    virtual list<IPeak> getRawConsensusPeaks() = 0;
 
-    virtual ~IConsensusSpectrumBuilder() = 0;
 };
 #endif //CSPECTRA_CLUSTER_ICONSENSUSSPECTRUMBUILDER_H

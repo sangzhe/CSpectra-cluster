@@ -8,26 +8,26 @@
 #include "Defaults.h"
 
 
-static const int DEFAULT_PEAKS_TO_KEEP = 5;
+int ConsensusSpectrum::DEFAULT_PEAKS_TO_KEEP = 5;
 
-static const int SIZE_TO_ADD_EVERY_TIME = 100;
+int ConsensusSpectrum::SIZE_TO_ADD_EVERY_TIME = 100;
 
-static const float NOISE_FILTER_INCREMENT = 100;
+float ConsensusSpectrum::NOISE_FILTER_INCREMENT = 100;
 
 // ToDo Functions
 //static IFunction<List<IPeak>, List<IPeak>> noiseFilter = new BinnedHighestNPeakFunction(DEFAULT_PEAKS_TO_KEEP, (int) NOISE_FILTER_INCREMENT, 0);
 
-static const float FRACTION_OF_LOWEST_PEAK_TOKEEP = 0.40F;
+float ConsensusSpectrum::FRACTION_OF_LOWEST_PEAK_TOKEEP = 0.40F;
 
 const string methodName = "Crowded Consensus Spectrum Builder";
 const string methodVersion = "0.1";
 
-static const float FINAL_MZ_THRESHOLD = 0.4F;
-static const float MZ_THRESHOLD_STEP = 0.1F;
-static const bool USE_ROUNDING = true;
-static const int MZ_PRECISION = 1000;
+float ConsensusSpectrum::FINAL_MZ_THRESHOLD = 0.4F;
+float ConsensusSpectrum::MZ_THRESHOLD_STEP = 0.1F;
+bool ConsensusSpectrum::USE_ROUNDING = true;
+int ConsensusSpectrum::MZ_PRECISION = 1000;
 
-static ConsensusSpectrumBuilderFactory* FACTORY = new ConsensusSpectrumFactory();
+ConsensusSpectrumBuilderFactory* ConsensusSpectrum::FACTORY = new ConsensusSpectrumFactory();
 
 
 ConsensusSpectrumBuilderFactory* ConsensusSpectrum::buildFactory() {
@@ -96,6 +96,10 @@ void ConsensusSpectrum::removeSpectra(ISpectrum &removed) {
     sumPrecursorIntens -= 0;
 
     nSpectra--;
+}
+
+void ConsensusSpectrum::removePeaks(list<IPeak *> &peaksToRemove) {
+
 }
 
 void ConsensusSpectrum::addHeldPeaks() {
@@ -321,4 +325,30 @@ ISpectrum* ConsensusSpectrum::internalGetConcensusSpectrum() {
     return consensusSpectrum;
 }
 
+int ConsensusSpectrum::getSumCharge() {
+    return sumCharge;
+}
+
+double ConsensusSpectrum::getSumPrecursorMz() {
+    return sumPrecursorMz;
+}
+
+double ConsensusSpectrum::getSumPrecursorIntensity() {
+    return sumPrecursorIntens;
+}
+
+int ConsensusSpectrum::getSpectraCount() {
+    return nSpectra;
+}
+
+bool ConsensusSpectrum::isRemovedSupported() {
+    return true;
+}
+
+void ConsensusSpectrum::setDirty(bool isDirty) {
+    this->isDirty = isDirty;
+}
+ConsensusSpectrum::~ConsensusSpectrum() {
+    delete FACTORY,consensusSpectrum;
+}
 

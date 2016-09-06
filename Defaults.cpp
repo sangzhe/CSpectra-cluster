@@ -4,10 +4,9 @@
 
 #include "Defaults.h"
 
+ConsensusSpectrumBuilderFactory* Defaults::consensusFactory = ConsensusSpectrum::FACTORY;
 
-static ConsensusSpectrumBuilderFactory* consensusFactory = ConsensusSpectrum::FACTORY;
-
-static IQualityScorer* defaultQualityScorer = new SignalToNoiseChecker();
+IQualityScorer* Defaults::defaultQualityScorer = new SignalToNoiseChecker();
 
 IConsensusSpectrumBuilder* Defaults::getDefaultConsensusSpectrumBuilder() {
     return consensusFactory->getConsensusSpectrumBuilder();
@@ -21,3 +20,7 @@ IQualityScorer* Defaults::getDefaultQualityScorer() {
 
 //ToDo functions!
 void Defaults::getDefaultPeakFilter(ISpectrum& spectrum) {}
+
+Defaults::~Defaults() {
+    delete consensusFactory,defaultQualityScorer;
+}

@@ -13,18 +13,16 @@
 class SignalToNoiseChecker: public IQualityScorer {
 
 private:
-    static const int NUMBER_HIGH_PEAKS;
-    static const string VERSION;
+    static  int NUMBER_HIGH_PEAKS;
+    static  string VERSION;
 
 public:
-    SignalToNoiseChecker(){};
-    string getName();
+    SignalToNoiseChecker();
 
     string getCurrentVersion();
 
     double calculateQualityScore(ISpectrum& spectrum);
 
-    ~SignalToNoiseChecker();
 
 
 };

@@ -5,10 +5,10 @@
 #include "Functions.h"
 
 void  Functions::replace(string& string1,const string &Old, const string &New){
-    int pos=0;
+    size_t pos=0;
     while(true){
         pos = string1.find(Old,pos);
-        if(pos == -1) break;
+        if(pos == string::npos) break;
         string1.replace(pos, New.length(),New);
         pos += New.length();
     }

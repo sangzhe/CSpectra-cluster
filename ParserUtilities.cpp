@@ -5,23 +5,23 @@
 #include "ParserUtilities.h"
 #include "ConsensusSpectrum.h"
 
-const string BEGIN_IONS = "BEGIN IONS";
-const string END_IONS = "END IONS";
-const string BEGIN_CLUSTER = "BEGIN CLUSTER";
-const string END_CLUSTER = "END CLUSTER";
+ string ParserUtilities::BEGIN_IONS = "BEGIN IONS";
+ string ParserUtilities::END_IONS = "END IONS";
+ string ParserUtilities::BEGIN_CLUSTER = "BEGIN CLUSTER";
+ string ParserUtilities::END_CLUSTER = "END CLUSTER";
 
-const string titleTile = "TITLE=";
-const string sequenceTitle = ",sequence=";
-const string titleAndId = "TITLE=id=";
-const string pepmassTitle = "PEPMASS=";
-const string chargeTitle = "CHARGE=";
-const string rtinsecondsTitle = "RTINSECONDS=";
-const string taxonomyTitle = "TAXONOMY=";
-const string taxonTitle = "TAXON=";
-const string user02Title = "USER02=";
-const string user03Title = "USER03=";
+ string ParserUtilities::titleTile = "TITLE=";
+ string ParserUtilities::sequenceTitle = ",sequence=";
+ string ParserUtilities::titleAndId = "TITLE=id=";
+ string ParserUtilities::pepmassTitle = "PEPMASS=";
+ string ParserUtilities::chargeTitle = "CHARGE=";
+ string ParserUtilities::rtinsecondsTitle = "RTINSECONDS=";
+ string ParserUtilities::taxonomyTitle = "TAXONOMY=";
+ string ParserUtilities::taxonTitle = "TAXON=";
+ string ParserUtilities::user02Title = "USER02=";
+ string ParserUtilities::user03Title = "USER03=";
 
-const string NOT_HANDLED_MGF_TAGS[18] = {
+ string ParserUtilities::NOT_HANDLED_MGF_TAGS[18] = {
                                  "TOLU=",
                                  "TOL=",
                                  "USER00",
@@ -306,15 +306,15 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                 props->clear();
 
                 if (species != "")
-                    spectrum->setProperty(KnowProperties::TAXONOMY_KEY,species);
+                    spectrum->setProperty(KnownProperties::TAXONOMY_KEY,species);
                 if (peptide != "")
-                    spectrum->setProperty(KnowProperties::IDENTIFIED_PEPTIDE_KEY, peptide);
+                    spectrum->setProperty(KnownProperties::IDENTIFIED_PEPTIDE_KEY, peptide);
                 if (peptide != "")
-                    spectrum->setProperty(KnowProperties::ANNOTATION_KEY, title);
+                    spectrum->setProperty(KnownProperties::ANNOTATION_KEY, title);
                 if (protein != "")
-                    spectrum->setProperty(KnowProperties::PROTEIN_KEY, protein);
+                    spectrum->setProperty(KnownProperties::PROTEIN_KEY, protein);
                 if (modifications != "")
-                    spectrum->setProperty(KnowProperties::MODIFICATION_KEY, modifications);
+                    spectrum->setProperty(KnownProperties::MODIFICATION_KEY, modifications);
                 if (titleLine != "")
 //                    handleTitleLine(spectrum, titleLine);
                 delete props,holder;
@@ -426,8 +426,8 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
     return consensusSpectrumBuilder;
 }
 
-const int MAX_NUMBER_BAD_MGF_LINES = 2000;
-int gNumberBadMGFLines = 0;
+int ParserUtilities::MAX_NUMBER_BAD_MGF_LINES = 2000;
+int ParserUtilities::gNumberBadMGFLines = 0;
 
 //void ParserUtilities::handleTitleLine(ISpectrum spectrum, string titleLine) {
 //    string tl = titleLine.substr(titleTile.length());
@@ -523,3 +523,6 @@ list<ComparisonMatch>* ParserUtilities::parseComparisonMatches(string line) {
 }
 
 ParserUtilities::ParserUtilities() {}
+
+ParserUtilities::~ParserUtilities() {
+}

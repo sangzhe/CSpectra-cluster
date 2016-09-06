@@ -18,6 +18,7 @@ class Defaults {
             static IQualityScorer* getDefaultQualityScorer();
             static void getDefaultPeakFilter(ISpectrum& spectrum);
             static IConsensusSpectrumBuilder* getDefaultConsensusSpectrumBuilder();
+            ~Defaults();
     private:
             static IQualityScorer* defaultQualityScorer;
             static ConsensusSpectrumBuilderFactory* consensusFactory;

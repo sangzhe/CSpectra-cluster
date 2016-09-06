@@ -82,3 +82,5 @@ string Peak::toString() {
     string ret = mzTitle + mz + intensTitle + intensity + countTitle + count;
     return ret;
 }
+
+Peak::~Peak(){}
