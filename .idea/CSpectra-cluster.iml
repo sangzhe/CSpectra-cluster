@@ -2,40 +2,50 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/Properties.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ComparisonMatch.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Properties.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ISpectrumHolder.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/IConsensusSpectrumBuilder.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/SignalToNoiseChecker.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/KnownProperties.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ConsensusSpectrumFactory.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/IQualityScorer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ConsensusSpectrumBuilderFactory.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ParserUtilities.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Spectrum.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ComparisonMatch.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Spectrum.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Peak.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/SpectralClusrer.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ConsensusSpectrumFactory.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ConsensusSpectrum.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ISpectrumQuality.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/IPeak.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ConsensusSpectrum.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ParserUtilities.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ICluster.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/KnownProperties.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/SignalToNoiseChecker.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/SpectralClusrer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Defaults.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Functions.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Functions.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Defaults.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/quality/IQualityScorer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Peak.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ISpectrum.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Property/Properties.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Property/Properties.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/ICluster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/ISpectrumHolder.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/HighestNPeakFunction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/HighestNPeakFunction.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemovePrecursorPeaksFunction.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemovePrecursorPeaksFunction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/MZIntensityUtilities.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/MZIntensityUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Defaults.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Defaults.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/KnownProperties.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Spectrum.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Peak.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/KnownProperties.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/ISpectrum.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/ISpectrumQuality.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Spectrum.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Mass.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/IPeak.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Peak.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Mass.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumFactory.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/IConsensusSpectrumBuilder.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumBuilderFactory.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumFactory.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
