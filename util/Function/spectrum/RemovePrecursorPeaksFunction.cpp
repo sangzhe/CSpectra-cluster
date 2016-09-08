@@ -49,6 +49,5 @@ void RemovePrecursorPeaksFunction::apply(ISpectrum *o) {
         filteredPeakList.push_back(*iterator1);
     }
     ISpectrum* filteredSpectrum = new Spectrum(*o, filteredPeakList, true);
-    delete o;
     o = filteredSpectrum;
 }

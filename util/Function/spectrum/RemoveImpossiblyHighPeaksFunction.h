@@ -14,7 +14,7 @@
 class RemoveImpossiblyHighPeaksFunction {
 public:
     static float DEFAULT_TOLERANCE;
-    static float tolerance;
+    float tolerance;
 
     RemoveImpossiblyHighPeaksFunction(float tolerance);
 

@@ -15,8 +15,11 @@
 
 using namespace boost::algorithm;
 using namespace std;
-class Functions {
+class IOUtilities {
 public:
+
+    static int   INT_MAX_VALUE;
+
     static void replace(string &string1,const string& Old,const string& New);
     static void split(const string& src, const string& separator, vector<string>& dest);
 

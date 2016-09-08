@@ -6,6 +6,7 @@
 #include "../Spectrum/Peak.h"
 #include "../Spectrum/Spectrum.h"
 #include "../util/Defaults.h"
+#include "../util/Function/peak/BinnedHighestNPeakFunction.h"
 
 
 int ConsensusSpectrum::DEFAULT_PEAKS_TO_KEEP = 5;
@@ -13,9 +14,6 @@ int ConsensusSpectrum::DEFAULT_PEAKS_TO_KEEP = 5;
 int ConsensusSpectrum::SIZE_TO_ADD_EVERY_TIME = 100;
 
 float ConsensusSpectrum::NOISE_FILTER_INCREMENT = 100;
-
-// ToDo Functions
-//static IFunction<List<IPeak>, List<IPeak>> noiseFilter = new BinnedHighestNPeakFunction(DEFAULT_PEAKS_TO_KEEP, (int) NOISE_FILTER_INCREMENT, 0);
 
 float ConsensusSpectrum::FRACTION_OF_LOWEST_PEAK_TOKEEP = 0.40F;
 
@@ -154,7 +152,7 @@ list<IPeak*> ConsensusSpectrum::findConsensusPeaks(list<IPeak *> &input, const i
     // Step 2: adapt the peak intensities based on the probability that the peak has been observed
     ret = adaptPeakIntensities(ret,nSpectra);
     // Step 3: filter the spectrum
-    ret = filterNoise(ret);
+    filterNoise(ret);
     return ret;
 }
 
@@ -233,11 +231,11 @@ list<IPeak*> ConsensusSpectrum::adaptPeakIntensities(list<IPeak *> &inp, int nSp
 
 list<IPeak*> ConsensusSpectrum::filterNoise(list<IPeak *> &inp) {
     inp.sort(Peak::cmpPeakMz);
-    list<IPeak*> filteredSpectrum;
-//    ToDo IFunctions class: nosiFilter
+    list<IPeak*> filteredSpectrum = inp;
+    BinnedHighestNPeakFunction func = BinnedHighestNPeakFunction(DEFAULT_PEAKS_TO_KEEP,(int)NOISE_FILTER_INCREMENT,0);
+    func.apply(filteredSpectrum);
 //    filteredSpectrum = noiseFilter(inp);
-
-    return filteredSpectrum;
+    inp = filteredSpectrum;
 }
 
 void ConsensusSpectrum::clear() {

@@ -6,6 +6,7 @@
 
 float RemoveImpossiblyHighPeaksFunction::DEFAULT_TOLERANCE = 3.0F;
 
+
 RemoveImpossiblyHighPeaksFunction::RemoveImpossiblyHighPeaksFunction(float tolerance) {
     this->tolerance = tolerance;
 }

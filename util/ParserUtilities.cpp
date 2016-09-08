@@ -233,10 +233,10 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                     line = line.substr(chargeTitle.length()); //strip the "+" or "-" behind the value
                     line = line.substr(0,line.length()-1);
                     if(line.find(".")){
-                        dcharge = (int)(0.5 + Functions::StringToFloat(line));
+                        dcharge = (int)(0.5 + IOUtilities::StringToFloat(line));
                     }
                     else{
-                        dcharge = Functions::StringToInt(line);
+                        dcharge = IOUtilities::StringToInt(line);
                     }
                     getline(ss,line);
                     continue;
@@ -294,7 +294,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                 IQualityScorer* defaultQualityScorer = Defaults::getDefaultQualityScorer();
                 ISpectrum *spectrum = new Spectrum(title,dcharge,(float)mz,defaultQualityScorer,holder);
 
-                Defaults::getDefaultPeakFilter(*spectrum);
+                Defaults::doDefaultPeakFilter(spectrum);
 
                 set<string> keys = props->getKeySet();
                 if(keys.size() != 0) {
@@ -321,13 +321,13 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                 return spectrum;
             }
             else {
-                Functions::replace(line,"\t", " ");
+                IOUtilities::replace(line,"\t", " ");
                 vector<string> items;
-                Functions::split(line," ",items);
+                IOUtilities::split(line," ",items);
                 if(items.size() >= 2){
                     try{
-                        float peakMass = Functions::StringToFloat(items[0]);
-                        float peakIntensity = Functions::StringToFloat(items[1]);
+                        float peakMass = IOUtilities::StringToFloat(items[0]);
+                        float peakIntensity = IOUtilities::StringToFloat(items[1]);
                         Peak *added = new Peak(peakMass,peakIntensity);
                         holder.push_back(added);
                     }catch(exception s){
@@ -362,7 +362,7 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
     line = line.substr(BEGIN_CONSENSUS.length());
 
     vector<string> headerFields;
-    Functions::split(line," ",headerFields);
+    IOUtilities::split(line," ",headerFields);
 
     string id,className;
     int nSpec,sumCharge;
@@ -379,19 +379,19 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
     if (headerFields[2].substr(0,nspecTitle.length()) != nspecTitle)
         throw("Header field miss nSpec= field");
     else
-        nSpec = Functions::StringToInt(headerFields[2].substr(nspecTitle.length()).data());
+        nSpec = IOUtilities::StringToInt(headerFields[2].substr(nspecTitle.length()).data());
     if (headerFields[3].substr(0,sumchargeTitle.length()) != sumchargeTitle)
         throw("Header field miss sumCharge= field");
     else
-        sumCharge = Functions::StringToInt(headerFields[3].substr(sumchargeTitle.length()).data());
+        sumCharge = IOUtilities::StringToInt(headerFields[3].substr(sumchargeTitle.length()).data());
     if(headerFields[4].substr(0,sumintensTitle.length()) != sumintensTitle)
         throw("Header field miss sumIntens= field");
     else
-        sumPrecIntens = Functions::StringToFloat(headerFields[4].substr(sumintensTitle.length()).data());
+        sumPrecIntens = IOUtilities::StringToFloat(headerFields[4].substr(sumintensTitle.length()).data());
     if(headerFields[5].substr(0,summzTitle.length()) != summzTitle)
         throw("Header field miss sumMz= field");
     else
-        sumPrecMz = Functions::StringToFloat(headerFields[5].substr(summzTitle.length()));
+        sumPrecMz = IOUtilities::StringToFloat(headerFields[5].substr(summzTitle.length()));
 
     //process the peak list
     list<IPeak*> peaks;
@@ -400,12 +400,12 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
         if(line == END_CONSENSUS) break;
 
         vector<string> peakFields;
-        Functions::split(line,"\t",peakFields);
+        IOUtilities::split(line,"\t",peakFields);
         if(peakFields.size() != 3)
             throw("Invalid consensus peak definition encountered: ",line);
-        float mz = Functions::StringToFloat(peakFields[0]);
-        float intens = Functions::StringToFloat(peakFields[1]);
-        int count = Functions::StringToInt(peakFields[3]);
+        float mz = IOUtilities::StringToFloat(peakFields[0]);
+        float intens = IOUtilities::StringToFloat(peakFields[1]);
+        int count = IOUtilities::StringToInt(peakFields[3]);
 
         Peak *peak = new Peak(mz,intens,count);
         peaks.push_back(peak);
@@ -448,7 +448,7 @@ double ParserUtilities::parsePepMassLine(string& pLine) {
     else {
          massStr = numeric.substr(0,pepmassTitle.length());
     }
-    mass = Functions::StringToFloat(massStr);
+    mass = IOUtilities::StringToFloat(massStr);
     return mass;
 }
 
@@ -466,9 +466,9 @@ string ParserUtilities::buildMGFTitle(string line){
 
 string ParserUtilities::idFromClusterLine(string& line) {
     string id = "Id=";
-    Functions::replace(line,BEGIN_CLUSTER,"");
+    IOUtilities::replace(line,BEGIN_CLUSTER,"");
     vector<string> split;
-    Functions::split(line," ",split);
+    IOUtilities::split(line," ",split);
     for(int index=0;index < split.size();index++){
         if(split[index].substr(0,id.length()) == id) return split[index].substr(id.length());
     }
@@ -477,9 +477,9 @@ string ParserUtilities::idFromClusterLine(string& line) {
 
 bool ParserUtilities::storesPeakListFromClusterLine(string& line) {
     string containPeakList = "ContainsPeaklist=";
-    Functions::replace(line,BEGIN_CLUSTER,"");
+    IOUtilities::replace(line,BEGIN_CLUSTER,"");
     vector<string> split;
-    Functions::split(line," ",split);
+    IOUtilities::split(line," ",split);
     for(int index=0;index < split.size();index++){
         if(split[index].substr(0,containPeakList.length()) == containPeakList){
             return (split[index].substr(containPeakList.length()) != "" ? true:false);
@@ -492,7 +492,7 @@ Properties* ParserUtilities::parseProperties(string& line) {
     string propertyTitle = "Properties=";
     line = line.substr(propertyTitle.length());
     vector<string> propertyFields;
-    Functions::split(line,"#",propertyFields);
+    IOUtilities::split(line,"#",propertyFields);
     Properties* properties =new Properties();
     for (int i =0 ;i<propertyFields.size();i++){
         size_t index = propertyFields[i].find("=");
@@ -509,7 +509,7 @@ list<ComparisonMatch> ParserUtilities::parseComparisonMatches(string line) {
     string comparisonTitle = "ComparisonMatches=";
     string matchedString = line.substr(comparisonTitle.length());
     vector<string> comparisonStrings;
-    Functions::split(line,"#",comparisonStrings);
+    IOUtilities::split(line,"#",comparisonStrings);
     list<ComparisonMatch> comparisonMatches;
 
     for(int i =0;i < comparisonStrings.size();i++){
@@ -520,7 +520,7 @@ list<ComparisonMatch> ParserUtilities::parseComparisonMatches(string line) {
         string similarityString = comparisonStrings[i].substr(0,index);
         string idString = comparisonStrings[i].substr(index+1);
 
-        ComparisonMatch *comparisonMatch = new ComparisonMatch(idString,Functions::StringToFloat(similarityString));
+        ComparisonMatch *comparisonMatch = new ComparisonMatch(idString,IOUtilities::StringToFloat(similarityString));
         comparisonMatches.push_back(*comparisonMatch);
         delete comparisonMatch;
     }

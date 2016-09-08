@@ -4,13 +4,14 @@
 
 #include "IOUtilities.h"
 
+int   IOUtilities::INT_MAX_VALUE = 0x7fffffff;
 
-void  Functions::replace(string& string1,const string &Old, const string &New){
+void  IOUtilities::replace(string& string1,const string &Old, const string &New){
     replace_all(string1,Old,New);
 
 }
 
-void Functions::split(const string& src, const string& separator, vector<string>& dest)
+void IOUtilities::split(const string& src, const string& separator, vector<string>& dest)
 {
     string str = src;
     string substring;
@@ -33,7 +34,7 @@ void Functions::split(const string& src, const string& separator, vector<string>
     dest.push_back(substring);
 }
 
-int Functions::compare(const float A, const float B) {
+int IOUtilities::compare(const float A, const float B) {
     const float EPSINON = 0.00001;
     if ( A < B ) return -1;
     if ( A > B ) return 1;
@@ -41,7 +42,7 @@ int Functions::compare(const float A, const float B) {
 
 }
 
-string Functions::FloatToString(const float &Num,const string& accuracy) {
+string IOUtilities::FloatToString(const float &Num,const string& accuracy) {
     char output[50];
     snprintf(output,50,accuracy.data(),Num);
     string ret = string(output);
@@ -49,14 +50,14 @@ string Functions::FloatToString(const float &Num,const string& accuracy) {
 
 }
 
-string Functions::IntToString(const int &Num, const string &accuracy) {
+string IOUtilities::IntToString(const int &Num, const string &accuracy) {
     char output[50];
     snprintf(output,50,accuracy.data(),Num);
     string ret = string(output);
     return ret;
 }
 
-float Functions::StringToFloat(const string &input) {
+float IOUtilities::StringToFloat(const string &input) {
     try {
         float num = boost::lexical_cast<float>(input);
         return num;
@@ -68,7 +69,7 @@ float Functions::StringToFloat(const string &input) {
 
 }
 
-int Functions::StringToInt(const string &input) {
+int IOUtilities::StringToInt(const string &input) {
     try {
         int num = boost::lexical_cast<int>(input);
         return num;
@@ -79,7 +80,7 @@ int Functions::StringToInt(const string &input) {
     }
 }
 
-double Functions::StringToDouble(const string &input) {
+double IOUtilities::StringToDouble(const string &input) {
     try {
         double num = boost::lexical_cast<double>(input);
         return num;

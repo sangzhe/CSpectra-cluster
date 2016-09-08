@@ -18,5 +18,5 @@ float ComparisonMatch::getSimilarity() {
 }
 
 int ComparisonMatch::compare(ComparisonMatch& o) {
-    return Functions::compare(this->similarity,o.similarity);
+    return IOUtilities::compare(this->similarity,o.similarity);
 }

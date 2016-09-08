@@ -28,14 +28,14 @@ float Mass::WATER_AVG      = 2*HYDROGEN_AVG + OXYGEN_AVG;
 float Mass::AMMONIA_MONO   = 3*HYDROGEN_MONO + NITROGEN_MONO;
 float Mass::AMMONIA_AVG    = 3*HYDROGEN_AVG + NITROGEN_AVG;
 
-static float Mass::getMonoisotopicMass(float precursorMz, int charge) {
+float Mass::getMonoisotopicMass(float precursorMz, int charge) {
     float floatCharge = (float) charge;
     float mass = (precursorMz * floatCharge) - (floatCharge * PROTON);
 
     return mass;
 }
 
-static float Mass::getMz(float mass, int charge) {
+float Mass::getMz(float mass, int charge) {
     float floatCharge = (float) charge;
     float mz = (mass + (floatCharge * PROTON)) / floatCharge;
 

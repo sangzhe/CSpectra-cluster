@@ -39,13 +39,13 @@ bool Peak::cmpPeak(IPeak* A,IPeak* B) {
     float Amz = A->getMz();
     float Bmz = B->getMz();
 
-    int ret = Functions::compare(Amz,Bmz);
+    int ret = IOUtilities::compare(Amz,Bmz);
     if(ret != 0) return ret;
 
     float Aintent = A->getIntensity();
     float Bintent = B->getIntensity();
 
-    ret = Functions::compare(Aintent,Bintent);
+    ret = IOUtilities::compare(Aintent,Bintent);
     if(ret != 0) return ret;
 
     return 0;
@@ -53,7 +53,7 @@ bool Peak::cmpPeak(IPeak* A,IPeak* B) {
 
 bool Peak::cmpPeakMz(IPeak *A, IPeak *B) {
 
-    return Functions::compare(A->getMz(),B->getMz());
+    return IOUtilities::compare(A->getMz(),B->getMz());
 }
 
 bool Peak::cmpPeakIntensity(IPeak *A, IPeak *B) {
@@ -70,20 +70,20 @@ bool Peak::cmpPeakIntensity(IPeak *A, IPeak *B) {
 }
 
 string Peak::toString() {
-    string mz = Functions::FloatToString(this->getMz(),"%10.5f");
-    string intensity = Functions::FloatToString(this->getIntensity(),"%8.2");
+    string mz = IOUtilities::FloatToString(this->getMz(),"%10.5f");
+    string intensity = IOUtilities::FloatToString(this->getIntensity(),"%8.2");
     string mzTitle = "m/z = ";
     string intensTitle = ", intensity = ";
     string countTitle = ", count = ";
-    string count = Functions::IntToString(this->getCount(),"");
+    string count = IOUtilities::IntToString(this->getCount(),"");
     string ret = mzTitle + mz + intensTitle + intensity + countTitle + count;
     return ret;
 }
 
 bool Peak::operator==( IPeak &O) {
 
-    if (Functions::compare(O.getIntensity(), intensity) != 0) return false;
-    return Functions::compare(O.getMz(), massChargeRatio) == 0;
+    if (IOUtilities::compare(O.getIntensity(), intensity) != 0) return false;
+    return IOUtilities::compare(O.getMz(), massChargeRatio) == 0;
 }
 
 Peak::~Peak(){}

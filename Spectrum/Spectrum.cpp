@@ -153,7 +153,7 @@ double Spectrum::getSumSquareIntensity() {
 
 bool Spectrum::operator==(ISpectrum &O) {
     if (precursorCharge != O.getPrecursorCharge()) return false;
-    if (Functions::compare(O.getPrecursorMz(), precursorMz) != 0) return false;
+    if (IOUtilities::compare(O.getPrecursorMz(), precursorMz) != 0) return false;
     if ( id != (O.getId())) return false;
     if (!(peaks.size() == O.getPeaks().size())) {
         return false;
