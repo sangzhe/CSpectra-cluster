@@ -31,42 +31,43 @@ BinnedHighestNPeakFunction::BinnedHighestNPeakFunction(int maxPeaks, int binSize
         throw ("Bin overlap must be smaller than the bin size.");
 }
 
-void BinnedHighestNPeakFunction::apply(list<IPeak *> &originalPeaks) {
-    set<IPeak*> retained;
+list<Peak> BinnedHighestNPeakFunction::apply(list<Peak> &originalPeaks) {
+    unordered_set<Peak> retained;
     int startPeak = 0;
     for(double binBottom = MAXIMUM_BINNED_MZ;binBottom < MAXIMUM_BINNED_MZ -binSize;binBottom+=(binSize - binOverlap)){
         startPeak = handleBin(originalPeaks,startPeak,retained,binBottom);
         if(startPeak > originalPeaks.size()) break;
     }
-    list<IPeak*> ret;
-    set<IPeak*>::iterator iter;
+    list<Peak> ret;
+    unordered_set<Peak>::iterator iter;
     for(iter = retained.begin();iter != retained.end();iter++){
-        IPeak* Toadd = *iter;
-        ret.push_back(new Peak(*(Toadd)));
-        delete Toadd;
+        ret.push_back(Peak(*iter));
     }
 
-    originalPeaks = ret;
+    return ret;
 
 }
 
-int BinnedHighestNPeakFunction::handleBin(list<IPeak *> allpeaks, int startpeak, set<IPeak *> retained,
+int BinnedHighestNPeakFunction::handleBin(list<Peak> allpeaks, int startpeak, unordered_set<Peak> retained,
                                           double binBottom) {
     int startIndexNextBin = startpeak; // the index of the next bin's peak
     double binEnd = binBottom + binSize; // end of this bin
     double nextBinStartMZ = binEnd - binOverlap; // start of next bin
 
     int index = startpeak;
-    IPeak* currentPeak;
-    list<IPeak*> byIntensity;
-    list<IPeak*>::iterator iter;
+    Peak currentPeak;
+    list<Peak> byIntensity;
+    list<Peak>::iterator iter;
     for(iter =allpeaks.begin();iter != allpeaks.end();iter++){
         index++;
-        IPeak* nextPeak = *iter;
+        Peak nextPeak = *iter;
 
-        if(currentPeak != NULL){
-            if(currentPeak->getMz() > nextPeak->getMz()){
-                if(fabs(currentPeak->getMz() - nextPeak->getMz()) > 1.2 * MZIntensityUtilities::SMALL_MZ_DIFFERENCE)
+
+//        ToDo problem?
+        Peak nullPeak = Peak();
+        if(!(currentPeak == nullPeak)){
+            if(currentPeak.getMz() > nextPeak.getMz()){
+                if(fabs(currentPeak.getMz() - nextPeak.getMz()) > 1.2 * MZIntensityUtilities::SMALL_MZ_DIFFERENCE)
                     throw("Peaks are NOT Sorted by MZ");
             }
         }
@@ -74,7 +75,7 @@ int BinnedHighestNPeakFunction::handleBin(list<IPeak *> allpeaks, int startpeak,
 
         // store all peaks that belong to this bin
         currentPeak = nextPeak;
-        float currentPeakMz = currentPeak->getMz();
+        float currentPeakMz = currentPeak.getMz();
         // ignore if it's before this bin
         if (currentPeakMz < binBottom)
             continue;
@@ -94,7 +95,7 @@ int BinnedHighestNPeakFunction::handleBin(list<IPeak *> allpeaks, int startpeak,
     byIntensity.sort(Peak::cmpPeakIntensity);
 
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++) {
-        retained.insert(*iter);
+        retained.insert(Peak(*iter));
         if (++numberAdded >= maxPeaks) break;
     }
 

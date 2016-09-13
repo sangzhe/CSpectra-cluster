@@ -21,7 +21,7 @@ public:
 
     string getCurrentVersion();
 
-    double calculateQualityScore(ISpectrum& spectrum);
+    double calculateQualityScore(Spectrum& spectrum);
 
 
 

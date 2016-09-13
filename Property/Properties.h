@@ -28,14 +28,16 @@ class Properties {
 
         void remove(string key);
 
-        ~Properties();
+        Properties& operator =(Properties O);
+
+
 
 
 private:
 
-        map<string,string>* propertyMap  = new map<string,string>;
+        map<string,string> propertyMap;
 
-        set<string>* keyName = new set<string>;
+        set<string> keyName;
 
 
 };

@@ -12,10 +12,12 @@
 
 class SpectralCluster: public ICluster{
 private:
+    static string MethodName;
+
     string id;
-    list<ISpectrum*> clusteredSpectra;
-    Properties* properties = new Properties();
-    set<string> spectraIds;
+    list<Spectrum> clusteredSpectra;
+    Properties properties;
+    unordered_set<string> spectraIds;
     IConsensusSpectrumBuilder* consensusSpectrumBuilder;
 
 public:
@@ -23,7 +25,9 @@ public:
 
     SpectralCluster(string id, IConsensusSpectrumBuilder& consensusSpectrumBuilder);
 
-    set<string> getSpectralIds();
+    unordered_set<string> getSpectralIds();
+
+    string getMethodName();
 
     string getSpectralId();
 
@@ -33,30 +37,30 @@ public:
 
     int getPrecursorCharge();
 
-    ISpectrum* getConsensusSpectrum();
+    Spectrum getConsensusSpectrum();
 
-    list<ISpectrum*> getClusterdSpectra();
+    list<Spectrum> getClusteredSpectra();
 
-    IConsensusSpectrumBuilder* getConsensusSpecrtrumBuilder();
+    IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
 
 
     int getClusteredSpectraCount();
 
     string getProperty(string key);
 
-    Properties* getProperties();
+    Properties getProperties();
 
     void setId(string id);
 
     void setProperty(string key,string value);
 
-    void addSpectra(ISpectrum& merged);
+    void addSpectra(const Spectrum& merged);
 
-    void addSpectra(list<ISpectrum*>& spectra);
+    void addSpectra(const list<Spectrum>& spectra);
 
-    void removeSpectra( ISpectrum& removed);
+    void removeSpectra(const Spectrum& removed);
 
-    void removeSpectra( list<ISpectrum*> &spectra) ;
+    void removeSpectra(const list<Spectrum> &spectra) ;
 
     bool isRemovedSupported();
 

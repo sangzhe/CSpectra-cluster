@@ -6,9 +6,7 @@
 #define CSPECTRA_CLUSTER_BINNEDHIGHESTNPEAKFUNCTION_H
 
 
-#include <set>
 #include "../../MZIntensityUtilities.h"
-#include "../../../Spectrum/IPeak.h"
 #include "list"
 #include "math.h"
 #include "../../../Spectrum/Peak.h"
@@ -31,7 +29,7 @@ public:
 
     BinnedHighestNPeakFunction();
 
-    void apply(list<IPeak*> &originalPeaks);
+    list<Peak> apply(list<Peak> &originalPeaks);
 
 
 private:
@@ -48,7 +46,7 @@ private:
      */
     int binOverlap;
 
-    int handleBin(list<IPeak*> allpeaks, int startpeak, set<IPeak*> retained, double binBottom);
+    int handleBin(list<Peak> allpeaks, int startpeak, unordered_set<Peak> retained, double binBottom);
 
 };
 

@@ -11,10 +11,12 @@
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/ISpectrumHolder.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/GreedySpectralCluster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/GreedySpectralCluster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/ICluster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/BinnedHighestNPeakFunction.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/HighestNPeakFunction.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/BinnedHighestNPeakFunction.cpp" isTestSource="false" />
@@ -49,8 +51,12 @@
       <sourceFolder url="file://$MODULE_DIR$/Consensus/IConsensusSpectrumBuilder.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumFactory.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrumFactory.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumBuilderFactory.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrum.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrumFactory.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrum.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

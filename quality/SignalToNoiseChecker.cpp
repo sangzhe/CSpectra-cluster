@@ -14,22 +14,22 @@ string SignalToNoiseChecker::getCurrentVersion() {
     return VERSION;
 }
 
-double SignalToNoiseChecker::calculateQualityScore(ISpectrum& spectrum) {
-    ISpectrum* highestNPeaks = spectrum.getHighestNPeaks(NUMBER_HIGH_PEAKS);
-    if(highestNPeaks->getPeaksCount() < NUMBER_HIGH_PEAKS) return 0.0;
+double SignalToNoiseChecker::calculateQualityScore(Spectrum& spectrum) {
+    Spectrum highestNPeaks(spectrum.getHighestNPeaks(NUMBER_HIGH_PEAKS));
+    if(highestNPeaks.getPeaksCount() < NUMBER_HIGH_PEAKS) return 0.0;
 
-    double totalIntensity = highestNPeaks->getTotalIntensity();
+    double totalIntensity = highestNPeaks.getTotalIntensity();
     double highestPeak = 0;
-    list<IPeak*> highestPeaks = highestNPeaks->getPeaks();
-    list<IPeak*>::iterator iter;
+    list<Peak> highestPeaks = highestNPeaks.getPeaks();
+    list<Peak>::iterator iter;
     for(iter=highestPeaks.begin();iter != highestPeaks.end();iter++){
-        IPeak* peak = *iter;
-        highestPeak = std::max((double)peak->getIntensity(),highestPeak);
+        Peak peak = *iter;
+        highestPeak = std::max((double)peak.getIntensity(),highestPeak);
     }
 
 
     double meanHigh = (totalIntensity - highestPeak) / (NUMBER_HIGH_PEAKS -1);
-    list<IPeak*> peaks = spectrum.getPeaks();
+    list<Peak> peaks = spectrum.getPeaks();
     peaks.sort(Peak::cmpPeakIntensity);
 
     double median;
@@ -37,39 +37,38 @@ double SignalToNoiseChecker::calculateQualityScore(ISpectrum& spectrum) {
     int peakSize = peaks.size();
     if(peakSize % 2 == 1){
         int index =peakSize / 2 ;
-        list<IPeak*>::iterator iter;
-        IPeak* iPeak;
+        list<Peak>::iterator iter;
+        Peak peak;
         int i =0;
         for(iter = peaks.begin();iter != peaks.end(); iter++){
             if ( i == index ) {
-                iPeak = *iter;
+                peak = *iter;
                 break;
             }
             else i++;
         }
-        median = iPeak->getIntensity();
+        median = peak.getIntensity();
     }
     else{
         int index2 = (peakSize / 2 );
         int index1 = index2 - 1 ;
-        list<IPeak*>::iterator iter;
-        IPeak* iPeak1;
-        IPeak* iPeak2;
+        list<Peak>::iterator iter;
+        Peak peak1;
+        Peak peak2;
         int i = 0;
         for(iter = peaks.begin();iter != peaks.end();iter++){
             if( i == index1 ){
-                iPeak1 = *iter;
+                peak1 = *iter;
             }
             else if (i == index2 ){
-                iPeak2 = *iter;
+                peak2 = *iter;
                 break;
             }
             else i++;
         }
-        double intensity1 = iPeak1->getIntensity();
-        double intensity2 =  iPeak2->getIntensity();
+        double intensity1 = peak1.getIntensity();
+        double intensity2 =  peak2.getIntensity();
         median = (intensity1 + intensity2) / 2 ;
     }
-    delete highestNPeaks;
     return meanHigh / median ;
 }

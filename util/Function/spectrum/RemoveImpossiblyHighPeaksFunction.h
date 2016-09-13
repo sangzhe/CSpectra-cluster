@@ -20,7 +20,7 @@ public:
 
     RemoveImpossiblyHighPeaksFunction();
 
-    void apply(ISpectrum* o);
+    Spectrum apply(Spectrum& o);
 
 };
 

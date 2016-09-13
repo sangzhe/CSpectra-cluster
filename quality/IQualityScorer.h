@@ -5,14 +5,14 @@
 #ifndef CSPECTRA_CLUSTER_IQUALITYSCORER_H
 #define CSPECTRA_CLUSTER_IQUALITYSCORER_H
 
-#include "../Spectrum/ISpectrum.h"
+#include "../Spectrum/Spectrum.h"
 
-class ISpectrum;
+class Spectrum;
 
 class IQualityScorer{
 public:
     IQualityScorer(){};
-    virtual double calculateQualityScore(ISpectrum& spectrum) = 0;
+    virtual double calculateQualityScore(Spectrum& spectrum) = 0;
 
 };
 #endif //CSPECTRA_CLUSTER_IQUALITYSCORER_H

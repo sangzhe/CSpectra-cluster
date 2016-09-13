@@ -6,16 +6,16 @@
 #define CSPECTRA_CLUSTER_CONSENSUSSPECTRUM_H
 
 
-#include <set>
 #include "IConsensusSpectrumBuilder.h"
 #include "ConsensusSpectrumBuilderFactory.h"
 #include "../Cluster/ISpectrumHolder.h"
-#include "ConsensusSpectrumFactory.h"
 #include "../util/MZIntensityUtilities.h"
+#include "ConsensusSpectrumFactory.h"
+
 
 class ConsensusSpectrum: public IConsensusSpectrumBuilder {
 public:
-    ConsensusSpectrum();
+    ConsensusSpectrum() ;
 
     static  int DEFAULT_PEAKS_TO_KEEP;
     static  int SIZE_TO_ADD_EVERY_TIME;
@@ -24,52 +24,58 @@ public:
     static ConsensusSpectrumBuilderFactory* FACTORY;
     static ConsensusSpectrumBuilderFactory* buildFactory();
 
-    ConsensusSpectrum(string& id, int& nSpectra,float& sumPrecusorMz,float& sumPrecursorIntens,int& sumCharge,list<IPeak*>& peaks);
+    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const list<Peak>& peaks) ;
 
-    void addSpectra(ISpectrum& merged);
+    void addSpectra(const Spectrum& merged) ;
 
-    void removeSpectra(ISpectrum& removed);
+    void removeSpectra(const Spectrum& removed) ;
 
     bool isRemovedSupported();
 
-    ISpectrum* getConsensusSpectrum();
+    Spectrum getConsensusSpectrum() ;
 
-    ISpectrum* internalGetConcensusSpectrum();
+    Spectrum internalGetConcensusSpectrum()const ;
     void clear();
 
-    int getSpectraCount();
+    int getSpectraCount()const ;
 
 //    string getName();
 //
 //    string getCurrentVersion();
 
-    int getSumCharge();
+    int getSumCharge()const ;
 
-    double getSumPrecursorMz();
+    double getSumPrecursorMz()const ;
 
-    double getSumPrecursorIntensity();
+    double getSumPrecursorIntensity()const ;
 
-    list<IPeak*> getInternalPeaks();
+    list<Peak> getInternalPeaks()const ;
 
-    void addPeaks(list<IPeak*>& peaksToAdd);
+    void addPeaks(const list<Peak>& peaksToAdd);
 
-    void removePeaks(list<IPeak*> &peaksToRemove);
+    void removePeaks(const list<Peak> &peaksToRemove);
 
-    void storeHeldPeaks(list<IPeak*>& peaksToAdd);
+    void storeHeldPeaks(const list<Peak>& peaksToAdd);
 
     void addHeldPeaks();
 
-    void internalAddPeaks(list<IPeak*>& peaksToAdd);
+    void internalAddPeaks(const list<Peak>& peaksToAdd);
 
     void update();
 
-    static list<IPeak*> findConsensusPeaks(list<IPeak*>& input,const int& peaksToKeep, int& nSpectra);
+    static list<Peak> findConsensusPeaks(const list<Peak>& input,const int& peaksToKeep, int& nSpectra) ;
 
     bool isDirty;
 
-    void addSpectra(list<ISpectrum*> &spectra);
+    void addSpectra(const list<Spectrum> &spectra);
 
-    void removeSpectra(list<ISpectrum*> &spectra);
+    void removeSpectra(const list<Spectrum> &spectra);
+
+    string getMethodName();
+
+//    IConsensusSpectrumBuilder& operator=(IConsensusSpectrumBuilder& O);
+
+
 
     ~ConsensusSpectrum();
 
@@ -78,12 +84,12 @@ public:
 
 
 
-private:
-     string id;
 
-    list<IPeak*> allPeaks;
-    set<IPeak*> heldPeaks;
-    list<IPeak*> consensusPeaks;
+private:
+    string id;
+    list<Peak> allPeaks;
+    unordered_set<Peak> heldPeaks;
+    list<Peak> consensusPeaks;
 
 
     ConsensusSpectrum(string& id);
@@ -101,20 +107,20 @@ protected:
     float lowestConcensusPeak;
     int averageCharge;
     int sumCharge;
-    ISpectrum* consensusSpectrum;
+    Spectrum* consensusSpectrum;
     const string methodName;
     const string methodVersion;
     static  float FINAL_MZ_THRESHOLD;
     static  float MZ_THRESHOLD_STEP;
     static  bool USE_ROUNDING;
     static  int MZ_PRECISION;
-    void setDirty(bool isDirty);
+    void setDirty(bool isDirty) ;
 
-    static list<IPeak*> mergeIdenticalPeaks(list<IPeak*>& inPeaks);
+    static list<Peak> mergeIdenticalPeaks(const list<Peak>& inPeaks);
 
-    static list<IPeak*> adaptPeakIntensities(list<IPeak*>& inp, int nSpectra);
+    static list<Peak> adaptPeakIntensities(const list<Peak>& inp, int nSpectra);
 
-    static list<IPeak*> filterNoise(list<IPeak*>& inp);
+    static list<Peak> filterNoise(const list<Peak>& inp);
 
 
 

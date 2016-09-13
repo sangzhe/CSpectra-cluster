@@ -7,6 +7,9 @@
 
 #include "IPeak.h"
 #include "string"
+#include <boost/unordered/unordered_set.hpp>
+
+using namespace boost::unordered;
 using namespace std;
 
 class Peak: public IPeak{
@@ -16,30 +19,36 @@ private:
     int count;
 
 public:
+    Peak(){};
     Peak(const float& massChargeRatio, const float& intensity);
 
     Peak(const float& massChargeRatio, const float& intensity,int count);
 
-    Peak(IPeak& copied);
 
-    float getMz();
+    Peak(const Peak& copied);
 
-    float getIntensity();
 
-    int getCount();
+    float getMz()const ;
 
-    static bool cmpPeak( IPeak* A,  IPeak* B);
+    float getIntensity() const ;
 
-    static bool cmpPeakMz( IPeak* A,  IPeak* B);
+    int getCount() const ;
 
-    static bool cmpPeakIntensity( IPeak* A,  IPeak* B);
+    static int cmpPeak( Peak& A,  Peak& B);
+
+    static int cmpPeakMz( Peak& A,  Peak& B);
+
+    static int cmpPeakIntensity( Peak& A,  Peak& B);
 
     string toString();
 
-    bool operator == ( IPeak& O);
+    bool operator == (const Peak& O) const;
 
-    ~Peak();
+    bool operator < (const Peak& O) const;
 
+    friend size_t hash_value(const Peak &p) ;
+//
+    Peak& operator =(const Peak& O);
 
 };
 

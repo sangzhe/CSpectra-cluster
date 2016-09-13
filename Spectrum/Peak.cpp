@@ -17,33 +17,34 @@ Peak::Peak(const float& massChargeRatio, const float& intensity, int count) {
     this->count = count;
 }
 
-Peak::Peak(IPeak& copied) {
+Peak::Peak(const Peak& copied) {
     this->massChargeRatio = copied.getMz();
     this->intensity = copied.getIntensity();
     this->count = copied.getCount();
 }
 
-int Peak::getCount() {
+
+int Peak::getCount()const  {
     return count;
 }
 
-float Peak::getIntensity() {
+float Peak::getIntensity() const {
     return intensity;
 }
 
-float Peak::getMz() {
+float Peak::getMz() const {
     return massChargeRatio;
 }
 
-bool Peak::cmpPeak(IPeak* A,IPeak* B) {
-    float Amz = A->getMz();
-    float Bmz = B->getMz();
+int Peak::cmpPeak(Peak& A,Peak& B) {
+    float Amz = A.getMz();
+    float Bmz = B.getMz();
 
     int ret = IOUtilities::compare(Amz,Bmz);
     if(ret != 0) return ret;
 
-    float Aintent = A->getIntensity();
-    float Bintent = B->getIntensity();
+    float Aintent = A.getIntensity();
+    float Bintent = B.getIntensity();
 
     ret = IOUtilities::compare(Aintent,Bintent);
     if(ret != 0) return ret;
@@ -51,20 +52,21 @@ bool Peak::cmpPeak(IPeak* A,IPeak* B) {
     return 0;
 }
 
-bool Peak::cmpPeakMz(IPeak *A, IPeak *B) {
+int Peak::cmpPeakMz(Peak &A, Peak &B) {
 
-    return IOUtilities::compare(A->getMz(),B->getMz());
+    return IOUtilities::compare(A.getMz(),B.getMz());
 }
 
-bool Peak::cmpPeakIntensity(IPeak *A, IPeak *B) {
-    if (A == NULL){
-        return (B == NULL? 0:-1);
+int Peak::cmpPeakIntensity(Peak& A, Peak& B) {
+    Peak C = Peak();
+    if (A == C){
+        return (B == C? 0:-1);
     }
-    if(B == NULL){
+    if(B == C){
         return 1;
     }
-    if(A->getIntensity() != B->getIntensity()){
-        return (B->getIntensity() < A->getIntensity()? -1:1);
+    if(A.getIntensity() != B.getIntensity()){
+        return (B.getIntensity() < A.getIntensity()? -1:1);
     }
     return 0;
 }
@@ -80,10 +82,27 @@ string Peak::toString() {
     return ret;
 }
 
-bool Peak::operator==( IPeak &O) {
+bool Peak::operator==(const Peak &O) const{
+
 
     if (IOUtilities::compare(O.getIntensity(), intensity) != 0) return false;
     return IOUtilities::compare(O.getMz(), massChargeRatio) == 0;
 }
 
-Peak::~Peak(){}
+bool Peak::operator<(const Peak &O) const {
+    return (IOUtilities::compare(intensity,O.getIntensity()) == -1);
+}
+
+Peak& Peak::operator=(const Peak &O){
+    this->count = O.getCount();
+    this->intensity = O.getIntensity();
+    this->massChargeRatio = O.getMz();
+}
+
+size_t hash_value(const Peak &p) {
+    size_t seed = 0;
+    boost::hash_combine(seed,p.intensity);
+    boost::hash_combine(seed,p.massChargeRatio);
+    boost::hash_combine(seed,p.count);
+    return seed;
+}

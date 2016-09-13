@@ -15,19 +15,19 @@ RemoveImpossiblyHighPeaksFunction::RemoveImpossiblyHighPeaksFunction() {
     new (this)RemoveImpossiblyHighPeaksFunction(DEFAULT_TOLERANCE);
 }
 
-void RemoveImpossiblyHighPeaksFunction::apply(ISpectrum *o) {
-     float monoisotopicMass = Mass::getMonoisotopicMass(o->getPrecursorMz(), o->getPrecursorCharge());
+Spectrum RemoveImpossiblyHighPeaksFunction::apply(Spectrum &o) {
+     float monoisotopicMass = Mass::getMonoisotopicMass(o.getPrecursorMz(), o.getPrecursorCharge());
      float maxMass = monoisotopicMass + Mass::PROTON + tolerance;
 
-    list<IPeak*> filteredPeaks;
-    list<IPeak*> peak = o->getPeaks();
-    list<IPeak*>::iterator iterator1;
+    list<Peak> filteredPeaks;
+    list<Peak> peak = o.getPeaks();
+    list<Peak>::iterator iterator1;
     for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
-        if ((*iterator1)->getMz() > maxMass)
+        if (iterator1->getMz() > maxMass)
             continue;
-        filteredPeaks.push_back(*iterator1);
+        Peak add(*iterator1);
+        filteredPeaks.push_back(add);
     }
-    ISpectrum *filteredSpectrum = new Spectrum(*o,filteredPeaks,true);
-    delete o;
-    o = filteredSpectrum;
+    Spectrum filteredSpectrum(o,filteredPeaks,true);
+    return filteredSpectrum;
 }

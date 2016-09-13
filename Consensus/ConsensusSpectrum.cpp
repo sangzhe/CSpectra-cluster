@@ -17,7 +17,8 @@ float ConsensusSpectrum::NOISE_FILTER_INCREMENT = 100;
 
 float ConsensusSpectrum::FRACTION_OF_LOWEST_PEAK_TOKEEP = 0.40F;
 
-const string methodName = "Crowded Consensus Spectrum Builder";
+
+const string methodName = "ConsensusSpectrum";
 const string methodVersion = "0.1";
 
 float ConsensusSpectrum::FINAL_MZ_THRESHOLD = 0.4F;
@@ -38,35 +39,36 @@ ConsensusSpectrum::ConsensusSpectrum(string &id) {
     this->id = id;
 }
 
-ConsensusSpectrum::ConsensusSpectrum(string &id, int &nSpectra, float &sumPrecusorMz, float &sumPrecursorIntens,
-                                     int &sumCharge, list<IPeak*> &peaks) {
+ConsensusSpectrum::ConsensusSpectrum(string &id, const int &nSpectra, const float &sumPrecusorMz, const float &sumPrecursorIntens,
+                                     const int &sumCharge, const list<Peak> &peaks)  {
     this->id = id;
     this->nSpectra = nSpectra;
     this->sumPrecursorMz = sumPrecusorMz;
     this->sumPrecursorIntens = sumPrecursorIntens;
     this->sumCharge = sumCharge;
-    consensusPeaks.merge(peaks);
+    consensusPeaks.merge(list<Peak>(peaks));
 
     setDirty(true);
 }
 
-list<IPeak*> ConsensusSpectrum::getInternalPeaks() {
+list<Peak> ConsensusSpectrum::getInternalPeaks() const {
     return consensusPeaks;
 }
 
-void ConsensusSpectrum::addSpectra(list<ISpectrum*> &spectra) {
+void ConsensusSpectrum::addSpectra(const list<Spectrum> &spectra) {
     if(spectra.size() < 1) return;
 
-    list<ISpectrum*>::iterator iter;
-    for(iter = spectra.begin();iter != spectra.end();iter++){
-        addSpectra(*(*iter));
+    list<Spectrum> in = spectra;
+    list<Spectrum>::iterator iter;
+    for(iter = in.begin();iter != in.end();iter++){
+        addSpectra(*iter);
     }
     setDirty(true);
 
 }
 
-void ConsensusSpectrum::addSpectra(ISpectrum &merged) {
-    list<IPeak*> spectrumPeaks = merged.getPeaks();
+void ConsensusSpectrum::addSpectra(const Spectrum &merged)  {
+    list<Peak> spectrumPeaks = merged.getPeaks();
     addPeaks(spectrumPeaks);
     sumCharge += merged.getPrecursorCharge();
     sumPrecursorMz += merged.getPrecursorMz();
@@ -75,18 +77,20 @@ void ConsensusSpectrum::addSpectra(ISpectrum &merged) {
     nSpectra++;
 }
 
-void ConsensusSpectrum::removeSpectra(list<ISpectrum *> &spectra) {
+void ConsensusSpectrum::removeSpectra(const list<Spectrum> &spectra) {
     if(spectra.size() < 1) return;
-    list<ISpectrum*>::iterator iter;
-    for(iter = spectra.begin();iter != spectra.end();iter++){
-        removeSpectra(*(*iter));
+
+    list<Spectrum> in = spectra;
+    list<Spectrum>::iterator iter;
+    for(iter = in.begin();iter != in.end();iter++){
+        removeSpectra(*iter);
 }
     setDirty(true);
 
 }
 
-void ConsensusSpectrum::removeSpectra(ISpectrum &removed) {
-    list<IPeak *> spectrumPeaks = removed.getPeaks();
+void ConsensusSpectrum::removeSpectra(const Spectrum &removed) {
+    list<Peak> spectrumPeaks = removed.getPeaks();
     removePeaks(spectrumPeaks);
 
     sumCharge -= removed.getPrecursorCharge();
@@ -96,13 +100,13 @@ void ConsensusSpectrum::removeSpectra(ISpectrum &removed) {
     nSpectra--;
 }
 
-void ConsensusSpectrum::removePeaks(list<IPeak *> &peaksToRemove) {
-
+void ConsensusSpectrum::removePeaks(const list<Peak> &peaksToRemove) {
+//Todo RemovePeaks;
 }
 
 void ConsensusSpectrum::addHeldPeaks() {
-    list<IPeak*> added;
-    set<IPeak*>::iterator iter;
+    list<Peak> added;
+    unordered_set<Peak>::iterator iter;
     for(iter = heldPeaks.begin();iter != heldPeaks.end();iter++){
         added.push_back(*iter);
     }
@@ -111,73 +115,83 @@ void ConsensusSpectrum::addHeldPeaks() {
     heldPeaks.clear();
 }
 
-void ConsensusSpectrum::internalAddPeaks(list<IPeak *> &peaksToAdd) {
-    list<IPeak*> newPeaks ;
+void ConsensusSpectrum::internalAddPeaks(const list<Peak> &peaksToAdd) {
+    list<Peak> peaks = peaksToAdd;
+    list<Peak> newPeaks ;
 
-    list<IPeak*>::iterator iter;
-    for(iter = peaksToAdd.begin() ;iter != peaksToAdd.end();iter++){
-        IPeak* peakToAdd = *iter;
-        double mzToAdd = peakToAdd->getMz();
+    list<Peak>::iterator iter;
+
+    list<Peak> PeaksToUpdate ;
+    for(iter = peaks.begin() ;iter != peaksToAdd.end();iter++){
+        Peak peakToAdd = *iter;
+        double mzToAdd = peakToAdd.getMz();
         if(USE_ROUNDING){
             mzToAdd = MZIntensityUtilities::round(mzToAdd, MZ_PRECISION);
         }
         bool wasAdded = false;
 
-        list<IPeak*>::iterator iter1;
-        for(iter1 = allPeaks.begin();iter1 != allPeaks.end();iter1++){
-            IPeak* currentExistingPeak = *iter1;
-            if(mzToAdd < currentExistingPeak->getMz()){
-                newPeaks.push_back(new Peak((float)mzToAdd,peakToAdd->getIntensity(),peakToAdd->getCount()));
+        list<Peak>::iterator iter1;
+        for(iter1 = allPeaks.begin();iter1 != allPeaks.end();){
+            Peak currentExistingPeak = *iter1;
+            if(mzToAdd < currentExistingPeak.getMz()){
+                Peak add((float)mzToAdd,peakToAdd.getIntensity(),peakToAdd.getCount());
+                newPeaks.push_back(add);
                 wasAdded = true;
+                iter1++;
                 break;
             }
-            if(mzToAdd == currentExistingPeak->getMz()){
-                allPeaks.erase(iter);
-                allPeaks.push_back(new Peak(currentExistingPeak->getMz(),peakToAdd->getIntensity()+currentExistingPeak->getIntensity(),currentExistingPeak->getCount()+peakToAdd->getCount()));
+            if(mzToAdd == currentExistingPeak.getMz()){
+                PeaksToUpdate.push_back(*iter);
+                Peak add(currentExistingPeak.getMz(),peakToAdd.getIntensity()+currentExistingPeak.getIntensity(),currentExistingPeak.getCount()+peakToAdd.getCount());
+                allPeaks.push_back(add);
                 wasAdded = true;
+                iter1++;
                 break;
             }
         }
         if(!wasAdded)
-            newPeaks.push_back(new Peak((float)mzToAdd,peakToAdd->getIntensity(),peakToAdd->getCount()));
+            newPeaks.push_back(Peak((float)mzToAdd,peakToAdd.getIntensity(),peakToAdd.getCount()));
 
-        allPeaks.merge(newPeaks);
-        allPeaks.sort(Peak::cmpPeakMz);
     }
+    for(iter = PeaksToUpdate.begin();iter != PeaksToUpdate.end();iter++){
+        allPeaks.erase(iter);
+    }
+    allPeaks.merge(list<Peak>(newPeaks));
+    allPeaks.sort(Peak::cmpPeakMz);
 }
 
-list<IPeak*> ConsensusSpectrum::findConsensusPeaks(list<IPeak *> &input, const int &peaksToKeep, int &nSpectra) {
+list<Peak> ConsensusSpectrum::findConsensusPeaks(const list<Peak> &input, const int &peaksToKeep, int &nSpectra){
     // Step 1: merge identical peaks
-    list<IPeak*> ret = mergeIdenticalPeaks(input);
+    list<Peak> ret = mergeIdenticalPeaks(input);
     // Step 2: adapt the peak intensities based on the probability that the peak has been observed
     ret = adaptPeakIntensities(ret,nSpectra);
     // Step 3: filter the spectrum
-    filterNoise(ret);
+    ret = filterNoise(ret);
     return ret;
 }
 
-list<IPeak*> ConsensusSpectrum::mergeIdenticalPeaks(list<IPeak *> &inPeaks) {
-    list<IPeak*> filterdPeaks;
+list<Peak> ConsensusSpectrum::mergeIdenticalPeaks( const list<Peak> &inPeaks) {
+    list<Peak> filterdPeaks;
     if(inPeaks.size() == 0) return filterdPeaks;
 
-    filterdPeaks.merge(inPeaks);
+    filterdPeaks.merge(list<Peak>(inPeaks));
 
     for(float range = MZ_THRESHOLD_STEP;range <= FINAL_MZ_THRESHOLD;range += MZ_THRESHOLD_STEP){
-        list<IPeak*> *newPeakList = new list<IPeak*>;
-        IPeak* currentPeak = *filterdPeaks.begin();
+        list<Peak> newPeakList;
+        Peak currentPeak = *filterdPeaks.begin();
 
-        list<IPeak*>::iterator iter = filterdPeaks.begin();
+        list<Peak>::iterator iter = filterdPeaks.begin();
         iter++;
         for(iter;iter != filterdPeaks.end(); iter++){
-            IPeak* nextPeak = *iter;
+            Peak nextPeak = *iter;
 
-            float nextPeakMz = nextPeak->getMz();
-            float currentPeakMz = currentPeak->getMz();
+            float nextPeakMz = nextPeak.getMz();
+            float currentPeakMz = currentPeak.getMz();
             float testLimit = currentPeakMz +range;
 
             if(nextPeakMz <= testLimit){
-                double nextPeakIntensity = nextPeak->getIntensity();
-                double currentPeakIntensity = currentPeak->getIntensity();
+                double nextPeakIntensity = nextPeak.getIntensity();
+                double currentPeakIntensity = currentPeak.getIntensity();
                 double totalIntensity = nextPeakIntensity + currentPeakIntensity;
                 double nextPeakFraction = nextPeakIntensity /totalIntensity;
                 double currentPeakFraction = currentPeakIntensity / totalIntensity;
@@ -186,40 +200,37 @@ list<IPeak*> ConsensusSpectrum::mergeIdenticalPeaks(list<IPeak *> &inPeaks) {
 
                 double intensity = currentPeakIntensity + nextPeakIntensity;
 
-                int count = currentPeak->getCount() + nextPeak->getCount();
+                int count = currentPeak.getCount() + nextPeak.getCount();
 
-                IPeak *newPeak = new Peak((float)weightedMz,(float)intensity,count);
+                Peak newPeak((float)weightedMz,(float)intensity,count);
 
-                delete currentPeak;
                 currentPeak = newPeak;
             }else{
-                newPeakList->push_back(currentPeak);
-                delete currentPeak;
+                newPeakList.push_back(currentPeak);
                 currentPeak = nextPeak;
 
             }
         }
-        newPeakList->push_back(currentPeak);
+        newPeakList.push_back(currentPeak);
         filterdPeaks.clear();
-        filterdPeaks.merge(*newPeakList);
-        delete newPeakList;newPeakList = nullptr;
+        filterdPeaks.merge(list<Peak>(newPeakList));
     }
     return filterdPeaks;
 }
 
-list<IPeak*> ConsensusSpectrum::adaptPeakIntensities(list<IPeak *> &inp, int nSpectra) {
+list<Peak> ConsensusSpectrum::adaptPeakIntensities(const list<Peak> &inp, int nSpectra) {
 //    int originalCount;
 //    ToDo add PeakUtilities class
 //    originalCount = PeakUtilities.getTotalCount(inp);
-    list<IPeak*> ret = inp;
-    list<IPeak*>::iterator iter;
+    list<Peak> ret = inp;
+    list<Peak>::iterator iter;
     for(iter = ret.begin();iter != ret.end();iter++){
-        IPeak* peak = *iter;
-        float peakProbability = (float)peak->getCount() / (float)nSpectra;
-        float newIntensity = (float)(peak->getIntensity() * (0.95 +0.05 * pow(1+peakProbability,5)));
+        Peak peak = *iter;
+        float peakProbability = (float)peak.getCount() / (float)nSpectra;
+        float newIntensity = (float)(peak.getIntensity() * (0.95 +0.05 * pow(1+peakProbability,5)));
 
         ret.erase(iter);
-        ret.push_back(new Peak(peak->getMz(),newIntensity,peak->getCount()));
+        ret.push_back(Peak(peak.getMz(),newIntensity,peak.getCount()));
     }
 //    int finalCount;
 //    ToDo PeakUtilities;
@@ -229,13 +240,13 @@ list<IPeak*> ConsensusSpectrum::adaptPeakIntensities(list<IPeak *> &inp, int nSp
     return ret;
 }
 
-list<IPeak*> ConsensusSpectrum::filterNoise(list<IPeak *> &inp) {
-    inp.sort(Peak::cmpPeakMz);
-    list<IPeak*> filteredSpectrum = inp;
+list<Peak> ConsensusSpectrum::filterNoise(const list<Peak> &inp) {
+    list<Peak> in = inp;
+    in.sort(Peak::cmpPeakMz);
     BinnedHighestNPeakFunction func = BinnedHighestNPeakFunction(DEFAULT_PEAKS_TO_KEEP,(int)NOISE_FILTER_INCREMENT,0);
-    func.apply(filteredSpectrum);
+    in = func.apply(in);
 //    filteredSpectrum = noiseFilter(inp);
-    inp = filteredSpectrum;
+    return in;
 }
 
 void ConsensusSpectrum::clear() {
@@ -248,7 +259,7 @@ void ConsensusSpectrum::clear() {
     setDirty(true);
 }
 
-void ConsensusSpectrum::addPeaks(list<IPeak *> &peaksToAdd) {
+void ConsensusSpectrum::addPeaks(const list<Peak> &peaksToAdd) {
     if(nSpectra < SIZE_TO_ADD_EVERY_TIME){
         internalAddPeaks(peaksToAdd);
         return;
@@ -265,17 +276,18 @@ void ConsensusSpectrum::addPeaks(list<IPeak *> &peaksToAdd) {
     }
 }
 
-void ConsensusSpectrum::storeHeldPeaks(list<IPeak *> &peaksToAdd) {
+void ConsensusSpectrum::storeHeldPeaks(const list<Peak> &peaksToAdd) {
     if(nSpectra < SIZE_TO_ADD_EVERY_TIME) throw("cannot add without a fairly large cluster");
 
     if(lowestConcensusPeak == 0)  getConsensusSpectrum();
 
+    list<Peak> in = peaksToAdd;
     float minimuxKeptPeak = lowestConcensusPeak * FRACTION_OF_LOWEST_PEAK_TOKEEP;
 
-    list<IPeak*>::iterator iter;
-    for(iter = peaksToAdd.begin();iter != peaksToAdd.end();iter++){
-        if((*iter)->getIntensity() > minimuxKeptPeak){
-            heldPeaks.insert(*iter);
+    list<Peak>::iterator iter;
+    for(iter = in.begin();iter != peaksToAdd.end();iter++){
+        if(iter->getIntensity() > minimuxKeptPeak){
+            heldPeaks.insert(Peak(*iter));
         }
     }
 
@@ -292,49 +304,56 @@ void ConsensusSpectrum::update() {
         averagePrecursorIntens = 0;
     }
     if(allPeaks.size() < 1){
-        list<IPeak*> emptylist;
+        list<Peak> emptylist;
+        if(consensusSpectrum != nullptr){
+            delete consensusSpectrum;
+        }
         consensusSpectrum = new Spectrum(id,averageCharge,averagePrecursorMz,Defaults::getDefaultQualityScorer(),emptylist);
         setDirty(false);
         return;
     }
-    list<IPeak*> newPeaks = findConsensusPeaks(allPeaks,DEFAULT_PEAKS_TO_KEEP,nSpectra);
+    list<Peak> newPeaks = findConsensusPeaks(allPeaks,DEFAULT_PEAKS_TO_KEEP,nSpectra);
 
     consensusPeaks.clear();
-    consensusPeaks.merge(newPeaks);
+    consensusPeaks.merge(list<Peak>(newPeaks));
     float minimumConsensusPeak = 0x1.fffffeP+127f;
-    list<IPeak*>::iterator iter;
+    list<Peak>::iterator iter;
     for(iter = consensusPeaks.begin();iter != consensusPeaks.end();iter++){
-        float intensity = (*iter)->getIntensity();
+        float intensity = iter->getIntensity();
         if( intensity < minimumConsensusPeak && intensity > 0) minimumConsensusPeak = intensity;
         lowestConcensusPeak = minimumConsensusPeak;
 
+        if(consensusSpectrum != nullptr){
+            delete consensusSpectrum;
+        }
         consensusSpectrum = new Spectrum(id,averageCharge,averagePrecursorMz,Defaults::getDefaultQualityScorer(),consensusPeaks);
         setDirty(false);
     }
 
 }
 
-ISpectrum* ConsensusSpectrum::getConsensusSpectrum() {
+Spectrum ConsensusSpectrum::getConsensusSpectrum() {
     if(isDirty) update();
     return internalGetConcensusSpectrum();
 }
-ISpectrum* ConsensusSpectrum::internalGetConcensusSpectrum() {
-    return consensusSpectrum;
+Spectrum ConsensusSpectrum::internalGetConcensusSpectrum() const{
+    Spectrum ret(*consensusSpectrum);
+    return ret;
 }
 
-int ConsensusSpectrum::getSumCharge() {
+int ConsensusSpectrum::getSumCharge() const{
     return sumCharge;
 }
 
-double ConsensusSpectrum::getSumPrecursorMz() {
+double ConsensusSpectrum::getSumPrecursorMz()const {
     return sumPrecursorMz;
 }
 
-double ConsensusSpectrum::getSumPrecursorIntensity() {
+double ConsensusSpectrum::getSumPrecursorIntensity() const{
     return sumPrecursorIntens;
 }
 
-int ConsensusSpectrum::getSpectraCount() {
+int ConsensusSpectrum::getSpectraCount()const {
     return nSpectra;
 }
 
@@ -342,10 +361,16 @@ bool ConsensusSpectrum::isRemovedSupported() {
     return true;
 }
 
-void ConsensusSpectrum::setDirty(bool isDirty) {
+void ConsensusSpectrum::setDirty(bool isDirty){
     this->isDirty = isDirty;
 }
+string ConsensusSpectrum::getMethodName() {
+    return methodName;
+}
+
+
 ConsensusSpectrum::~ConsensusSpectrum() {
-    delete FACTORY,consensusSpectrum;
+    delete consensusSpectrum,FACTORY;
+    consensusSpectrum,FACTORY= nullptr;
 }
 

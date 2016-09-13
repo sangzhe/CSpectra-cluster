@@ -6,7 +6,7 @@
 #define CSPECTRA_CLUSTER_ICONSENSUSSPECTRUMBUILDER_H
 
 #include "list"
-#include "../Spectrum/ISpectrum.h"
+#include "../Spectrum/Spectrum.h"
 #include "../Spectrum/IPeak.h"
 #include "../Cluster/ISpectrumHolder.h"
 
@@ -14,13 +14,14 @@ class IConsensusSpectrumBuilder: public ISpectrumHolder{
     public:
     IConsensusSpectrumBuilder(){};
 
-    virtual ISpectrum* getConsensusSpectrum() = 0;
-    virtual ISpectrum* internalGetConcensusSpectrum() = 0;
+    virtual Spectrum getConsensusSpectrum() = 0;
     virtual void clear() = 0;
-    virtual int getSpectraCount() = 0;
-    virtual int getSumCharge() = 0;
-    virtual double getSumPrecursorMz() = 0;
-    virtual double getSumPrecursorIntensity() = 0;
+    virtual int getSpectraCount() const = 0;
+    virtual int getSumCharge() const = 0;
+    virtual double getSumPrecursorMz() const = 0;
+    virtual double getSumPrecursorIntensity() const = 0;
+    virtual string getMethodName() = 0;
+//    virtual IConsensusSpectrumBuilder& operator=(IConsensusSpectrumBuilder& O) = 0;
 //    virtual list<IPeak> getRawConsensusPeaks() = 0;
 
 };

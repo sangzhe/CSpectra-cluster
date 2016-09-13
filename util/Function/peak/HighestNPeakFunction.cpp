@@ -14,18 +14,18 @@ HighestNPeakFunction::HighestNPeakFunction(int maxPeaks) {
     this->maxPeaks = maxPeaks;
 }
 
-void HighestNPeakFunction::apply(list<IPeak *> &originalPeaks) {
-    list<IPeak*> byIntensity = originalPeaks;
+list<Peak> HighestNPeakFunction::apply(list<Peak> &originalPeaks) {
+    list<Peak> byIntensity = originalPeaks;
     byIntensity.sort(Peak::cmpPeakIntensity);
-    list<IPeak*> ret;
+    list<Peak> ret;
 
-    list<IPeak*>::iterator iter;
+    list<Peak>::iterator iter;
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++){
         if(ret.size() >= maxPeaks){
-            delete *iter;
+            break;
         }else{
             ret.push_back(*iter);
         }
     }
-    originalPeaks = ret;
+    originalPeaks = list<Peak>(ret);
 }

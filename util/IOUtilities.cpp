@@ -42,6 +42,13 @@ int IOUtilities::compare(const float A, const float B) {
 
 }
 
+int IOUtilities::compare(const double A, const double B) {
+    const float EPSINON = 0.00000001;
+    if ( A < B ) return -1;
+    if ( A > B ) return 1;
+    if(fabs( A - B ) < EPSINON ) return 0;
+}
+
 string IOUtilities::FloatToString(const float &Num,const string& accuracy) {
     char output[50];
     snprintf(output,50,accuracy.data(),Num);

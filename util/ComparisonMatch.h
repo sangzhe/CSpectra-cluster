@@ -10,10 +10,15 @@
 class ComparisonMatch {
 public:
     ComparisonMatch(string& spectrumId,float similarity);
-    string getSpectrumId();
-    float getSimilarity();
-    int compare(ComparisonMatch& o);
+    string getSpectrumId() const;
+    float getSimilarity() const;
+//    int compare(const ComparisonMatch& o);
 
+    bool operator <(const ComparisonMatch &O) const;
+
+    bool operator ==(const ComparisonMatch &O) const;
+
+    ComparisonMatch& operator =(const ComparisonMatch &O);
 private:
     string spectrumId;
     float similarity;

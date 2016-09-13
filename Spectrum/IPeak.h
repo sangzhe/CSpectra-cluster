@@ -8,10 +8,9 @@
 class IPeak{
     public:
         IPeak(){};
-        virtual float getMz() = 0;
-        virtual float getIntensity() = 0;
-        virtual int getCount() = 0;
-        virtual bool operator == ( IPeak& O) = 0;
+        virtual float getMz() const = 0;
+        virtual float getIntensity() const  = 0;
+        virtual int getCount() const = 0;
 
 };
 #endif //CSPECTRA_CLUSTER_IPEAK_H

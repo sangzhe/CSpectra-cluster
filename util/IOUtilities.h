@@ -25,6 +25,9 @@ public:
 
     static int compare(const float A,const float B);
 
+    static int compare(const double A,const double B);
+
+
     static string FloatToString(const float& Num,const string& accuracy);
 
     static string IntToString(const int& Num,const string& accuracy);
@@ -35,11 +38,7 @@ public:
 
     static double StringToDouble(const string& input);
 
-    void RemoveImpossiblyHighPeaksFunction(ISpectrum* spectrum);
 
-    void RemovePrecursorPeaksFunction(ISpectrum* spectrum,float fragmentIonTolerance);
-
-    void HighestNSpectrumPeaksFunction(ISpectrum* spectrum, int maxPeaks);
 };
 
 

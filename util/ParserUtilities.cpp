@@ -51,7 +51,7 @@ string ParserUtilities::convertClusterToString(ICluster& cluster) {
 ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
     string currentId = "";
     bool storesPeakLists = false;
-    list<ISpectrum*> spectra;
+    list<Spectrum> spectra;
     IConsensusSpectrumBuilder* consensusSpectrumBuilder;
     list<ComparisonMatch> comparisonMatches;
 
@@ -65,28 +65,27 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
             }
             // naked spectrum
             if(line.substr(0,BEGIN_IONS.length()) == BEGIN_IONS){
-                ISpectrum* internalComplete = readMGFScan(ss,line);
-                list<IPeak*> peaks = internalComplete->getPeaks();
-                ISpectrum *internal = new Spectrum(*internalComplete,peaks);
-                ISpectrum *internalFilterd = internal;
+                Spectrum internalComplete = readMGFScan(ss,line);
+                list<Peak> peaks = internalComplete.getPeaks();
+                Spectrum internalFilterd =  Spectrum(internalComplete,peaks);
                 // perform default peak filtering
 
-                Defaults::doDefaultPeakFilter(internalFilterd);
+                internalFilterd = Spectrum(Defaults::doDefaultPeakFilter(internalFilterd));
 
                 IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
-                string Id = internal->getId();
+                string Id = internalFilterd.getId();
                 ICluster *ret = new SpectralCluster(Id,*consensusSpectrumBuilder);
-                ret->addSpectra(*internalFilterd);
-                delete internalFilterd,internal;
+                ret->addSpectra(internalFilterd);
+
                 return ret;
             }
             getline(ss,line);
         }
-        if(line == "") return NULL;
+        if(line == "") return nullptr;
 
         getline(ss,line);
 
-        Properties *properties = new Properties();
+        Properties properties;
         string propertyTitle = "Properties=";
         string comparisonTitle = "ComparisonMatched=";
         string BEGIN_CONSENSUS = "BEGIN CONSENSUS";
@@ -107,12 +106,12 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
             consensusSpectrumBuilder = parseConsensusSpectrumBuilder(ss,line);
         }
         while (line != ""){
-            ISpectrum* internal = readMGFScan(ss,line);
-            if(internal != NULL)
+            Spectrum internal = readMGFScan(ss,line);
+            if(!(internal == Spectrum()))
                 spectra.push_back(internal);
             getline(ss,line);
             if(line == "")
-                return NULL;
+                return nullptr;
             if(line.substr(0,END_CLUSTER.length()) == END_CLUSTER){
                 ICluster* ret;
                 if(storesPeakLists){
@@ -129,11 +128,11 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
 
                 set<string>::iterator iter;
                 int i =0;
-                set<string> keys = properties->getKeySet();
+                set<string> keys = properties.getKeySet();
                 if(keys.size() != 0) {
                     for (iter = keys.begin(); iter != keys.end(); iter++) {
                         string name = *iter;
-                        ret->setProperty(name, properties->getProperty(name));
+                        ret->setProperty(name, properties.getProperty(name));
                     }
                 }
                 return ret;
@@ -144,7 +143,7 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
     }catch(exception){
         throw("runtime_error");
     }
-    return NULL;
+    return nullptr;
 
 
 
@@ -157,14 +156,14 @@ list<ICluster*> ParserUtilities::readSpectralCluster(string& clusterString) {
     ss << clusterString;
     string line ="";
     ICluster* cls =  readSpectralCluster(ss,line);
-    while (cls != NULL){
+    while (cls != nullptr){
         holder.push_back(cls);
         cls = readSpectralCluster(ss,line);
     }
     return holder;
 }
 
-ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
+Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
     string titleLine = "";
     string sequence = "";
     string protein = "";
@@ -172,9 +171,9 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
     string modifications = "";
 
 
+    Spectrum ret;
 
-
-    Properties *props = new Properties();
+    Properties props;
 
     string annotation = "";
 
@@ -195,9 +194,9 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
             }
             getline(ss,line);
         }
-        if (line == "") return NULL;
+        if (line == "") return Spectrum();
 
-        list<IPeak*> holder;
+        list<Peak> holder;
 
         while (line != ""){
 //            getline(ss,line);
@@ -292,18 +291,22 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                 holder.sort(Peak::cmpPeak);
 
                 IQualityScorer* defaultQualityScorer = Defaults::getDefaultQualityScorer();
-                ISpectrum *spectrum = new Spectrum(title,dcharge,(float)mz,defaultQualityScorer,holder);
+                Spectrum *spectrum = new Spectrum(title,dcharge,(float)mz,defaultQualityScorer,holder);
 
-                Defaults::doDefaultPeakFilter(spectrum);
+                Spectrum *spectrum1 = new Spectrum(Defaults::doDefaultPeakFilter(*spectrum));
 
-                set<string> keys = props->getKeySet();
+                delete spectrum;
+
+                spectrum = spectrum1;
+
+                set<string> keys = props.getKeySet();
                 if(keys.size() != 0) {
                     set<string>::iterator keysIter;
                     for (keysIter = keys.begin(); keysIter != keys.end(); keysIter++) {
-                        spectrum->setProperty(*keysIter, props->getProperty(*keysIter));
+                        spectrum->setProperty(*keysIter, props.getProperty(*keysIter));
                     }
                 }
-                props->clear();
+                props.clear();
 
                 if (species != "")
                     spectrum->setProperty(KnownProperties::TAXONOMY_KEY,species);
@@ -317,8 +320,9 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                     spectrum->setProperty(KnownProperties::MODIFICATION_KEY, modifications);
                 if (titleLine != "")
 //                    handleTitleLine(spectrum, titleLine);
-                delete props;
-                return spectrum;
+                ret = *spectrum;
+                delete spectrum;
+                return ret;
             }
             else {
                 IOUtilities::replace(line,"\t", " ");
@@ -328,7 +332,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                     try{
                         float peakMass = IOUtilities::StringToFloat(items[0]);
                         float peakIntensity = IOUtilities::StringToFloat(items[1]);
-                        Peak *added = new Peak(peakMass,peakIntensity);
+                        Peak added = Peak(peakMass,peakIntensity);
                         holder.push_back(added);
                     }catch(exception s){
 //                        handleBadMGFData(line);
@@ -341,7 +345,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
             }
 
         }
-    return NULL;
+    return Spectrum();
     }catch(exception){
        // throw new runtime_error(" ");
     }
@@ -394,7 +398,7 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
         sumPrecMz = IOUtilities::StringToFloat(headerFields[5].substr(summzTitle.length()));
 
     //process the peak list
-    list<IPeak*> peaks;
+    list<Peak> peaks;
 
     while(getline(ss,line) && line != ""){
         if(line == END_CONSENSUS) break;
@@ -407,7 +411,7 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
         float intens = IOUtilities::StringToFloat(peakFields[1]);
         int count = IOUtilities::StringToInt(peakFields[3]);
 
-        Peak *peak = new Peak(mz,intens,count);
+        Peak peak = Peak(mz,intens,count);
         peaks.push_back(peak);
     }
 
@@ -488,19 +492,19 @@ bool ParserUtilities::storesPeakListFromClusterLine(string& line) {
    throw("no ContainsPeaklist= part in ",line);
 }
 
-Properties* ParserUtilities::parseProperties(string& line) {
+Properties ParserUtilities::parseProperties(string& line) {
     string propertyTitle = "Properties=";
     line = line.substr(propertyTitle.length());
     vector<string> propertyFields;
     IOUtilities::split(line,"#",propertyFields);
-    Properties* properties =new Properties();
+    Properties properties;
     for (int i =0 ;i<propertyFields.size();i++){
         size_t index = propertyFields[i].find("=");
         if(index == string::npos || index < 1) continue;
 
         string name = propertyFields[i].substr(0,index);
         string value = propertyFields[i].substr(index+1);
-        properties->setProperty(name,value);
+        properties.setProperty(name,value);
     }
     return properties;
 }
@@ -520,9 +524,8 @@ list<ComparisonMatch> ParserUtilities::parseComparisonMatches(string line) {
         string similarityString = comparisonStrings[i].substr(0,index);
         string idString = comparisonStrings[i].substr(index+1);
 
-        ComparisonMatch *comparisonMatch = new ComparisonMatch(idString,IOUtilities::StringToFloat(similarityString));
-        comparisonMatches.push_back(*comparisonMatch);
-        delete comparisonMatch;
+        ComparisonMatch comparisonMatch = ComparisonMatch(idString,IOUtilities::StringToFloat(similarityString));
+        comparisonMatches.push_back(comparisonMatch);
     }
     return comparisonMatches;
 }

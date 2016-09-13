@@ -15,7 +15,7 @@ public:
 
     HighestNPeakFunction(int maxPeaks);
     HighestNPeakFunction();
-    void apply(list<IPeak*> &originalPeaks);
+    list<Peak> apply(list<Peak> &originalPeaks);
 
 private:
     int maxPeaks;

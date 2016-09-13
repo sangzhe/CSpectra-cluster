@@ -30,7 +30,7 @@ class ParserUtilities {
 
         static ICluster* readSpectralCluster( stringstream& ss, string& line);
 
-        static ISpectrum* readMGFScan( stringstream& ss,  string& line);
+        static Spectrum readMGFScan( stringstream& ss,  string& line);
 
         static string convertClusterToString(ICluster& cluster);
 
@@ -59,7 +59,7 @@ class ParserUtilities {
         static  string NOT_HANDLED_MGF_TAGS[19];
         static int gNumberBadMGFLines;
 
-        static Properties* parseProperties(string& line);
+        static Properties parseProperties(string& line);
 
 //        static stringstream skipLines(stringstream& ss,int& num);
 

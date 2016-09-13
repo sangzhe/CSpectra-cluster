@@ -6,13 +6,12 @@
 #define CSPECTRA_CLUSTER_SPECTRUM_H
 
 
-#include <vector>
 #include "ISpectrum.h"
 #include "../Property/Properties.h"
 #include "../quality/IQualityScorer.h"
-#include "map"
 #include "Peak.h"
 #include "math.h"
+#include "boost/unordered/unordered_map.hpp"
 
 class Spectrum: public ISpectrum{
     private:
@@ -20,8 +19,8 @@ class Spectrum: public ISpectrum{
         string id;
         int precursorCharge;
         float precursorMz;
-        list<IPeak*> peaks;
-        Properties* properties = new Properties();
+        list<Peak> peaks;
+        Properties properties;
 
         double totalIntensity;
         double sumSquareIntensity;
@@ -29,7 +28,7 @@ class Spectrum: public ISpectrum{
         IQualityScorer* qualityScorer;
         double qualityMeasure = BAD_QUALITY_MEASURE;
 
-        map<int,ISpectrum*> highestPeaks;
+        unordered_map<int,Spectrum> highestPeaks;
         list<int> majorPeakMZ;
         int currentMAjorPeakCount;
 
@@ -37,41 +36,54 @@ class Spectrum: public ISpectrum{
 
         double convertIntensity(IPeak& p1);
 
-        ISpectrum* buildHighestPeaks(int numberRequested);
+        Spectrum buildHighestPeaks(int numberRequested) const;
 
 
 
 
 
     public:
+        Spectrum();
 
-        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, list<IPeak*>& inpeaks);
+        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, const list<Peak>& inpeaks);
 
-        Spectrum( ISpectrum& spectrum);
+        Spectrum(const Spectrum& spectrum);
 
-        Spectrum( ISpectrum& spectrum, list<IPeak*>& inpeaks);
 
-        Spectrum( ISpectrum& spectrum, list<IPeak*>& inpeaks,bool isSortedList);
 
-        string getId();
+    Spectrum( const Spectrum& spectrum,  const list<Peak>& inpeaks);
+
+        Spectrum( const Spectrum& spectrum,  const list<Peak>& inpeaks,bool isSortedList);
+
+        string getId() const;
 
         double getQualityScore();
 
-        IQualityScorer* getQualityScorer();
+        IQualityScorer* getQualityScorer()  const ;
 
-        float getPrecursorMz() ;
-        int getPrecursorCharge() ;
-        double getTotalIntensity();
-        double getSumSquareIntensity();
-        list<IPeak*> getPeaks();
-        int getPeaksCount();
-        ISpectrum* getHighestNPeaks(int numberRequested);
+        float getPrecursorMz() const;
+        int getPrecursorCharge() const;
+        double getTotalIntensity() const;
+        double getSumSquareIntensity() const;
+        list<Peak> getPeaks() const;
+        int getPeaksCount() const;
+        Spectrum getHighestNPeaks(int numberRequested);
 //        int asMajorPeaksMZs(int majorPeakCount);
         string getProperty(string key);
         void setProperty(string key,string value);
-        Properties* getProperties();
-        bool operator == (ISpectrum& O);
-        ~Spectrum();
+        Properties getProperties() const;
+
+        bool operator < ( const Spectrum& O)const;
+
+        bool operator == ( const Spectrum& O)const;
+
+        Spectrum& operator=( const Spectrum& O);
+
+        friend size_t hash_value(const Spectrum &p);
+
+
+
+
 
 
 };

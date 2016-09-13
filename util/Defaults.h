@@ -20,8 +20,9 @@
 class Defaults {
     public:
             static float DEFAULT_FRAGMENT_ION_TOLERANCE;
+            static float getFragmentIonTolerance();
             static IQualityScorer* getDefaultQualityScorer();
-            static void doDefaultPeakFilter(ISpectrum* spectrum);
+            static Spectrum doDefaultPeakFilter(Spectrum& spectrum);
             static IConsensusSpectrumBuilder* getDefaultConsensusSpectrumBuilder();
             ~Defaults();
     private:
