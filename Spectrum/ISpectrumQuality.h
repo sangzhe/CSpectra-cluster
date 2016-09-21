@@ -5,9 +5,10 @@
 #ifndef CSPECTRA_CLUSTER_ISPECTRUMQUALITY_H
 #define CSPECTRA_CLUSTER_ISPECTRUMQUALITY_H
 
+#include "../IPointer.h"
 class IQualityScorer;
 
-class ISpectrumQuality{
+class ISpectrumQuality : public IPointer{
 public:
     ISpectrumQuality(){};
     virtual double getQualityScore() = 0;

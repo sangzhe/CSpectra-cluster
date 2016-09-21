@@ -6,12 +6,15 @@
 #define CSPECTRA_CLUSTER_SPECTRUM_H
 
 
+#include <boost/unordered/unordered_map.hpp>
 #include "ISpectrum.h"
+#include "../util/IOUtilities.h"
 #include "../Property/Properties.h"
 #include "../quality/IQualityScorer.h"
-#include "Peak.h"
 #include "math.h"
-#include "boost/unordered/unordered_map.hpp"
+#include "../pool/ClusterPointerPool.h"
+#include "Peak.h"
+
 
 class Spectrum: public ISpectrum{
     private:
@@ -19,7 +22,7 @@ class Spectrum: public ISpectrum{
         string id;
         int precursorCharge;
         float precursorMz;
-        list<Peak> peaks;
+        list<IPeak*> peaks;
         Properties properties;
 
         double totalIntensity;
@@ -28,7 +31,7 @@ class Spectrum: public ISpectrum{
         IQualityScorer* qualityScorer;
         double qualityMeasure = BAD_QUALITY_MEASURE;
 
-        unordered_map<int,Spectrum> highestPeaks;
+        unordered_map<int,ISpectrum*> highestPeaks;
         list<int> majorPeakMZ;
         int currentMAjorPeakCount;
 
@@ -45,15 +48,15 @@ class Spectrum: public ISpectrum{
     public:
         Spectrum();
 
-        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, const list<Peak>& inpeaks);
+        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, const list<IPeak*>& inpeaks);
 
-        Spectrum(const Spectrum& spectrum);
+        Spectrum(const ISpectrum& spectrum);
 
 
 
-    Spectrum( const Spectrum& spectrum,  const list<Peak>& inpeaks);
+        Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks);
 
-        Spectrum( const Spectrum& spectrum,  const list<Peak>& inpeaks,bool isSortedList);
+        Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks,bool isSortedList);
 
         string getId() const;
 
@@ -65,23 +68,23 @@ class Spectrum: public ISpectrum{
         int getPrecursorCharge() const;
         double getTotalIntensity() const;
         double getSumSquareIntensity() const;
-        list<Peak> getPeaks() const;
+        list<IPeak*> getPeaks() const;
         int getPeaksCount() const;
-        Spectrum getHighestNPeaks(int numberRequested);
+        ISpectrum* getHighestNPeaks(int numberRequested);
 //        int asMajorPeaksMZs(int majorPeakCount);
         string getProperty(string key);
         void setProperty(string key,string value);
         Properties getProperties() const;
 
-        bool operator < ( const Spectrum& O)const;
+//        bool operator < ( const Spectrum& O)const;
 
-        bool operator == ( const Spectrum& O)const;
+        bool operator == ( const ISpectrum& O)const;
 
-        Spectrum& operator=( const Spectrum& O);
+//        Spectrum& operator=( const Spectrum& O);
 
-        friend size_t hash_value(const Spectrum &p);
+//        friend size_t hash_value(const Spectrum &p);
 
-
+        ~Spectrum();
 
 
 

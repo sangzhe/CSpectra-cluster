@@ -14,6 +14,8 @@
 #include "../Spectrum/Peak.h"
 #include "ComparisonMatch.h"
 #include "../Cluster/SpectralClusrer.h"
+#include "../Cluster/GreedySpectralCluster.h"
+
 
 #ifndef CSPECTRA_CLUSTER_PARSERUTILITIES_H
 #define CSPECTRA_CLUSTER_PARSERUTILITIES_H
@@ -30,7 +32,7 @@ class ParserUtilities {
 
         static ICluster* readSpectralCluster( stringstream& ss, string& line);
 
-        static Spectrum readMGFScan( stringstream& ss,  string& line);
+        static ISpectrum* readMGFScan( stringstream& ss,  string& line);
 
         static string convertClusterToString(ICluster& cluster);
 

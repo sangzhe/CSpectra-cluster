@@ -15,15 +15,21 @@ private:
     static string MethodName;
 
     string id;
-    list<Spectrum> clusteredSpectra;
+
+    list<SpectrumHolderListener*> spectrumHolderListeners;
+
+    list<ISpectrum*> clusteredSpectra;
+
     Properties properties;
     unordered_set<string> spectraIds;
     IConsensusSpectrumBuilder* consensusSpectrumBuilder;
 
-public:
-    SpectralCluster( ICluster& copied,IConsensusSpectrumBuilder& consensusSpectrumBuilder);
+    void notifySpectrumHolderListeners(bool isAdd, list<ISpectrum*> spectra);
 
-    SpectralCluster(string id, IConsensusSpectrumBuilder& consensusSpectrumBuilder);
+public:
+    SpectralCluster( ICluster* copied,IConsensusSpectrumBuilder* consensusSpectrumBuilder);
+
+    SpectralCluster(string id, IConsensusSpectrumBuilder* consensusSpectrumBuilder);
 
     unordered_set<string> getSpectralIds();
 
@@ -37,12 +43,14 @@ public:
 
     int getPrecursorCharge();
 
-    Spectrum getConsensusSpectrum();
+    ISpectrum* getConsensusSpectrum();
 
-    list<Spectrum> getClusteredSpectra();
+    list<ISpectrum*> getClusteredSpectra() const;
 
     IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
 
+    void addSpectrumHolderListener(SpectrumHolderListener* added) ;
+    void removeSpectrumHolderListener(SpectrumHolderListener* removed);
 
     int getClusteredSpectraCount();
 
@@ -54,17 +62,20 @@ public:
 
     void setProperty(string key,string value);
 
-    void addSpectra(const Spectrum& merged);
+    void addSpectra(const ISpectrum* merged);
 
-    void addSpectra(const list<Spectrum>& spectra);
+    void addSpectra(const list<ISpectrum*>& spectra);
 
-    void removeSpectra(const Spectrum& removed);
+    void removeSpectra(const ISpectrum* removed);
 
-    void removeSpectra(const list<Spectrum> &spectra) ;
+    void removeSpectra(const list<ISpectrum*> &spectra) ;
 
     bool isRemovedSupported();
 
     bool storesPeakLists();
+
+    string toString();
+
 
     ~SpectralCluster();
 

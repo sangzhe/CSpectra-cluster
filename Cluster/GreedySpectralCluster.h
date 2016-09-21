@@ -14,8 +14,8 @@ public:
     static  int SAVED_COMPARISON_MATCHES;
 
     GreedySpectralCluster(string id);
-    GreedySpectralCluster(ICluster& cluster);
-    GreedySpectralCluster(string id, list<Spectrum> clusteredSpectra, GreedyConsensusSpectrum *consensusSpectrumBuilder, list<ComparisonMatch> &bestComparisonMatches);
+    GreedySpectralCluster(ICluster* cluster);
+    GreedySpectralCluster(string id, list<ISpectrum*> clusteredSpectra, GreedyConsensusSpectrum *consensusSpectrumBuilder, list<ComparisonMatch> &bestComparisonMatches);
 
     string getMethodName();
     unordered_set<string> getSpectralIds();
@@ -30,23 +30,27 @@ public:
 
     int getPrecursorCharge();
 
-    list<Spectrum> getHighestQualitySpectra();
+    list<ISpectrum*> getHighestQualitySpectra();
 
-    Spectrum getHighestQualitySpectrum();
+    ISpectrum* getHighestQualitySpectrum();
 
-    Spectrum getConsensusSpectrum();
+    ISpectrum* getConsensusSpectrum();
 
     IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
 
-    list<Spectrum> getClusteredSpectra() const;
+    list<ISpectrum*> getClusteredSpectra() const;
 
     int getClusteredSpectraCount();
 
-    void addSpectra(const Spectrum& merged);
-    void addSpectra(const list<Spectrum>& spectra);
+    void addCluster(ICluster* cluster);
+
+    void addSpectra(const ISpectrum* merged);
+    void addSpectra(const list<ISpectrum*>& spectra);
+
+
     bool isRemovedSupported();
-    void removeSpectra(const Spectrum& removed);
-    void removeSpectra(const list<Spectrum> &spectra);
+    void removeSpectra(const ISpectrum* removed);
+    void removeSpectra(const list<ISpectrum*> &spectra);
 
     string getProperty(string key);
 
@@ -68,6 +72,10 @@ public:
 
     bool isKnownComparisonMatch(string clusterId);
 
+    void addSpectrumHolderListener(SpectrumHolderListener* added) ;
+    void removeSpectrumHolderListener(SpectrumHolderListener* removed);
+
+
 //    bool operator ==(ICluster& O);
 
 private:
@@ -78,10 +86,12 @@ private:
     string id;
     unordered_set<string> spectraIds;
     Properties properties ;
-    /* ToDo HolderListener to inform update status*/
-    //List<SpectrumHolderListener> spectrumHolderListeners = new CopyOnWriteArrayList<SpectrumHolderListener>();
-    list<Spectrum> clusteredSpectra;
+
+    list<SpectrumHolderListener*> spectrumHolderListeners;
+
+    list<ISpectrum*> clusteredSpectra;
     GreedyConsensusSpectrum* consensusSpectrumBuilder;
+    void notifySpectrumHolderListeners(bool isAdd, list<ISpectrum*> spectra);
 
 
 };

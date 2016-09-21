@@ -24,17 +24,21 @@ public:
     static ConsensusSpectrumBuilderFactory* FACTORY;
     static ConsensusSpectrumBuilderFactory* buildFactory();
 
-    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const list<Peak>& peaks) ;
+    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const list<IPeak*>& peaks) ;
 
-    void addSpectra(const Spectrum& merged) ;
+    void addSpectra(const ISpectrum* merged) ;
 
-    void removeSpectra(const Spectrum& removed) ;
+    void removeSpectra(const ISpectrum* removed) ;
+
+    void onSpectraAdd(ISpectrumHolder* holder,list<ISpectrum*>& added);
+
+    void onSpectraRemove(ISpectrumHolder* holder,list<ISpectrum*>& removed);
 
     bool isRemovedSupported();
 
-    Spectrum getConsensusSpectrum() ;
+    ISpectrum* getConsensusSpectrum() ;
 
-    Spectrum internalGetConcensusSpectrum()const ;
+    ISpectrum* internalGetConcensusSpectrum()const ;
     void clear();
 
     int getSpectraCount()const ;
@@ -49,27 +53,30 @@ public:
 
     double getSumPrecursorIntensity()const ;
 
-    list<Peak> getInternalPeaks()const ;
+    list<IPeak*> getInternalPeaks()const ;
 
-    void addPeaks(const list<Peak>& peaksToAdd);
+    void addPeaks(const list<IPeak*>& peaksToAdd);
 
-    void removePeaks(const list<Peak> &peaksToRemove);
+    void removePeaks(const list<IPeak*> &peaksToRemove);
 
-    void storeHeldPeaks(const list<Peak>& peaksToAdd);
+    void storeHeldPeaks(const list<IPeak*>& peaksToAdd);
 
     void addHeldPeaks();
 
-    void internalAddPeaks(const list<Peak>& peaksToAdd);
+    void internalAddPeaks(const list<IPeak*>& peaksToAdd);
 
     void update();
 
-    static list<Peak> findConsensusPeaks(const list<Peak>& input,const int& peaksToKeep, int& nSpectra) ;
+    static list<IPeak*> findConsensusPeaks(const list<IPeak*>& input,const int& peaksToKeep, int& nSpectra) ;
 
     bool isDirty;
 
-    void addSpectra(const list<Spectrum> &spectra);
+    void addSpectra(const list<ISpectrum*> &spectra);
 
-    void removeSpectra(const list<Spectrum> &spectra);
+    void removeSpectra(const list<ISpectrum*> &spectra);
+
+    void addSpectrumHolderListener(SpectrumHolderListener* added);
+    void removeSpectrumHolderListener(SpectrumHolderListener* removed);
 
     string getMethodName();
 
@@ -87,9 +94,9 @@ public:
 
 private:
     string id;
-    list<Peak> allPeaks;
-    unordered_set<Peak> heldPeaks;
-    list<Peak> consensusPeaks;
+    list<IPeak*> allPeaks;
+    unordered_set<IPeak*> heldPeaks;
+    list<IPeak*> consensusPeaks;
 
 
     ConsensusSpectrum(string& id);
@@ -116,11 +123,13 @@ protected:
     static  int MZ_PRECISION;
     void setDirty(bool isDirty) ;
 
-    static list<Peak> mergeIdenticalPeaks(const list<Peak>& inPeaks);
+    static list<IPeak*> mergeIdenticalPeaks(const list<IPeak*>& inPeaks);
 
-    static list<Peak> adaptPeakIntensities(const list<Peak>& inp, int nSpectra);
+    static list<IPeak*> adaptPeakIntensities(const list<IPeak*>& inp, int nSpectra);
 
-    static list<Peak> filterNoise(const list<Peak>& inp);
+    static list<IPeak*> filterNoise(const list<IPeak*>& inp);
+
+    list<SpectrumHolderListener*> listeners;
 
 
 

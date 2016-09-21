@@ -27,17 +27,23 @@ public:
 
     GreedyConsensusSpectrum(float fragmentTolerance, string id);
 
-    GreedyConsensusSpectrum(float fragmentTolerance, string id, int nSpectra, double sumPrecursorMz, double sumPrecursorIntens, int sumCharge,const list<Peak> peaks);
+    GreedyConsensusSpectrum(float fragmentTolerance, string id, int nSpectra, double sumPrecursorMz, double sumPrecursorIntens, int sumCharge,const list<IPeak*> peaks);
 
-    void addSpectra(const Spectrum& merged);
-    void addSpectra(const list<Spectrum>& spectra);
+    void addSpectra(const ISpectrum* merged);
+    void addSpectra(const list<ISpectrum*>& spectra);
     bool isRemovedSupported();
-    void removeSpectra(const Spectrum& removed);
-    void removeSpectra(const list<Spectrum> &spectra);
+    void removeSpectra(const ISpectrum* removed);
+    void removeSpectra(const list<ISpectrum*> &spectra);
     void addConsensusSpectrum( IConsensusSpectrumBuilder& consensusSpectrumToAdd);
 
-    Spectrum getConsensusSpectrum() ;
+    ISpectrum* getConsensusSpectrum() ;
 
+    void addSpectrumHolderListener(SpectrumHolderListener* added);
+    void removeSpectrumHolderListener(SpectrumHolderListener* removed);
+
+    void onSpectraAdd(ISpectrumHolder* holder,list<ISpectrum*>& added);
+
+    void onSpectraRemove(ISpectrumHolder* holder,list<ISpectrum*>& removed);
 
     void clear();
 
@@ -60,22 +66,24 @@ protected:
     int sumCharge;
     Spectrum* consensusSpectrum;
 
+    list<SpectrumHolderListener*> listeners;
+
     string methodName = "GreedyConsensusSpectrum";
     string methodVersion = "0.1";
 
     void updateConsensusSpectrum();
 
-    void addPeaksToConsensus(const list<Peak>& peaksToAdd);
+    void addPeaksToConsensus(const list<IPeak*>& peaksToAdd);
 
     void updateProperties();
 
-    static list<Peak> findConsensusPeaks(const list<Peak>& input, int nSpectra);
+    static list<IPeak*> findConsensusPeaks(const list<IPeak*>& input, int nSpectra);
 
-    static list<Peak> filterNoise( const list<Peak>& inp);
+    static list<IPeak*> filterNoise( const list<IPeak*>& inp);
 
-    static list<Peak> adaptPeakIntensities(const list<Peak>& inp, int nSpectra);
+    static list<IPeak*> adaptPeakIntensities(const list<IPeak*>& inp, int nSpectra);
 
-    list<Peak> mergeIdenticalPeaks(const list<Peak>& inPeaks)const;
+    list<IPeak*> mergeIdenticalPeaks(const list<IPeak*>& inPeaks)const;
 
     bool isDirty() ;
 
@@ -84,7 +92,7 @@ protected:
 private:
     string id;
     bool Dirty = true;
-    list<Peak> consensusPeaks;
+    list<IPeak*> consensusPeaks;
 
 
 

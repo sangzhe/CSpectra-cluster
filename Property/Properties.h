@@ -5,9 +5,10 @@
 #ifndef CSPECTRA_CLUSTER_PROPERTIES_H
 #define CSPECTRA_CLUSTER_PROPERTIES_H
 #include "string"
-#include "map"
-#include "set"
+#include "boost/unordered/unordered_map.hpp"
+#include "boost/unordered/unordered_set.hpp"
 
+using namespace boost::unordered;
 using namespace std;
 class Properties {
     public:
@@ -18,9 +19,9 @@ class Properties {
 
         void setProperty(string& key,string& value);
 
-        map<string,string> getMap();
+        unordered_map<string,string> getMap();
 
-        set<string> getKeySet();
+        unordered_set<string> getKeySet();
 
         void clear();
 
@@ -35,9 +36,9 @@ class Properties {
 
 private:
 
-        map<string,string> propertyMap;
+    unordered_map<string,string> propertyMap;
 
-        set<string> keyName;
+    unordered_set<string> keyName;
 
 
 };

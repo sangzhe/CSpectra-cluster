@@ -9,9 +9,10 @@
 #include "../../MZIntensityUtilities.h"
 #include "list"
 #include "math.h"
+#include "../../../Spectrum/IPeak.h"
 #include "../../../Spectrum/Peak.h"
-
-
+#include <boost/unordered/unordered_set.hpp>
+using namespace boost::unordered;
 using namespace std;
 
 class BinnedHighestNPeakFunction {
@@ -29,7 +30,7 @@ public:
 
     BinnedHighestNPeakFunction();
 
-    list<Peak> apply(list<Peak> &originalPeaks);
+    list<IPeak*> apply(list<IPeak*> &originalPeaks);
 
 
 private:
@@ -46,7 +47,7 @@ private:
      */
     int binOverlap;
 
-    int handleBin(list<Peak> allpeaks, int startpeak, unordered_set<Peak> retained, double binBottom);
+    int handleBin(list<IPeak*> allpeaks, int startpeak, unordered_set<IPeak*> retained, double binBottom);
 
 };
 

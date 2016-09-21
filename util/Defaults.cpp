@@ -22,21 +22,20 @@ IQualityScorer* Defaults::getDefaultQualityScorer() {
 
 }
 
-Spectrum Defaults::doDefaultPeakFilter(Spectrum& spectrum) {
-    Spectrum new_spec = spectrum;
-
+ISpectrum* Defaults::doDefaultPeakFilter(const ISpectrum& spectrum) {
     RemovePrecursorPeaksFunction func1 = RemovePrecursorPeaksFunction(fragmentIonTolerance);
-    func1.apply(new_spec);
+    ISpectrum* spec1 = func1.apply(spectrum);
 
-    list<Peak> new_peak = spectrum.getPeaks();
+    list<IPeak*> new_peak = spec1->getPeaks();
     HighestNPeakFunction func2 = HighestNPeakFunction(150);
-    func2.apply(new_peak);
-    Spectrum ret(new_spec,new_peak);
+    new_peak = func2.apply(new_peak);
+    ISpectrum* spec2 = new Spectrum(*spec1,new_peak);
 
     RemoveImpossiblyHighPeaksFunction func3 = RemoveImpossiblyHighPeaksFunction();
-    func3.apply(ret);
-
-    return ret;
+    ISpectrum *spec3 = func3.apply(*spec2);
+    delete spec1,spec2;
+    PointerPool::add(spec3);
+    return spec3;
 }
 
 float Defaults::getFragmentIonTolerance() {

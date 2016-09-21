@@ -9,12 +9,15 @@
 #include "../Spectrum/Spectrum.h"
 #include "../Spectrum/IPeak.h"
 #include "../Cluster/ISpectrumHolder.h"
+#include "../Cluster/SpectrumHolderListener.h"
+#include "../pool/ClusterPointerPool.h"
 
-class IConsensusSpectrumBuilder: public ISpectrumHolder{
+
+class IConsensusSpectrumBuilder: public ISpectrumHolder,public SpectrumHolderListener{
     public:
     IConsensusSpectrumBuilder(){};
 
-    virtual Spectrum getConsensusSpectrum() = 0;
+    virtual ISpectrum* getConsensusSpectrum() = 0;
     virtual void clear() = 0;
     virtual int getSpectraCount() const = 0;
     virtual int getSumCharge() const = 0;

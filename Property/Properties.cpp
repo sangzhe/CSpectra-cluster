@@ -15,12 +15,12 @@ string Properties::getProperty(string key) {
     return propertyMap.at(key);
 }
 
-map<string,string> Properties::getMap() {
+unordered_map<string,string> Properties::getMap() {
     return propertyMap;
 }
 
-set<string> Properties::getKeySet() {
-    map<string,string>::iterator iter_1;
+unordered_set<string> Properties::getKeySet() {
+    unordered_map<string,string>::iterator iter_1;
     if (keyName.size() == 0 ){
         for(iter_1=propertyMap.begin();iter_1 != propertyMap.end();iter_1++){
             keyName.insert(iter_1->first);
@@ -31,8 +31,8 @@ set<string> Properties::getKeySet() {
 }
 
 void Properties::putAll(Properties &props) {
-    set<string>::iterator iter;
-    set<string> keys = props.getKeySet();
+    unordered_set<string>::iterator iter;
+    unordered_set<string> keys = props.getKeySet();
     for(iter = keys.begin();iter != keys.end();iter++){
         string name = *iter;
         propertyMap.insert(pair<string,string>(name,props.getProperty(name)));
@@ -40,7 +40,10 @@ void Properties::putAll(Properties &props) {
 }
 
 void Properties::remove(string key) {
-    propertyMap.erase(key);
+    unordered_map<string,string>::iterator iter = propertyMap.find(key);
+    if(iter != propertyMap.end()){
+        propertyMap.erase(key);
+    }
 }
 
 void Properties::clear() {

@@ -3,9 +3,8 @@
 //
 
 #include "ParserUtilities.h"
-#include "../Consensus/ConsensusSpectrum.h"
 
- string ParserUtilities::BEGIN_IONS = "BEGIN IONS";
+string ParserUtilities::BEGIN_IONS = "BEGIN IONS";
  string ParserUtilities::END_IONS = "END IONS";
  string ParserUtilities::BEGIN_CLUSTER = "BEGIN CLUSTER";
  string ParserUtilities::END_CLUSTER = "END CLUSTER";
@@ -51,8 +50,8 @@ string ParserUtilities::convertClusterToString(ICluster& cluster) {
 ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
     string currentId = "";
     bool storesPeakLists = false;
-    list<Spectrum> spectra;
-    IConsensusSpectrumBuilder* consensusSpectrumBuilder;
+    list<ISpectrum*> spectra;
+    IConsensusSpectrumBuilder* consensusSpectrumBuilder = nullptr;
     list<ComparisonMatch> comparisonMatches;
 
     try{
@@ -65,16 +64,18 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
             }
             // naked spectrum
             if(line.substr(0,BEGIN_IONS.length()) == BEGIN_IONS){
-                Spectrum internalComplete = readMGFScan(ss,line);
-                list<Peak> peaks = internalComplete.getPeaks();
-                Spectrum internalFilterd =  Spectrum(internalComplete,peaks);
+                ISpectrum *internalComplete = readMGFScan(ss,line);
+                list<IPeak*> peaks = internalComplete->getPeaks();
+                ISpectrum* internalFilterd = new Spectrum(*internalComplete,peaks);
+                PointerPool::remove(internalComplete);
                 // perform default peak filtering
 
-                internalFilterd = Spectrum(Defaults::doDefaultPeakFilter(internalFilterd));
-
+                ISpectrum *Filterd = Defaults::doDefaultPeakFilter(*internalFilterd);
+                delete internalFilterd;
                 IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
-                string Id = internalFilterd.getId();
-                ICluster *ret = new SpectralCluster(Id,*consensusSpectrumBuilder);
+                string Id = Filterd->getId();
+                ICluster *ret = new SpectralCluster(Id,consensusSpectrumBuilder);
+                PointerPool::add(ret);
                 ret->addSpectra(internalFilterd);
 
                 return ret;
@@ -106,8 +107,8 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
             consensusSpectrumBuilder = parseConsensusSpectrumBuilder(ss,line);
         }
         while (line != ""){
-            Spectrum internal = readMGFScan(ss,line);
-            if(!(internal == Spectrum()))
+            ISpectrum* internal = readMGFScan(ss,line);
+            if(internal != nullptr)
                 spectra.push_back(internal);
             getline(ss,line);
             if(line == "")
@@ -116,19 +117,18 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
                 ICluster* ret;
                 if(storesPeakLists){
                     IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
-
-                    ret = new SpectralCluster(currentId,*consensusSpectrumBuilder);
-
+                    ret = new SpectralCluster(currentId,consensusSpectrumBuilder);
+                    PointerPool::add(ret);
                     ret->addSpectra(spectra);
                 }
                 else{
 //                    ToDO add GreedySpectralCluster
-//                    ret = new GreedySpectralCluster(currentId, spectra, (GreedyConsensusSpectrum) consensusSpectrumBuilder, comparisonMatches);
+                    ret = new GreedySpectralCluster(currentId, spectra, (GreedyConsensusSpectrum*)consensusSpectrumBuilder, comparisonMatches);
                 }
 
-                set<string>::iterator iter;
+                unordered_set<string>::iterator iter;
                 int i =0;
-                set<string> keys = properties.getKeySet();
+                unordered_set<string> keys = properties.getKeySet();
                 if(keys.size() != 0) {
                     for (iter = keys.begin(); iter != keys.end(); iter++) {
                         string name = *iter;
@@ -163,7 +163,7 @@ list<ICluster*> ParserUtilities::readSpectralCluster(string& clusterString) {
     return holder;
 }
 
-Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
+ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
     string titleLine = "";
     string sequence = "";
     string protein = "";
@@ -194,9 +194,9 @@ Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
             }
             getline(ss,line);
         }
-        if (line == "") return Spectrum();
+        if (line == "") return nullptr;
 
-        list<Peak> holder;
+        list<IPeak*> holder;
 
         while (line != ""){
 //            getline(ss,line);
@@ -291,17 +291,17 @@ Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                 holder.sort(Peak::cmpPeak);
 
                 IQualityScorer* defaultQualityScorer = Defaults::getDefaultQualityScorer();
-                Spectrum *spectrum = new Spectrum(title,dcharge,(float)mz,defaultQualityScorer,holder);
+                ISpectrum *spectrum = new Spectrum(title,dcharge,(float)mz,defaultQualityScorer,holder);
 
-                Spectrum *spectrum1 = new Spectrum(Defaults::doDefaultPeakFilter(*spectrum));
+                ISpectrum *spectrum1 = Defaults::doDefaultPeakFilter(*spectrum);
 
                 delete spectrum;
 
                 spectrum = spectrum1;
 
-                set<string> keys = props.getKeySet();
+                unordered_set<string> keys = props.getKeySet();
                 if(keys.size() != 0) {
-                    set<string>::iterator keysIter;
+                    unordered_set<string>::iterator keysIter;
                     for (keysIter = keys.begin(); keysIter != keys.end(); keysIter++) {
                         spectrum->setProperty(*keysIter, props.getProperty(*keysIter));
                     }
@@ -320,9 +320,7 @@ Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                     spectrum->setProperty(KnownProperties::MODIFICATION_KEY, modifications);
                 if (titleLine != "")
 //                    handleTitleLine(spectrum, titleLine);
-                ret = *spectrum;
-                delete spectrum;
-                return ret;
+                return spectrum;
             }
             else {
                 IOUtilities::replace(line,"\t", " ");
@@ -332,8 +330,9 @@ Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                     try{
                         float peakMass = IOUtilities::StringToFloat(items[0]);
                         float peakIntensity = IOUtilities::StringToFloat(items[1]);
-                        Peak added = Peak(peakMass,peakIntensity);
+                        IPeak *added =new Peak(peakMass,peakIntensity);
                         holder.push_back(added);
+                        PointerPool::add(added);
                     }catch(exception s){
 //                        handleBadMGFData(line);
                     }
@@ -345,7 +344,7 @@ Spectrum ParserUtilities::readMGFScan(stringstream& ss, string& line) {
             }
 
         }
-    return Spectrum();
+    return nullptr;
     }catch(exception){
        // throw new runtime_error(" ");
     }
@@ -398,7 +397,7 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
         sumPrecMz = IOUtilities::StringToFloat(headerFields[5].substr(summzTitle.length()));
 
     //process the peak list
-    list<Peak> peaks;
+    list<IPeak*> peaks;
 
     while(getline(ss,line) && line != ""){
         if(line == END_CONSENSUS) break;
@@ -411,8 +410,9 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
         float intens = IOUtilities::StringToFloat(peakFields[1]);
         int count = IOUtilities::StringToInt(peakFields[3]);
 
-        Peak peak = Peak(mz,intens,count);
+        IPeak *peak =new Peak(mz,intens,count);
         peaks.push_back(peak);
+        PointerPool::add(peak);
     }
 
     //build the object
@@ -420,10 +420,8 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
     if(className == "uk.ac.ebi.pride.spectracluster.consensus.ConsensusSpectrum")
         consensusSpectrumBuilder = new ConsensusSpectrum(id,nSpec,sumPrecMz,sumPrecIntens,sumCharge,peaks);
 
-//      not needed in hadoop, the default ConsensusSpectrumBuilder
-//                      is ConsensusSpectrum
-//    else if (className == "uk.ac.ebi.pride.spectracluster.consensus.GreedyConsensusSpectrum")
-//        consensusSpectrumBuilder = new GreedyConsensusSpectrum();
+    else if (className == "uk.ac.ebi.pride.spectracluster.consensus.GreedyConsensusSpectrum")
+        consensusSpectrumBuilder = new GreedyConsensusSpectrum(Defaults::getFragmentIonTolerance(), id, nSpec, sumPrecMz, sumPrecIntens, sumCharge, peaks);
     else
         throw("Cannot recover consensus spectrum of class",className);
     return consensusSpectrumBuilder;

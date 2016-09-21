@@ -64,11 +64,10 @@ set(SOURCE_FILES
         Consensus/GreedyConsensusSpectrum.h
         Consensus/GreedyConsensusSpectrumFactory.cpp
         Consensus/GreedyConsensusSpectrumFactory.h
-        )
+        pool/ClusterPointerPool.h Cluster/SpectrumHolderListener.h IPointer.h)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_LIBRARIES "/usr/local/include/boost")
-
 #find_package(Boost 1.61.0 COMPONENTS  algorithm  regex REQUIRED)
 
 add_executable(CSpectra_cluster ${SOURCE_FILES})

@@ -12,7 +12,7 @@ bool RemovePrecursorPeaksFunction::isWithinRange(float min, float max, float val
     return (value >= min && value <= max);
 }
 
-void RemovePrecursorPeaksFunction::apply(Spectrum& o) {
+ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
     // calculate m/z of neutral losses
      float floatCharge     = (float) o.getPrecursorCharge();
      float waterLoss       = o.getPrecursorMz() - (Mass::WATER_MONO / floatCharge);
@@ -31,11 +31,11 @@ void RemovePrecursorPeaksFunction::apply(Spectrum& o) {
      float minPrecursor = o.getPrecursorMz() - fragmentIonTolerance;
      float maxPrecursor = o.getPrecursorCharge() + fragmentIonTolerance;
 
-    list<Peak> filteredPeakList;
-    list<Peak> peak = o.getPeaks();
-    list<Peak>::iterator iterator1;
+    list<IPeak*> filteredPeakList;
+    list<IPeak*> peak = o.getPeaks();
+    list<IPeak*>::iterator iterator1;
     for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
-        float peakMz = iterator1->getMz();
+        float peakMz = (*iterator1)->getMz();
         // ignore any peak that could be a neutral loss
         if (isWithinRange(minWaterLoss, maxWaterLoss, peakMz))
             continue;
@@ -48,6 +48,8 @@ void RemovePrecursorPeaksFunction::apply(Spectrum& o) {
 
         filteredPeakList.push_back(*iterator1);
     }
-    Spectrum filteredSpectrum = Spectrum(o, filteredPeakList, true);
-    o = filteredSpectrum;
+    PointerPool::remove(peak);
+    ISpectrum *filteredSpectrum = new Spectrum(o, filteredPeakList, true);
+    PointerPool::add(filteredPeakList);
+    return filteredSpectrum;
 }

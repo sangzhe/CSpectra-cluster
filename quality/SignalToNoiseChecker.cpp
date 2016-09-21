@@ -14,22 +14,23 @@ string SignalToNoiseChecker::getCurrentVersion() {
     return VERSION;
 }
 
-double SignalToNoiseChecker::calculateQualityScore(Spectrum& spectrum) {
-    Spectrum highestNPeaks(spectrum.getHighestNPeaks(NUMBER_HIGH_PEAKS));
-    if(highestNPeaks.getPeaksCount() < NUMBER_HIGH_PEAKS) return 0.0;
+double SignalToNoiseChecker::calculateQualityScore(const ISpectrum& spectrum) {
+    Spectrum insp(spectrum);
+    ISpectrum *highestNPeaks = insp.getHighestNPeaks(NUMBER_HIGH_PEAKS);
+    if(highestNPeaks->getPeaksCount() < NUMBER_HIGH_PEAKS) return 0.0;
 
-    double totalIntensity = highestNPeaks.getTotalIntensity();
+    double totalIntensity = highestNPeaks->getTotalIntensity();
     double highestPeak = 0;
-    list<Peak> highestPeaks = highestNPeaks.getPeaks();
-    list<Peak>::iterator iter;
+    list<IPeak*> highestPeaks = highestNPeaks->getPeaks();
+    list<IPeak*>::iterator iter;
     for(iter=highestPeaks.begin();iter != highestPeaks.end();iter++){
-        Peak peak = *iter;
-        highestPeak = std::max((double)peak.getIntensity(),highestPeak);
+        IPeak *peak = *iter;
+        highestPeak = max((double)peak->getIntensity(),highestPeak);
     }
 
 
     double meanHigh = (totalIntensity - highestPeak) / (NUMBER_HIGH_PEAKS -1);
-    list<Peak> peaks = spectrum.getPeaks();
+    list<IPeak*> peaks = spectrum.getPeaks();
     peaks.sort(Peak::cmpPeakIntensity);
 
     double median;
@@ -37,8 +38,8 @@ double SignalToNoiseChecker::calculateQualityScore(Spectrum& spectrum) {
     int peakSize = peaks.size();
     if(peakSize % 2 == 1){
         int index =peakSize / 2 ;
-        list<Peak>::iterator iter;
-        Peak peak;
+        list<IPeak*>::iterator iter;
+        IPeak *peak;
         int i =0;
         for(iter = peaks.begin();iter != peaks.end(); iter++){
             if ( i == index ) {
@@ -47,14 +48,14 @@ double SignalToNoiseChecker::calculateQualityScore(Spectrum& spectrum) {
             }
             else i++;
         }
-        median = peak.getIntensity();
+        median = peak->getIntensity();
     }
     else{
         int index2 = (peakSize / 2 );
         int index1 = index2 - 1 ;
-        list<Peak>::iterator iter;
-        Peak peak1;
-        Peak peak2;
+        list<IPeak*>::iterator iter;
+        IPeak *peak1;
+        IPeak *peak2;
         int i = 0;
         for(iter = peaks.begin();iter != peaks.end();iter++){
             if( i == index1 ){
@@ -66,8 +67,8 @@ double SignalToNoiseChecker::calculateQualityScore(Spectrum& spectrum) {
             }
             else i++;
         }
-        double intensity1 = peak1.getIntensity();
-        double intensity2 =  peak2.getIntensity();
+        double intensity1 = peak1->getIntensity();
+        double intensity2 =  peak2->getIntensity();
         median = (intensity1 + intensity2) / 2 ;
     }
     return meanHigh / median ;
