@@ -22,7 +22,7 @@ class Spectrum: public ISpectrum{
         string id;
         int precursorCharge;
         float precursorMz;
-        list<IPeak*> peaks;
+        vector<IPeak*> peaks;
         Properties properties;
 
         double totalIntensity;
@@ -48,15 +48,15 @@ class Spectrum: public ISpectrum{
     public:
         Spectrum();
 
-        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, const list<IPeak*>& inpeaks);
+        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, const vector<IPeak*>& inpeaks);
 
         Spectrum(const ISpectrum& spectrum);
 
 
 
-        Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks);
+        Spectrum( const ISpectrum& spectrum,  const vector<IPeak*>& inpeaks);
 
-        Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks,bool isSortedList);
+        Spectrum( const ISpectrum& spectrum,  const vector<IPeak*>& inpeaks,bool isSortedList);
 
         string getId() const;
 
@@ -68,7 +68,7 @@ class Spectrum: public ISpectrum{
         int getPrecursorCharge() const;
         double getTotalIntensity() const;
         double getSumSquareIntensity() const;
-        list<IPeak*> getPeaks() const;
+        vector<IPeak*> getPeaks() const;
         int getPeaksCount() const;
         ISpectrum* getHighestNPeaks(int numberRequested);
 //        int asMajorPeaksMZs(int majorPeakCount);

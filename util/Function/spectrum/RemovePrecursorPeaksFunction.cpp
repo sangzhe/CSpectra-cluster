@@ -31,9 +31,9 @@ ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
      float minPrecursor = o.getPrecursorMz() - fragmentIonTolerance;
      float maxPrecursor = o.getPrecursorCharge() + fragmentIonTolerance;
 
-    list<IPeak*> filteredPeakList;
-    list<IPeak*> peak = o.getPeaks();
-    list<IPeak*>::iterator iterator1;
+    vector<IPeak*> filteredPeakList;
+    vector<IPeak*> peak = o.getPeaks();
+    vector<IPeak*>::iterator iterator1;
     for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
         float peakMz = (*iterator1)->getMz();
         // ignore any peak that could be a neutral loss

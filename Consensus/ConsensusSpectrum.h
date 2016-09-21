@@ -24,7 +24,7 @@ public:
     static ConsensusSpectrumBuilderFactory* FACTORY;
     static ConsensusSpectrumBuilderFactory* buildFactory();
 
-    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const list<IPeak*>& peaks) ;
+    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const vector<IPeak*>& peaks) ;
 
     void addSpectra(const ISpectrum* merged) ;
 
@@ -53,21 +53,21 @@ public:
 
     double getSumPrecursorIntensity()const ;
 
-    list<IPeak*> getInternalPeaks()const ;
+    vector<IPeak*> getInternalPeaks()const ;
 
-    void addPeaks(const list<IPeak*>& peaksToAdd);
+    void addPeaks(const vector<IPeak*>& peaksToAdd);
 
-    void removePeaks(const list<IPeak*> &peaksToRemove);
+    void removePeaks(const vector<IPeak*> &peaksToRemove);
 
-    void storeHeldPeaks(const list<IPeak*>& peaksToAdd);
+    void storeHeldPeaks(const vector<IPeak*>& peaksToAdd);
 
     void addHeldPeaks();
 
-    void internalAddPeaks(const list<IPeak*>& peaksToAdd);
+    void internalAddPeaks(const vector<IPeak*>& peaksToAdd);
 
     void update();
 
-    static list<IPeak*> findConsensusPeaks(const list<IPeak*>& input,const int& peaksToKeep, int& nSpectra) ;
+    static vector<IPeak*> findConsensusPeaks(const vector<IPeak*>& input,const int& peaksToKeep, int& nSpectra) ;
 
     bool isDirty;
 
@@ -94,9 +94,9 @@ public:
 
 private:
     string id;
-    list<IPeak*> allPeaks;
+    vector<IPeak*> allPeaks;
     unordered_set<IPeak*> heldPeaks;
-    list<IPeak*> consensusPeaks;
+    vector<IPeak*> consensusPeaks;
 
 
     ConsensusSpectrum(string& id);
@@ -123,11 +123,11 @@ protected:
     static  int MZ_PRECISION;
     void setDirty(bool isDirty) ;
 
-    static list<IPeak*> mergeIdenticalPeaks(const list<IPeak*>& inPeaks);
+    static vector<IPeak*> mergeIdenticalPeaks(const vector<IPeak*>& inPeaks);
 
-    static list<IPeak*> adaptPeakIntensities(const list<IPeak*>& inp, int nSpectra);
+    static vector<IPeak*> adaptPeakIntensities(const vector<IPeak*>& inp, int nSpectra);
 
-    static list<IPeak*> filterNoise(const list<IPeak*>& inp);
+    static vector<IPeak*> filterNoise(const vector<IPeak*>& inp);
 
     list<SpectrumHolderListener*> listeners;
 

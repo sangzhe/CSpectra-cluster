@@ -32,14 +32,14 @@ BinnedHighestNPeakFunction::BinnedHighestNPeakFunction(int maxPeaks, int binSize
         throw ("Bin overlap must be smaller than the bin size.");
 }
 
-list<IPeak*> BinnedHighestNPeakFunction::apply(list<IPeak*> &originalPeaks) {
+vector<IPeak*> BinnedHighestNPeakFunction::apply(vector<IPeak*> &originalPeaks) {
     unordered_set<IPeak*> retained;
     int startPeak = 0;
     for(double binBottom = MAXIMUM_BINNED_MZ;binBottom < MAXIMUM_BINNED_MZ -binSize;binBottom+=(binSize - binOverlap)){
         startPeak = handleBin(originalPeaks,startPeak,retained,binBottom);
         if(startPeak > originalPeaks.size()) break;
     }
-    list<IPeak*> ret;
+    vector<IPeak*> ret;
     unordered_set<IPeak*>::iterator iter;
     for(iter = retained.begin();iter != retained.end();iter++){
         ret.push_back(*iter);
@@ -49,7 +49,7 @@ list<IPeak*> BinnedHighestNPeakFunction::apply(list<IPeak*> &originalPeaks) {
 
 }
 
-int BinnedHighestNPeakFunction::handleBin(list<IPeak*> allpeaks, int startpeak, unordered_set<IPeak*> retained,
+int BinnedHighestNPeakFunction::handleBin(vector<IPeak*> allpeaks, int startpeak, unordered_set<IPeak*> retained,
                                           double binBottom) {
     int startIndexNextBin = startpeak; // the index of the next bin's peak
     double binEnd = binBottom + binSize; // end of this bin
@@ -57,8 +57,8 @@ int BinnedHighestNPeakFunction::handleBin(list<IPeak*> allpeaks, int startpeak, 
 
     int index = startpeak;
     IPeak* currentPeak = nullptr;
-    list<IPeak*> byIntensity;
-    list<IPeak*>::iterator iter;
+    vector<IPeak*> byIntensity;
+    vector<IPeak*>::iterator iter;
     for(iter =allpeaks.begin();iter != allpeaks.end();iter++){
         index++;
         IPeak* nextPeak = *iter;

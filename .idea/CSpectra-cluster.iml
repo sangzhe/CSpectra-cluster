@@ -2,31 +2,37 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/engine/IIncrementalClusteringEngine.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/engine/IClusteringEngine.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/similarity/ISimilarityChecker.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/engine/IncrementalClusteringEngineFactory.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/engine/IIncrementalClusteringEngine.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/quality/IQualityScorer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/ISimilarityChecker.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/IPeakMatches.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatches.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatches.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/pool/ClusterPointerPool.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectrumHolderListener.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/ISpectrumHolder.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/GreedySpectralCluster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/GreedySpectralCluster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/ICluster.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Cluster/ISpectrumHolder.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectralClusrer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/BinnedHighestNPeakFunction.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/HighestNPeakFunction.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/BinnedHighestNPeakFunction.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/peak/HighestNPeakFunction.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemovePrecursorPeaksFunction.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemovePrecursorPeaksFunction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.cpp" isTestSource="false" />
@@ -38,14 +44,14 @@
       <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/IPointer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/KnownProperties.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Spectrum.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Peak.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/KnownProperties.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/ISpectrum.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/ISpectrumQuality.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Spectrum.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Spectrum/Peak.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Mass.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/IPeak.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Peak.cpp" isTestSource="false" />

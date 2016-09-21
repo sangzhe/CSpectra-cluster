@@ -11,41 +11,41 @@ int currentMAjorPeakCount = 0;
 Spectrum::Spectrum() {};
 
 Spectrum::Spectrum(string &pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer,
-                   const list<IPeak*> &inpeaks) {
+                   const vector<IPeak*> &inpeaks) {
     this->id = pId;
     this->precursorCharge = pPrecursorCharge;
     this->precursorMz = pPrecursorMz;
     this->qualityScorer = qualityScorer;
     this->peaks.clear();
-    list<IPeak*> in = inpeaks;
-    peaks.merge(in);
+    vector<IPeak*> in = inpeaks;
+    peaks.insert(peaks.end(),in.begin(),in.end());
     PointerPool::add(in);
-    peaks.sort(Peak::cmpPeakMz);
+    sort(peaks.begin(),peaks.end(),Peak::cmpPeakMz);
     calculateIntensities();
 }
 
 Spectrum::Spectrum( const ISpectrum& spectrum){
-    list<IPeak*> peaks = spectrum.getPeaks();
+    vector<IPeak*> peaks = spectrum.getPeaks();
     new (this)Spectrum(spectrum,peaks);
 }
 
-Spectrum::Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks){
+Spectrum::Spectrum( const ISpectrum& spectrum,  const vector<IPeak*>& inpeaks){
     new (this)Spectrum(spectrum,inpeaks,false);
 }
 
-Spectrum::Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks, bool isSortedList) {
+Spectrum::Spectrum( const ISpectrum& spectrum,  const vector<IPeak*>& inpeaks, bool isSortedList) {
     this->id = spectrum.getId();
     this->precursorCharge = spectrum.getPrecursorCharge();
     this->precursorMz = spectrum.getPrecursorMz();
     this->qualityScorer = spectrum.getQualityScorer();
 
     peaks.clear();
-    peaks.merge(list<IPeak*>(inpeaks));
+    peaks.insert(peaks.end(),inpeaks.begin(),inpeaks.end());
     PointerPool::add(inpeaks);
 
 
     if(!isSortedList)
-        peaks.sort(Peak::cmpPeakMz);
+        sort(peaks.begin(),peaks.end(),Peak::cmpPeakMz);
 
     Properties props = spectrum.getProperties();
     properties.putAll(props);
@@ -55,7 +55,7 @@ Spectrum::Spectrum( const ISpectrum& spectrum,  const list<IPeak*>& inpeaks, boo
 void Spectrum::calculateIntensities() {
     double totalIntensityX = 0;
     double sumSquareIntensityX = 0;
-    list<IPeak*>::iterator iter;
+    vector<IPeak*>::iterator iter;
     for(iter = peaks.begin();iter != peaks.end();iter++){
         double intensity = (*iter)->getIntensity();
         totalIntensityX += intensity;
@@ -93,10 +93,10 @@ ISpectrum* Spectrum::getHighestNPeaks(int numberRequested) {
 }
 
 Spectrum Spectrum::buildHighestPeaks(int numberRequested) const {
-    list<IPeak*> byIntensity = this->getPeaks();
-    byIntensity.sort(Peak::cmpPeakIntensity);
-    list<IPeak*> holder;
-    list<IPeak*>::iterator iter;
+    vector<IPeak*> byIntensity = this->getPeaks();
+    sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity);
+    vector<IPeak*> holder;
+    vector<IPeak*>::iterator iter;
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++){
         holder.push_back(*iter);
         PointerPool::add(*iter);
@@ -127,7 +127,7 @@ string Spectrum::getId() const{
     return id;
 }
 
-list<IPeak*> Spectrum::getPeaks() const{
+vector<IPeak*> Spectrum::getPeaks() const{
     return peaks;
 }
 
@@ -170,9 +170,9 @@ bool Spectrum::operator==(const ISpectrum& O) const{
     if (peaks.size() != (O.getPeaks().size())) {
         return false;
     }
-    list<IPeak*> peaks1 = peaks;
-    list<IPeak*>::iterator iter1;
-    list<IPeak*>::iterator iter2;
+    vector<IPeak*> peaks1 = peaks;
+    vector<IPeak*>::iterator iter1;
+    vector<IPeak*>::iterator iter2;
     iter1= peaks1.begin();
     iter2 = O.getPeaks().begin();
 

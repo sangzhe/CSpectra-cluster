@@ -32,7 +32,7 @@ namespace PointerPool {
         }
     }
 
-    static void add(const list<IPeak*>& peaks){
+    static void add(const vector<IPeak*>& peaks){
         for(IPeak* peak:peaks){
             add(peak);
         }
@@ -62,7 +62,7 @@ namespace PointerPool {
         }
     }
 
-    static void remove(const list<IPeak*>& peaks){
+    static void remove(const vector<IPeak*>& peaks){
         for(IPeak* peak:peaks){
             remove(peak);
         }

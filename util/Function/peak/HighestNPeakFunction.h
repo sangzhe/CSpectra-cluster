@@ -7,7 +7,7 @@
 
 #include "../../../Spectrum/Peak.h"
 #include "../../../Spectrum/IPeak.h"
-#include "list"
+#include "vector"
 using namespace std;
 class HighestNPeakFunction {
 public:
@@ -15,7 +15,7 @@ public:
 
     HighestNPeakFunction(int maxPeaks);
     HighestNPeakFunction();
-    list<IPeak*> apply(const list<IPeak*> &originalPeaks);
+    vector<IPeak*> apply(const vector<IPeak*> &originalPeaks);
 
 private:
     int maxPeaks;

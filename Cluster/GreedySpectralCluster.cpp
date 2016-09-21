@@ -145,7 +145,7 @@ void GreedySpectralCluster::addSpectra(const ISpectrum* merged) {
     unordered_set<string>::iterator iter(find(Ids.begin(),Ids.end(),merged->getId()));
     if( iter != Ids.end()) return;
     spectraIds.insert(merged->getId());
-    ISpectrum *withoutPeaks = new Spectrum(*merged,list<IPeak*>());
+    ISpectrum *withoutPeaks = new Spectrum(*merged,vector<IPeak*>());
     PointerPool::add(withoutPeaks);
     clusteredSpectra.push_back(withoutPeaks);
 
@@ -165,7 +165,7 @@ void GreedySpectralCluster::addSpectra(const list<ISpectrum*> &spectra) {
         unordered_set<string>::iterator iter(find(Ids.begin(),Ids.end(),added->getId()));
         if( iter != Ids.end()) continue;
         spectraIds.insert(added->getId());
-        ISpectrum *withoutPeaks = new Spectrum(*added,list<IPeak*>());
+        ISpectrum *withoutPeaks = new Spectrum(*added,vector<IPeak*>());
         PointerPool::add(withoutPeaks);
         clusteredSpectra.push_back(withoutPeaks);
         spectrumAdded = true;

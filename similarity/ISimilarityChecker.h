@@ -9,7 +9,7 @@
 
 class ISimilarityChecker{
 public:
-    virtual double assessSimilarity(ISpectrum& spectrum1,ISpectrum& spectrum2) = 0;
+    virtual double assessSimilarity(const ISpectrum& spectrum1,const ISpectrum& spectrum2) = 0;
     virtual bool isPeakFiltering() = 0;
     virtual void setPeakFiltering(bool peakFiltering) = 0;
     virtual void setFragmentIonTolerance(float fragmentIonTolerance) = 0;

@@ -8,6 +8,6 @@
 #include "IClusteringEngine.h"
 
 class IIncrementalClusteringEngine: public IClusteringEngine{
-    virtual list<ICluster&> addClusterIncremental(ICluster& added);
+    virtual list<ICluster*> addClusterIncremental(ICluster& added);
 };
 #endif //CSPECTRA_CLUSTER_IINCREMENTALCLUSTERINGENGINE_H

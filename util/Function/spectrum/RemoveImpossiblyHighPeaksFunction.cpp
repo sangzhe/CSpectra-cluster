@@ -19,9 +19,9 @@ ISpectrum* RemoveImpossiblyHighPeaksFunction::apply(const ISpectrum &o) {
      float monoisotopicMass = Mass::getMonoisotopicMass(o.getPrecursorMz(), o.getPrecursorCharge());
      float maxMass = monoisotopicMass + Mass::PROTON + tolerance;
 
-    list<IPeak*> filteredPeaks;
-    list<IPeak*> peak = o.getPeaks();
-    list<IPeak*>::iterator iterator1;
+    vector<IPeak*> filteredPeaks;
+    vector<IPeak*> peak = o.getPeaks();
+    vector<IPeak*>::iterator iterator1;
     for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
         if ((*iterator1)->getMz() > maxMass)
             continue;

@@ -15,12 +15,12 @@ HighestNPeakFunction::HighestNPeakFunction(int maxPeaks) {
     this->maxPeaks = maxPeaks;
 }
 
-list<IPeak*> HighestNPeakFunction::apply(const list<IPeak*> &originalPeaks) {
-    list<IPeak*> byIntensity = originalPeaks;
-    byIntensity.sort(Peak::cmpPeakIntensity);
-    list<IPeak*> ret;
+vector<IPeak*> HighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) {
+    vector<IPeak*> byIntensity = originalPeaks;
+    sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity)
+    vector<IPeak*> ret;
 
-    list<IPeak*>::iterator iter;
+    vector<IPeak*>::iterator iter;
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++){
         if(ret.size() >= maxPeaks){
             break;

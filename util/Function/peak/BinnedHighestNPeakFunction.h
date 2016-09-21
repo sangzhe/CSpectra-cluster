@@ -30,7 +30,7 @@ public:
 
     BinnedHighestNPeakFunction();
 
-    list<IPeak*> apply(list<IPeak*> &originalPeaks);
+    vector<IPeak*> apply(vector<IPeak*> &originalPeaks);
 
 
 private:
@@ -47,7 +47,7 @@ private:
      */
     int binOverlap;
 
-    int handleBin(list<IPeak*> allpeaks, int startpeak, unordered_set<IPeak*> retained, double binBottom);
+    int handleBin(vector<IPeak*> allpeaks, int startpeak, unordered_set<IPeak*> retained, double binBottom);
 
 };
 

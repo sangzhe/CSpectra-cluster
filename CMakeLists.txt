@@ -64,7 +64,7 @@ set(SOURCE_FILES
         Consensus/GreedyConsensusSpectrum.h
         Consensus/GreedyConsensusSpectrumFactory.cpp
         Consensus/GreedyConsensusSpectrumFactory.h
-        pool/ClusterPointerPool.h Cluster/SpectrumHolderListener.h IPointer.h)
+        pool/ClusterPointerPool.h Cluster/SpectrumHolderListener.h IPointer.h engine/IncrementalClusteringEngineFactory.h similarity/IntensityRankCorrelation.cpp similarity/IntensityRankCorrelation.h similarity/IPeakMatches.h similarity/PeakMatches.cpp similarity/PeakMatches.h)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_LIBRARIES "/usr/local/include/boost")
