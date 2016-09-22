@@ -8,19 +8,22 @@
 #include "../Spectrum/IPeak.h"
 #include "../Spectrum/ISpectrum.h"
 
-class IPeakMatches{
+class IPeakMatches:public IPointer{
+public:
+    virtual vector<IPeak*> getSharedPeaksFromSpectrumOne() = 0 ;
 
-    list<IPeak*> getSharedPeaksFromSpectrumOne();
+    virtual vector<IPeak*> getSharedPeaksFromSpectrumTwo() = 0 ;
 
-    list<IPeak*> getSharedPeaksFromSpectrumTwo();
+    virtual int getNumberOfSharedPeaks() = 0 ;
 
-    int getNumberOfSharedPeaks();
+    virtual pair<IPeak*, IPeak*> getPeakPair(int nIndex) = 0 ;
 
-    pair<IPeak*, IPeak*> getPeakPair(int nIndex);
-
-    ISpectrum* getSpectrumOne();
+    virtual ISpectrum* getSpectrumOne() = 0 ;
 
 
-    ISpectrum* getSpectrumTwo();
+    virtual ISpectrum* getSpectrumTwo() = 0 ;
+
+
+    virtual ~IPeakMatches();
 };
 #endif //CSPECTRA_CLUSTER_IPEAKMATCHES_H

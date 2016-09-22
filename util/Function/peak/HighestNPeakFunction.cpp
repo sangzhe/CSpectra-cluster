@@ -17,7 +17,7 @@ HighestNPeakFunction::HighestNPeakFunction(int maxPeaks) {
 
 vector<IPeak*> HighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) {
     vector<IPeak*> byIntensity = originalPeaks;
-    sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity)
+    sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity);
     vector<IPeak*> ret;
 
     vector<IPeak*>::iterator iter;

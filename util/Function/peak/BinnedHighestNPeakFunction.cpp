@@ -49,7 +49,7 @@ vector<IPeak*> BinnedHighestNPeakFunction::apply(vector<IPeak*> &originalPeaks) 
 
 }
 
-int BinnedHighestNPeakFunction::handleBin(vector<IPeak*> allpeaks, int startpeak, unordered_set<IPeak*> retained,
+int BinnedHighestNPeakFunction::handleBin(vector<IPeak *> allpeaks, int startpeak, unordered_set<IPeak *> retained,
                                           double binBottom) {
     int startIndexNextBin = startpeak; // the index of the next bin's peak
     double binEnd = binBottom + binSize; // end of this bin
@@ -92,7 +92,7 @@ int BinnedHighestNPeakFunction::handleBin(vector<IPeak*> allpeaks, int startpeak
 
 
     int numberAdded = 0;
-    byIntensity.sort(Peak::cmpPeakIntensity);
+    sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity);
 
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++) {
         retained.insert(*iter);

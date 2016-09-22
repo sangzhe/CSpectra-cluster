@@ -65,7 +65,7 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
             // naked spectrum
             if(line.substr(0,BEGIN_IONS.length()) == BEGIN_IONS){
                 ISpectrum *internalComplete = readMGFScan(ss,line);
-                list<IPeak*> peaks = internalComplete->getPeaks();
+                vector<IPeak*> peaks = internalComplete->getPeaks();
                 ISpectrum* internalFilterd = new Spectrum(*internalComplete,peaks);
                 PointerPool::remove(internalComplete);
                 // perform default peak filtering
@@ -196,7 +196,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
         }
         if (line == "") return nullptr;
 
-        list<IPeak*> holder;
+        vector<IPeak*> holder;
 
         while (line != ""){
 //            getline(ss,line);
@@ -397,7 +397,7 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
         sumPrecMz = IOUtilities::StringToFloat(headerFields[5].substr(summzTitle.length()));
 
     //process the peak list
-    list<IPeak*> peaks;
+    vector<IPeak*> peaks;
 
     while(getline(ss,line) && line != ""){
         if(line == END_CONSENSUS) break;

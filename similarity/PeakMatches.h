@@ -12,19 +12,21 @@ class PeakMatches : public IPeakMatches{
 private:
     ISpectrum* spectrum1;
     ISpectrum* spectrum2;
-    list<int> sharedPeakIndecesSpec1;
-    list<int> sharedPeakIndecesSpec2;
-    list<IPeak*> sharedPeaksSpec1;
-    list<IPeak*> sharedPeaksSpec2;
+    vector<int> sharedPeakIndecesSpec1;
+    vector<int> sharedPeakIndecesSpec2;
+    vector<IPeak*> sharedPeaksSpec1;
+    vector<IPeak*> sharedPeaksSpec2;
 
 public:
-    PeakMatches(ISpectrum* spectrum1, ISpectrum* spectrum2, list<int> sharedPeakIndecesSpec1, list<int> sharedPeakIndecesSpec2);
-    list<IPeak*> getSharedPeaksFromSpectrumOne();
-    list<IPeak*> getSharedPeaksFromSpectrumTwo();
+    PeakMatches(ISpectrum* spectrum1, ISpectrum* spectrum2, vector<int> sharedPeakIndecesSpec1, vector<int> sharedPeakIndecesSpec2);
+    vector<IPeak*> getSharedPeaksFromSpectrumOne();
+    vector<IPeak*> getSharedPeaksFromSpectrumTwo();
     int getNumberOfSharedPeaks();
     pair<IPeak*, IPeak*> getPeakPair(int nIndex);
     ISpectrum* getSpectrumOne();
     ISpectrum* getSpectrumTwo();
+
+    ~PeakMatches();
 
 };
 

@@ -4,7 +4,11 @@
 
 #include "IOUtilities.h"
 
-int   IOUtilities::INT_MAX_VALUE = 0x7fffffff;
+int   IOUtilities::INT_MAX_VALUE = INT_MAX;
+
+float IOUtilities::FLOAT_MAX_VALUE =  FLT_MAX;
+
+
 
 void  IOUtilities::replace(string& string1,const string &Old, const string &New){
     replace_all(string1,Old,New);

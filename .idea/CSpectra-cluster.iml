@@ -10,10 +10,14 @@
       <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/quality/IQualityScorer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/ISimilarityChecker.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/HypergeometricScore.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/IPeakMatches.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatches.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatches.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatchesUtilities.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/HypergeometricScore.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatchesUtilities.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/pool/ClusterPointerPool.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.cpp" isTestSource="false" />
@@ -241,14 +245,14 @@
           <root url="file:///System/Library/Frameworks/Accelerate.framework/Headers" />
           <root url="file:///System/Library/Frameworks/Accelerate.framework/Frameworks/vImage.framework/Headers" />
           <root url="file:///System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Headers" />
-          <root url="file:///Library/Developer/CommandLineTools/usr/lib/clang/8.0.0/include" />
-          <root url="file:///Library/Developer/CommandLineTools/usr/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/local/include" />
           <root url="file:///Library/Frameworks/GTK+.framework/Headers" />
           <root url="file:///Library/Frameworks/iTunesLibrary.framework/Headers" />
           <root url="file:///Library/Frameworks/R.framework/Headers" />
           <root url="file:///Library/Frameworks/R.framework/PrivateHeaders" />
-          <root url="file:///usr/include" />
-          <root url="file:///usr/local/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.0.0/include" />
         </CLASSES>
         <SOURCES>
           <root url="file:///System/Library/Frameworks/AudioToolbox.framework/Headers" />
@@ -421,14 +425,14 @@
           <root url="file:///System/Library/Frameworks/Accelerate.framework/Headers" />
           <root url="file:///System/Library/Frameworks/Accelerate.framework/Frameworks/vImage.framework/Headers" />
           <root url="file:///System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Headers" />
-          <root url="file:///Library/Developer/CommandLineTools/usr/lib/clang/8.0.0/include" />
-          <root url="file:///Library/Developer/CommandLineTools/usr/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/local/include" />
           <root url="file:///Library/Frameworks/GTK+.framework/Headers" />
           <root url="file:///Library/Frameworks/iTunesLibrary.framework/Headers" />
           <root url="file:///Library/Frameworks/R.framework/Headers" />
           <root url="file:///Library/Frameworks/R.framework/PrivateHeaders" />
-          <root url="file:///usr/include" />
-          <root url="file:///usr/local/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include" />
+          <root url="file:///Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.0.0/include" />
         </SOURCES>
       </library>
     </orderEntry>

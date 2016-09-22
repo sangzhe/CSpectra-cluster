@@ -7,6 +7,8 @@
 
 #include "vector"
 #include "string"
+#include "limits.h"
+#include "float.h"
 #include "../Spectrum/ISpectrum.h"
 #include "math.h"
 #include "stdlib.h"
@@ -19,6 +21,7 @@ class IOUtilities {
 public:
 
     static int   INT_MAX_VALUE;
+    static float FLOAT_MAX_VALUE;
 
     static void replace(string &string1,const string& Old,const string& New);
     static void split(const string& src, const string& separator, vector<string>& dest);
