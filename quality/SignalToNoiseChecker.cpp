@@ -31,7 +31,7 @@ double SignalToNoiseChecker::calculateQualityScore(const ISpectrum& spectrum) {
 
     double meanHigh = (totalIntensity - highestPeak) / (NUMBER_HIGH_PEAKS -1);
     vector<IPeak*> peaks = spectrum.getPeaks();
-    peaks.sort(Peak::cmpPeakIntensity);
+    sort(peaks.begin(),peaks.end(),Peak::cmpPeakIntensity);
 
     double median;
 

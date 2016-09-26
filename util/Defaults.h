@@ -14,22 +14,30 @@
 #include "Function/peak/HighestNPeakFunction.h"
 #include "Function/spectrum/RemovePrecursorPeaksFunction.h"
 #include "Function/spectrum/RemoveImpossiblyHighPeaksFunction.h"
+#include "../similarity/ISimilarityChecker.h"
+#include "../similarity/CombinedFisherIntensityTest.h"
 
 
 
 class Defaults {
     public:
             static float DEFAULT_FRAGMENT_ION_TOLERANCE;
+            static  double DEFAULT_SIMILARITY_THRESHOLD;
             static float getFragmentIonTolerance();
             static IQualityScorer* getDefaultQualityScorer();
             static ISpectrum* doDefaultPeakFilter(const ISpectrum& spectrum);
             static IConsensusSpectrumBuilder* getDefaultConsensusSpectrumBuilder();
+            static ISimilarityChecker* getDefaultSimilarityChecker();
+            static double getSimilarityThreshold();
+            static void setFragmentIonTolerance(float fragmentIonTolerance);
             ~Defaults();
-    private:
-            static float fragmentIonTolerance;
 
+private:
+            static float fragmentIonTolerance;
+            static ISimilarityChecker* defaultSimilarityChecker;
             static IQualityScorer* defaultQualityScorer;
             static ConsensusSpectrumBuilderFactory* consensusFactory;
+            static double similarityThreshold = DEFAULT_SIMILARITY_THRESHOLD;
 
 };
 

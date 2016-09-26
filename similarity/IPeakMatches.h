@@ -24,6 +24,5 @@ public:
     virtual ISpectrum* getSpectrumTwo() = 0 ;
 
 
-    virtual ~IPeakMatches();
 };
 #endif //CSPECTRA_CLUSTER_IPEAKMATCHES_H

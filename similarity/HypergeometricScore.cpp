@@ -6,8 +6,8 @@
 #include "PeakMatchesUtilities.h"
 
 string HypergeometricScore::algorithmName = "Hypergeometric Exact Test";
-  string HypergeometricScore::algorithmVersion = "0.1";
-  bool HypergeometricScore::DEFAULT_PEAK_FILTERING = false;
+string HypergeometricScore::algorithmVersion = "0.1";
+bool HypergeometricScore::DEFAULT_PEAK_FILTERING = false;
 
 HypergeometricScore::HypergeometricScore() {
     new(this) HypergeometricScore(Defaults::getFragmentIonTolerance(), DEFAULT_PEAK_FILTERING);
@@ -88,7 +88,7 @@ double HypergeometricScore::calculateSimilarityProbablity(int numberOfSharedPeak
     }
 
 
-    boost::math::hypergeometric_distribution hyperGeometric(numberOfPeaksFromSpec1,numberOfPeaksFromSpec2,numberOfBins);
+    boost::math::hypergeometric_distribution<double> hyperGeometric(numberOfPeaksFromSpec1,numberOfPeaksFromSpec2,numberOfBins);
 
 
     double hgtScore = 0; // summed probability of finding more peaks

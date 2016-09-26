@@ -11,7 +11,7 @@ SpectralCluster::SpectralCluster(ICluster *copied, IConsensusSpectrumBuilder *co
     new (this)SpectralCluster(copied->getId(),consensusSpectrumBuilder);
     if(!copied->storesPeakLists()) throw("Clusters can only be copied if peak lists are stored.");
 
-    list<ISpectrum*> clusterdSpectra1 = copied->getClusteredSpectra();
+    vector<ISpectrum*> clusterdSpectra1 = copied->getClusteredSpectra();
     addSpectra(clusterdSpectra1);
 }
 
@@ -78,7 +78,7 @@ ISpectrum* SpectralCluster::getConsensusSpectrum() {
     return consensusSpectrumBuilder->getConsensusSpectrum();
 }
 
-list<ISpectrum*> SpectralCluster::getClusteredSpectra() const{
+vector<ISpectrum*> SpectralCluster::getClusteredSpectra() const{
     return clusteredSpectra;
 }
 
@@ -94,13 +94,13 @@ void SpectralCluster::addSpectra(const ISpectrum *merged) {
     ISpectrum *added = new Spectrum(*merged);
     string Id = added->getId();
     spectraIds.insert(Id);
-    list<ISpectrum*> all = clusteredSpectra;
-    list<ISpectrum*>::iterator iter(find(all.begin(),all.end(),merged));
+    vector<ISpectrum*> all = clusteredSpectra;
+    vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),merged));
     if(iter == all.end()){
         clusteredSpectra.push_back(added);
         PointerPool::add(added);
 
-        list<ISpectrum*> tmp;
+        vector<ISpectrum*> tmp;
         tmp.push_back(added);
         notifySpectrumHolderListeners(true,tmp);
 
@@ -110,19 +110,19 @@ void SpectralCluster::addSpectra(const ISpectrum *merged) {
 //    }
 }
 
-void SpectralCluster::addSpectra(const list<ISpectrum*> &spectra) {
+void SpectralCluster::addSpectra(const vector<ISpectrum*> &spectra) {
     if( spectra.size() > 0){
         bool spectrumAdded = false;
 
-        list<ISpectrum*> in = spectra;
-        list<ISpectrum*>::iterator iter;
-        list<ISpectrum*> ToAdd;
+        vector<ISpectrum*> in = spectra;
+        vector<ISpectrum*>::iterator iter;
+        vector<ISpectrum*> ToAdd;
         for(iter = in.begin();iter != in.end();iter++){
             ISpectrum *added = *iter;
             string Id = added->getId();
             spectraIds.insert(Id);
-            list<ISpectrum*> all = clusteredSpectra;
-            list<ISpectrum*>::iterator iter(find(all.begin(),all.end(),added));
+            vector<ISpectrum*> all = clusteredSpectra;
+            vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),added));
             if(iter == all.end()){
                 spectrumAdded = true;
                 clusteredSpectra.push_back(added);
@@ -137,12 +137,12 @@ void SpectralCluster::addSpectra(const list<ISpectrum*> &spectra) {
     }
 }
 
-void SpectralCluster::removeSpectra(const list<ISpectrum*> &spectra) {
+void SpectralCluster::removeSpectra(const vector<ISpectrum*> &spectra) {
     if (!isRemovedSupported())
         throw ("Remove not supported");
     if (spectra.size() > 0){
-        list<ISpectrum*> in = spectra;
-        list<ISpectrum*>::iterator iter;
+        vector<ISpectrum*> in = spectra;
+        vector<ISpectrum*>::iterator iter;
         for(iter = in.begin();iter != in.end();iter++){
             removeSpectra(*iter);
         }
@@ -150,7 +150,7 @@ void SpectralCluster::removeSpectra(const list<ISpectrum*> &spectra) {
 }
 
 void SpectralCluster::removeSpectra(const ISpectrum *removed) {
-    list<ISpectrum*>::iterator remove;
+    vector<ISpectrum*>::iterator remove;
     for(remove=clusteredSpectra.begin();remove != clusteredSpectra.end();remove++){
         if((*remove)->getPeaks() == removed->getPeaks() && (*remove)->getPrecursorMz() == removed->getPrecursorMz()){
             unordered_set<string>::iterator iterator1 = find(spectraIds.begin(),spectraIds.end(),(*remove)->getId());
@@ -180,7 +180,7 @@ void SpectralCluster::removeSpectrumHolderListener(SpectrumHolderListener *remov
     }
 }
 
-void SpectralCluster::notifySpectrumHolderListeners(bool isAdd, list<ISpectrum *> spectra) {
+void SpectralCluster::notifySpectrumHolderListeners(bool isAdd, vector<ISpectrum *> spectra) {
     if (spectrumHolderListeners.empty())
         return;
     for (SpectrumHolderListener *listener:spectrumHolderListeners) {

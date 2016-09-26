@@ -30,10 +30,10 @@ public:
     GreedyConsensusSpectrum(float fragmentTolerance, string id, int nSpectra, double sumPrecursorMz, double sumPrecursorIntens, int sumCharge,const vector<IPeak*> peaks);
 
     void addSpectra(const ISpectrum* merged);
-    void addSpectra(const list<ISpectrum*>& spectra);
+    void addSpectra(const vector<ISpectrum*>& spectra);
     bool isRemovedSupported();
     void removeSpectra(const ISpectrum* removed);
-    void removeSpectra(const list<ISpectrum*> &spectra);
+    void removeSpectra(const vector<ISpectrum*> &spectra);
     void addConsensusSpectrum( IConsensusSpectrumBuilder& consensusSpectrumToAdd);
 
     ISpectrum* getConsensusSpectrum() ;
@@ -41,9 +41,9 @@ public:
     void addSpectrumHolderListener(SpectrumHolderListener* added);
     void removeSpectrumHolderListener(SpectrumHolderListener* removed);
 
-    void onSpectraAdd(ISpectrumHolder* holder,list<ISpectrum*>& added);
+    void onSpectraAdd(ISpectrumHolder* holder,vector<ISpectrum*>& added);
 
-    void onSpectraRemove(ISpectrumHolder* holder,list<ISpectrum*>& removed);
+    void onSpectraRemove(ISpectrumHolder* holder,vector<ISpectrum*>& removed);
 
     void clear();
 

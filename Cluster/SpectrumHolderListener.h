@@ -13,9 +13,9 @@ class ISpectrumHolder;
 
 class SpectrumHolderListener:virtual public IPointer{
 public:
-    virtual void onSpectraAdd(ISpectrumHolder* holder,list<ISpectrum*>& added) = 0;
+    virtual void onSpectraAdd(ISpectrumHolder* holder,vector<ISpectrum*>& added) = 0;
 
-    virtual void onSpectraRemove(ISpectrumHolder* holder,list<ISpectrum*>& removed) = 0;
+    virtual void onSpectraRemove(ISpectrumHolder* holder,vector<ISpectrum*>& removed) = 0;
 };
 
 #endif //CSPECTRA_CLUSTER_SPECTRUMHOLDERLISTENER_H

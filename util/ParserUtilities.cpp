@@ -50,7 +50,7 @@ string ParserUtilities::convertClusterToString(ICluster& cluster) {
 ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
     string currentId = "";
     bool storesPeakLists = false;
-    list<ISpectrum*> spectra;
+    vector<ISpectrum*> spectra;
     IConsensusSpectrumBuilder* consensusSpectrumBuilder = nullptr;
     list<ComparisonMatch> comparisonMatches;
 
@@ -288,7 +288,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                 string peptide = sequence;
                 sequence = "";
 
-                holder.sort(Peak::cmpPeak);
+                sort(holder.begin(),holder.end(),Peak::cmpPeak);
 
                 IQualityScorer* defaultQualityScorer = Defaults::getDefaultQualityScorer();
                 ISpectrum *spectrum = new Spectrum(title,dcharge,(float)mz,defaultQualityScorer,holder);

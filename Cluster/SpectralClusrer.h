@@ -18,13 +18,13 @@ private:
 
     list<SpectrumHolderListener*> spectrumHolderListeners;
 
-    list<ISpectrum*> clusteredSpectra;
+    vector<ISpectrum*> clusteredSpectra;
 
     Properties properties;
     unordered_set<string> spectraIds;
     IConsensusSpectrumBuilder* consensusSpectrumBuilder;
 
-    void notifySpectrumHolderListeners(bool isAdd, list<ISpectrum*> spectra);
+    void notifySpectrumHolderListeners(bool isAdd, vector<ISpectrum*> spectra);
 
 public:
     SpectralCluster( ICluster* copied,IConsensusSpectrumBuilder* consensusSpectrumBuilder);
@@ -45,7 +45,7 @@ public:
 
     ISpectrum* getConsensusSpectrum();
 
-    list<ISpectrum*> getClusteredSpectra() const;
+    vector<ISpectrum*> getClusteredSpectra() const;
 
     IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
 
@@ -64,11 +64,11 @@ public:
 
     void addSpectra(const ISpectrum* merged);
 
-    void addSpectra(const list<ISpectrum*>& spectra);
+    void addSpectra(const vector<ISpectrum*>& spectra);
 
     void removeSpectra(const ISpectrum* removed);
 
-    void removeSpectra(const list<ISpectrum*> &spectra) ;
+    void removeSpectra(const vector<ISpectrum*> &spectra) ;
 
     bool isRemovedSupported();
 

@@ -10,13 +10,13 @@
 
 class IClusteringEngine{
 public:
-    virtual ISimilarityChecker getSimilarityChecker() = 0;
+    virtual ISimilarityChecker* getSimilarityChecker() = 0;
 
     virtual double getSimilarityThreshold() = 0;
 
-    virtual list<ICluster*> getClusters() = 0;
+    virtual vector<ICluster*> getClusters() = 0;
 
-    virtual void addClusters(list<ICluster*> cluster) = 0;
+    virtual void addClusters(vector<ICluster*> cluster) = 0;
 
     virtual void addClusters(ICluster* cluster) = 0;
 

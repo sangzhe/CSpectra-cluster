@@ -58,11 +58,11 @@ vector<IPeak*> ConsensusSpectrum::getInternalPeaks() const {
     return consensusPeaks;
 }
 
-void ConsensusSpectrum::addSpectra(const list<ISpectrum*> &spectra) {
+void ConsensusSpectrum::addSpectra(const vector<ISpectrum*> &spectra) {
     if(spectra.size() < 1) return;
 
-    list<ISpectrum*> in = spectra;
-    list<ISpectrum*>::iterator iter;
+    vector<ISpectrum*> in = spectra;
+    vector<ISpectrum*>::iterator iter;
     for(iter = in.begin();iter != in.end();iter++){
         addSpectra(*iter);
     }
@@ -73,7 +73,7 @@ void ConsensusSpectrum::addSpectra(const list<ISpectrum*> &spectra) {
 
 }
 
-void ConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, list<ISpectrum*>& added) {
+void ConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, vector<ISpectrum*>& added) {
     PointerPool::add(added);
     addSpectra(added);
 }
@@ -87,15 +87,15 @@ void ConsensusSpectrum::addSpectra(const ISpectrum *merged)  {
     nSpectra++;
 }
 
-void ConsensusSpectrum::onSpectraRemove(ISpectrumHolder *holder, list<ISpectrum*>& removed) {
+void ConsensusSpectrum::onSpectraRemove(ISpectrumHolder *holder, vector<ISpectrum*>& removed) {
     removeSpectra(removed);
     PointerPool::remove(removed);
 }
-void ConsensusSpectrum::removeSpectra(const list<ISpectrum*> &spectra) {
+void ConsensusSpectrum::removeSpectra(const vector<ISpectrum*> &spectra) {
     if(spectra.size() < 1) return;
 
-    list<ISpectrum*> in = spectra;
-    list<ISpectrum*>::iterator iter;
+    vector<ISpectrum*> in = spectra;
+    vector<ISpectrum*>::iterator iter;
     for(iter = in.begin();iter != in.end();iter++){
         removeSpectra(*iter);
 }

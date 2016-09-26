@@ -6,13 +6,14 @@
 #define CSPECTRA_CLUSTER_INCREMENTALCLUSTERINGENGINEFACTORY_H
 
 #include "IIncrementalClusteringEngine.h"
+#include "../util/Defaults.h"
 
 class IncrementalClusteringEngineFactory{
 public:
     IIncrementalClusteringEngine getIncrementalClusteringEngine(float windowSize) {
-         ISimilarityChecker similarityChecker = Defaults::getDefaultSimilarityChecker();
+         ISimilarityChecker* similarityChecker = Defaults::getDefaultSimilarityChecker();
          double similarityThreshold = Defaults::getSimilarityThreshold();
-        return new IncrementalClusteringEngine(similarityChecker, comparator, windowSize, similarityThreshold);
+        return new IncrementalClusteringEngine(similarityChecker, windowSize, similarityThreshold);
     }
 };
 #endif //CSPECTRA_CLUSTER_INCREMENTALCLUSTERINGENGINEFACTORY_H

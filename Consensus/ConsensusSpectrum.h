@@ -30,9 +30,9 @@ public:
 
     void removeSpectra(const ISpectrum* removed) ;
 
-    void onSpectraAdd(ISpectrumHolder* holder,list<ISpectrum*>& added);
+    void onSpectraAdd(ISpectrumHolder* holder,vector<ISpectrum*>& added);
 
-    void onSpectraRemove(ISpectrumHolder* holder,list<ISpectrum*>& removed);
+    void onSpectraRemove(ISpectrumHolder* holder,vector<ISpectrum*>& removed);
 
     bool isRemovedSupported();
 
@@ -71,9 +71,9 @@ public:
 
     bool isDirty;
 
-    void addSpectra(const list<ISpectrum*> &spectra);
+    void addSpectra(const vector<ISpectrum*> &spectra);
 
-    void removeSpectra(const list<ISpectrum*> &spectra);
+    void removeSpectra(const vector<ISpectrum*> &spectra);
 
     void addSpectrumHolderListener(SpectrumHolderListener* added);
     void removeSpectrumHolderListener(SpectrumHolderListener* removed);

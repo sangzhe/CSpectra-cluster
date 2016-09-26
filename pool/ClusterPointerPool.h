@@ -8,6 +8,7 @@
 #include "../IPointer.h"
 #include "../Spectrum/IPeak.h"
 #include "../Spectrum/ISpectrum.h"
+#include "../Cluster/ICluster.h"
 #include <boost/unordered/unordered_set.hpp>
 #include <boost/unordered/unordered_map.hpp>
 
@@ -32,13 +33,18 @@ namespace PointerPool {
         }
     }
 
+    static void add(const vector<ICluster*>& clusters){
+        for(ICluster* cluster: clusters){
+            add(cluster);
+        }
+    }
     static void add(const vector<IPeak*>& peaks){
         for(IPeak* peak:peaks){
             add(peak);
         }
     }
 
-    static void add(const list<ISpectrum*>& spectra){
+    static void add(const vector<ISpectrum*>& spectra){
         for(ISpectrum *spectrum:spectra){
             add(spectra);
         }
@@ -68,9 +74,14 @@ namespace PointerPool {
         }
     }
 
-    static void remove(const list<ISpectrum*>& spectra){
+    static void remove(const vector<ISpectrum*>& spectra){
         for(ISpectrum* spectrum:spectra){
             remove(spectrum);
+        }
+    }
+    static void remove(const vector<ICluster*>& clusters){
+        for(ICluster* cluster: clusters){
+            remove(cluster);
         }
     }
 

@@ -44,10 +44,10 @@ GreedyConsensusSpectrum::GreedyConsensusSpectrum(float fragmentTolerance, string
 
 };
 
-void GreedyConsensusSpectrum::addSpectra(const list<ISpectrum*> &spectra) {
+void GreedyConsensusSpectrum::addSpectra(const vector<ISpectrum*> &spectra) {
     if(spectra.size() < 1) return;
-    list<ISpectrum*> in = spectra;
-    list<ISpectrum*>::iterator iter;
+    vector<ISpectrum*> in = spectra;
+    vector<ISpectrum*>::iterator iter;
     for(iter = in.begin();iter != in.end();iter++){
         addSpectra(*iter);
     }
@@ -101,7 +101,7 @@ void GreedyConsensusSpectrum::addConsensusSpectrum( IConsensusSpectrumBuilder &c
 
     for (SpectrumHolderListener *listener : listeners){
         ISpectrum* consensus = consensusSpectrumToAdd.getConsensusSpectrum();
-        list<ISpectrum*> tmp;
+        vector<ISpectrum*> tmp;
         tmp.push_back(consensus);
         listener->onSpectraAdd(this, tmp);
     }
@@ -120,7 +120,7 @@ void GreedyConsensusSpectrum::updateConsensusSpectrum() {
     }
 }
 
-void GreedyConsensusSpectrum::removeSpectra(const list<ISpectrum*> &spectra) {
+void GreedyConsensusSpectrum::removeSpectra(const vector<ISpectrum*> &spectra) {
     throw("GreedyConsensusSpectrum does not support removing of spectra.");
 }
 
@@ -291,12 +291,12 @@ void GreedyConsensusSpectrum::clear() {
     setIsDirty(true);
 }
 
-void GreedyConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, list<ISpectrum *> &added) {
+void GreedyConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, vector<ISpectrum *> &added) {
     addSpectra(added);
     PointerPool::add(added);
 }
 
-void GreedyConsensusSpectrum::onSpectraRemove(ISpectrumHolder *holder, list<ISpectrum *> &removed) {
+void GreedyConsensusSpectrum::onSpectraRemove(ISpectrumHolder *holder, vector<ISpectrum *> &removed) {
     removeSpectra(removed);
     PointerPool::remove(removed);
 }

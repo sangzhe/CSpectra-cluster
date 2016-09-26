@@ -11,6 +11,7 @@
 #include "../util/Defaults.h"
 #include "PeakMatches.h"
 #include "PeakMatchesUtilities.h"
+#include "math.h"
 
 
 class IntensityRankCorrelation: public ISimilarityChecker {
