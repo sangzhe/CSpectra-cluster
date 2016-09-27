@@ -39,6 +39,8 @@ public:
 
     static int StringToInt(const string& input);
 
+    static long StringToLong(const string &input);
+
     static double StringToDouble(const string& input);
 
 

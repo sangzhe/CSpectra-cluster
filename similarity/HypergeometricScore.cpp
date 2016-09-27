@@ -9,8 +9,10 @@ string HypergeometricScore::algorithmName = "Hypergeometric Exact Test";
 string HypergeometricScore::algorithmVersion = "0.1";
 bool HypergeometricScore::DEFAULT_PEAK_FILTERING = false;
 
+float HypergeometricScore::DEFAULT_FRAGMENT_ION_TOLERANCE = 0.5F;
+
 HypergeometricScore::HypergeometricScore() {
-    new(this) HypergeometricScore(Defaults::getFragmentIonTolerance(), DEFAULT_PEAK_FILTERING);
+    new(this) HypergeometricScore(DEFAULT_FRAGMENT_ION_TOLERANCE, DEFAULT_PEAK_FILTERING);
 }
 HypergeometricScore::HypergeometricScore(float fragmentIonTolerance) {
     this->fragmentIonTolerance = fragmentIonTolerance;
@@ -131,4 +133,8 @@ void HypergeometricScore::setPeakFiltering(bool peakFiltering) {
 
 bool HypergeometricScore::isPeakFiltering() {
     return peakFiltering;
+}
+
+string HypergeometricScore::getAlgorithmName() {
+    return algorithmName;
 }

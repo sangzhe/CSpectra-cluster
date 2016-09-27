@@ -28,6 +28,9 @@ class ISpectrum: public ISpectrumQuality{
         virtual void setProperty(string key,string value) = 0;
         virtual Properties getProperties()  const = 0;
 
+    virtual ~ISpectrum() = 0;
+
+
 
 
 };

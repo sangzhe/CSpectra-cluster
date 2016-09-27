@@ -6,11 +6,11 @@
 #define CSPECTRA_CLUSTER_COMBINEDFISHERINTENSITYTEST_H
 
 
-#include "ISimilarityChecker.h"
+#include <boost/math/distributions/chi_squared.hpp>
 #include "FisherExactTest.h"
 #include "IntensityRankCorrelation.h"
-#include "boost/math/distributions/chi_squared.hpp"
-#include "../util/Defaults.h"
+
+
 
 class CombinedFisherIntensityTest: public ISimilarityChecker {
 public:
@@ -18,6 +18,7 @@ public:
     static string algorithmVersion;
 
     static  bool DEFAULT_PEAK_FILTERING;
+    static float DEFAULT_FRAGMENT_ION_TOLERANCE;
 
     CombinedFisherIntensityTest();
     CombinedFisherIntensityTest(float fragmentIonTolerance);
@@ -28,6 +29,7 @@ public:
     void setPeakFiltering(bool peakFiltering);
     void setFragmentIonTolerance(float fragmentIonTolerance);
     float getFragmentIonTolerance();
+    string getAlgorithmName();
 
 private:
     bool peakFiltering;

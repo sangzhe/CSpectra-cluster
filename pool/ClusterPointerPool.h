@@ -12,6 +12,7 @@
 #include <boost/unordered/unordered_set.hpp>
 #include <boost/unordered/unordered_map.hpp>
 
+class ICluster;
 using namespace boost::unordered;
 
 namespace PointerPool {
@@ -35,7 +36,7 @@ namespace PointerPool {
 
     static void add(const vector<ICluster*>& clusters){
         for(ICluster* cluster: clusters){
-            add(cluster);
+            PointerPool::add((IPointer*)cluster);
         }
     }
     static void add(const vector<IPeak*>& peaks){
@@ -81,7 +82,7 @@ namespace PointerPool {
     }
     static void remove(const vector<ICluster*>& clusters){
         for(ICluster* cluster: clusters){
-            remove(cluster);
+            PointerPool::remove((IPointer*)cluster);
         }
     }
 

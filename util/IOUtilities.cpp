@@ -80,6 +80,18 @@ float IOUtilities::StringToFloat(const string &input) {
 
 }
 
+long IOUtilities::StringToLong(const string &input) {
+    try {
+        long num = boost::lexical_cast<long>(input);
+        return num;
+    }
+    catch(boost::bad_lexical_cast & e)
+    {
+        printf("%s/n", e.what());
+    }
+
+}
+
 int IOUtilities::StringToInt(const string &input) {
     try {
         int num = boost::lexical_cast<int>(input);

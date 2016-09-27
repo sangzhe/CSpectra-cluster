@@ -15,8 +15,7 @@ public:
     FisherExactTest();
     FisherExactTest(float peakMzTolerance);
     FisherExactTest(float peakMzTolerance, bool peakFiltering);
-    string getName();
-    string getCurrentVersion();
+    string getAlgorithmName();
 protected:
     double calculateSimilarityProbablity(int numberOfSharedPeaks, int numberOfPeaksFromSpec1, int numberOfPeaksFromSpec2, int numberOfBins);
 };

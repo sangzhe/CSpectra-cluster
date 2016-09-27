@@ -7,8 +7,6 @@
 
 
 #include "ISimilarityChecker.h"
-#include "IPeakMatches.h"
-#include "../util/Defaults.h"
 #include "PeakMatches.h"
 #include "PeakMatchesUtilities.h"
 #include "math.h"
@@ -17,6 +15,9 @@
 class IntensityRankCorrelation: public ISimilarityChecker {
 public:
     static bool DEFAULT_PEAK_FILTERING;
+    static float DEFAULT_FRAGMENT_ION_TOLERANCE;
+
+
 
     IntensityRankCorrelation();
     IntensityRankCorrelation(float fragmentIonTolerance);
@@ -28,6 +29,7 @@ public:
     void setPeakFiltering(bool peakFiltering);
     void setFragmentIonTolerance(float fragmentIonTolerance);
     float getFragmentIonTolerance();
+    string getAlgorithmName();
 
 protected:
     float fragmentIonTolerance;

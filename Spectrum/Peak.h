@@ -42,6 +42,7 @@ public:
 
     bool operator == (const IPeak& O) ;
 
+    ~Peak(){};
 //    bool operator < (const IPeak& O) const;
 
 //    friend size_t hash_value(const IPeak &p) ;

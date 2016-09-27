@@ -7,8 +7,6 @@
 
 
 #include "ISimilarityChecker.h"
-#include "IPeakMatches.h"
-#include "../util/Defaults.h"
 #include "boost/math/distributions/hypergeometric.hpp"
 
 
@@ -17,6 +15,7 @@ public:
     static  string algorithmName ;
     static  string algorithmVersion ;
     static  bool DEFAULT_PEAK_FILTERING ;
+    static float DEFAULT_FRAGMENT_ION_TOLERANCE;
 
     HypergeometricScore();
     HypergeometricScore(float fragmentIonTolerance);
@@ -28,6 +27,7 @@ public:
     float getFragmentIonTolerance();
     bool isPeakFiltering();
     void setPeakFiltering(bool peakFiltering);
+    string getAlgorithmName();
 private:
     bool peakFiltering;
 

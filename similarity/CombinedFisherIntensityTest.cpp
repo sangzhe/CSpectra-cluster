@@ -10,8 +10,10 @@
 
 bool CombinedFisherIntensityTest::DEFAULT_PEAK_FILTERING = false;
 
+float CombinedFisherIntensityTest::DEFAULT_FRAGMENT_ION_TOLERANCE = 0.5F;
+
 CombinedFisherIntensityTest::CombinedFisherIntensityTest() {
-    new(this)CombinedFisherIntensityTest(Defaults::getFragmentIonTolerance());
+    new(this)CombinedFisherIntensityTest(DEFAULT_FRAGMENT_ION_TOLERANCE);
 }
 
 CombinedFisherIntensityTest::CombinedFisherIntensityTest(float fragmentIonTolerance) {
@@ -48,6 +50,9 @@ double CombinedFisherIntensityTest::assessSimilarity(IPeakMatches *peakMatches) 
     return -log(pValue);
 }
 
+string CombinedFisherIntensityTest::getAlgorithmName() {
+    return algorithmName;
+}
 float CombinedFisherIntensityTest::getFragmentIonTolerance() {
     return fragmentIonTolerance;
 }

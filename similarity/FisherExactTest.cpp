@@ -19,6 +19,10 @@ FisherExactTest::FisherExactTest(float peakMzTolerance, bool peakFiltering) {
     new(this)HypergeometricScore(peakMzTolerance,peakFiltering);
 }
 
+string FisherExactTest::getAlgorithmName() {
+    return algorithmName;
+}
+
 double FisherExactTest::calculateSimilarityProbablity(int numberOfSharedPeaks, int numberOfPeaksFromSpec1,
                                                       int numberOfPeaksFromSpec2, int numberOfBins) {
     if (numberOfBins < 1) {

@@ -18,7 +18,6 @@
 #include "../similarity/CombinedFisherIntensityTest.h"
 
 
-
 class Defaults {
     public:
             static float DEFAULT_FRAGMENT_ION_TOLERANCE;
@@ -37,7 +36,7 @@ private:
             static ISimilarityChecker* defaultSimilarityChecker;
             static IQualityScorer* defaultQualityScorer;
             static ConsensusSpectrumBuilderFactory* consensusFactory;
-            static double similarityThreshold = DEFAULT_SIMILARITY_THRESHOLD;
+            static double similarityThreshold ;
 
 };
 

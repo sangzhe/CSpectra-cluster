@@ -9,8 +9,10 @@
 
 bool IntensityRankCorrelation::DEFAULT_PEAK_FILTERING = false;
 
+float IntensityRankCorrelation::DEFAULT_FRAGMENT_ION_TOLERANCE = 0.5F;
+
 IntensityRankCorrelation::IntensityRankCorrelation() {
-    new(this) IntensityRankCorrelation(Defaults::getFragmentIonTolerance(),DEFAULT_PEAK_FILTERING);
+    new(this) IntensityRankCorrelation(DEFAULT_FRAGMENT_ION_TOLERANCE,DEFAULT_PEAK_FILTERING);
 }
 
 IntensityRankCorrelation::IntensityRankCorrelation(float fragmentIonTolerance) {
@@ -92,4 +94,8 @@ float IntensityRankCorrelation::getFragmentIonTolerance() {
 }
 void IntensityRankCorrelation::setFragmentIonTolerance(float fragmentIonTolerance) {
     this->fragmentIonTolerance = fragmentIonTolerance;
+}
+
+string IntensityRankCorrelation::getAlgorithmName() {
+    return "";
 }

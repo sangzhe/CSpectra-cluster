@@ -13,9 +13,10 @@
 #include "../util/ComparisonMatch.h"
 #include "../pool/ClusterPointerPool.h"
 
+class IConsensusSpectrumBuilder;
+
 class ICluster:public ISpectrumHolder{
     public:
-        ICluster(){};
         virtual string getMethodName() = 0;
         virtual string getId() = 0 ;
         virtual void setId(string id) = 0 ;

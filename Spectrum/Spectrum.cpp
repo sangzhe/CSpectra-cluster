@@ -182,11 +182,13 @@ bool Spectrum::operator==(const ISpectrum& O) const{
         pk0 = *iter1;
         pk1 = *iter2;
         if ( ! (*pk0 == *pk1)) {
-            delete pk0,pk1;
+            PointerPool::remove(pk0);
+            PointerPool::remove(pk1);
             return false;
         }
     }
-    delete pk0,pk1;
+    PointerPool::remove(pk0);
+    PointerPool::remove(pk1);
     return true;
 }
 

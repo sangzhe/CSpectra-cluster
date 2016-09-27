@@ -11,14 +11,14 @@ float Defaults::fragmentIonTolerance = DEFAULT_FRAGMENT_ION_TOLERANCE;
 double Defaults::DEFAULT_SIMILARITY_THRESHOLD = 0.99;
 
 
-double similarityThreshold = DEFAULT_SIMILARITY_THRESHOLD;
+double Defaults::similarityThreshold = DEFAULT_SIMILARITY_THRESHOLD;
 
 
 ConsensusSpectrumBuilderFactory* Defaults::consensusFactory = new ConsensusSpectrumFactory();
 
 IQualityScorer* Defaults::defaultQualityScorer = new SignalToNoiseChecker();
 
-ISimilarityChecker* Defaults::defaultSimilarityChecker = new CombinedFisherIntensityTest((float) getFragmentIonTolerance());
+ISimilarityChecker* Defaults::defaultSimilarityChecker = new CombinedFisherIntensityTest((float)getFragmentIonTolerance());
 
 
 ISimilarityChecker* Defaults::getDefaultSimilarityChecker() {

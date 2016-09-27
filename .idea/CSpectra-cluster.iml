@@ -2,19 +2,25 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/engine/IncrementalClusteringEngine.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/engine/IncrementalClusteringEngine.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/engine/GreedyIncrementalClusteringEngine.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/engine/GreedyIncrementalClusteringEngine.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/engine/IIncrementalClusteringEngine.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/engine/IClusteringEngine.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/engine/IncrementalClusteringEngineFactory.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/engine/IncrementalClusteringEngine.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/engine/IIncrementalClusteringEngine.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/engine/IncrementalClusteringEngine.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/quality/IQualityScorer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cdf/CumulativeDistributionFunction.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cdf/CumulativeDistributionFunctionFactory.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cdf/CumulativeDistributionFunction.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cdf/CumulativeDistributionFunctionFactory.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/pool/ClusterPointerPool.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Property/Properties.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/quality/SignalToNoiseChecker.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/quality/IQualityScorer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectrumHolderListener.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/ISpectrumHolder.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/GreedySpectralCluster.h" isTestSource="false" />
@@ -43,16 +49,18 @@
       <sourceFolder url="file://$MODULE_DIR$/IPointer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/FisherExactTest.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/IPeakMatches.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/CombinedFisherIntensityTest.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/ISimilarityChecker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/KendallCorrelation.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/FisherExactTest.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/CombinedFisherIntensityTest.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatchesUtilities.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/similarity/HypergeometricScore.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatchesUtilities.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/similarity/CombinedFisherIntensityTest.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatches.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/FrankEtAlDotProduct.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatchesUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/FrankEtAlDotProduct.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/similarity/HypergeometricScore.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/HypergeometricScore.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/IntensityRankCorrelation.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/PeakMatches.cpp" isTestSource="false" />
