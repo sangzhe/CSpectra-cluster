@@ -10,6 +10,10 @@ float Defaults::fragmentIonTolerance = DEFAULT_FRAGMENT_ION_TOLERANCE;
 
 double Defaults::DEFAULT_SIMILARITY_THRESHOLD = 0.99;
 
+int Defaults::DEFAULT_MIN_NUMBER_COMPARISONS = 0;
+
+int Defaults::minNumberComparisons = DEFAULT_MIN_NUMBER_COMPARISONS;
+
 
 double Defaults::similarityThreshold = DEFAULT_SIMILARITY_THRESHOLD;
 
@@ -61,7 +65,9 @@ void Defaults::setFragmentIonTolerance(float fragmentIonTolerance) {
     Defaults::fragmentIonTolerance = fragmentIonTolerance;
 }
 
-
+int Defaults::getMinNumberComparisons() {
+    return minNumberComparisons;
+}
 Defaults::~Defaults() {
     delete consensusFactory,defaultQualityScorer;
 }

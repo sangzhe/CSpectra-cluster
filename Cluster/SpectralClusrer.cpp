@@ -217,6 +217,13 @@ bool SpectralCluster::storesPeakLists() {
 
 }
 
+list<ComparisonMatch> SpectralCluster::getComparisonMatches() {
+    return list<ComparisonMatch>();
+}
+
+bool SpectralCluster::isKnownComparisonMatch(string clusterId) {
+    return false;
+}
 string SpectralCluster::toString() {
     double precursorMZ = getPrecursorMz();
     string charge = "charge= ";

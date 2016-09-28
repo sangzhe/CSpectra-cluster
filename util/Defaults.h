@@ -22,6 +22,7 @@ class Defaults {
     public:
             static float DEFAULT_FRAGMENT_ION_TOLERANCE;
             static  double DEFAULT_SIMILARITY_THRESHOLD;
+            static  int DEFAULT_MIN_NUMBER_COMPARISONS;
             static float getFragmentIonTolerance();
             static IQualityScorer* getDefaultQualityScorer();
             static ISpectrum* doDefaultPeakFilter(const ISpectrum& spectrum);
@@ -29,10 +30,12 @@ class Defaults {
             static ISimilarityChecker* getDefaultSimilarityChecker();
             static double getSimilarityThreshold();
             static void setFragmentIonTolerance(float fragmentIonTolerance);
+            static int getMinNumberComparisons();
             ~Defaults();
 
 private:
             static float fragmentIonTolerance;
+            static int minNumberComparisons;
             static ISimilarityChecker* defaultSimilarityChecker;
             static IQualityScorer* defaultQualityScorer;
             static ConsensusSpectrumBuilderFactory* consensusFactory;

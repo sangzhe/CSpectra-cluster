@@ -41,6 +41,10 @@ class Spectrum: public ISpectrum{
 
         Spectrum buildHighestPeaks(int numberRequested) const;
 
+        ISpectrum* asMajorPeaks(int majorPeakCount);
+
+        void guaranteeMajorPeaks(int majorPeakCount);
+
 
 
 
@@ -71,7 +75,7 @@ class Spectrum: public ISpectrum{
         vector<IPeak*> getPeaks() const;
         int getPeaksCount() const;
         ISpectrum* getHighestNPeaks(int numberRequested);
-//        int asMajorPeaksMZs(int majorPeakCount);
+        vector<int> asMajorPeakMZs(int majorPeakCount);
         string getProperty(string key);
         void setProperty(string key,string value);
         Properties getProperties() const;

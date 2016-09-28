@@ -34,6 +34,10 @@ class ICluster:public ISpectrumHolder{
         virtual bool storesPeakLists() = 0;
         virtual string toString() = 0;
 
+        virtual list<ComparisonMatch> getComparisonMatches() = 0;
+
+        virtual bool isKnownComparisonMatch(string clusterId) = 0 ;
+
         static int cmp(ICluster* A, ICluster* B){
 //            ToDo compare cluster: sorting
             if (A == B)

@@ -46,6 +46,8 @@ public:
 
     string toString();
 
+    ~IncrementalClusteringEngine();
+
 
 protected:
     vector<ICluster*> findClustersTooLow(double precursorMz);

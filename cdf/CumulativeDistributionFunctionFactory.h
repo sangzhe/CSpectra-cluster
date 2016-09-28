@@ -14,6 +14,9 @@ class CumulativeDistributionFunctionFactory {
 private:
     CumulativeDistributionFunctionFactory() {}
 public:
+
+    static CumulativeDistributionFunction getDefaultCumlativeDistributionFunctionForSimilarityMetric(ISimilarityChecker* similarityCheckerClass)throw(exception);;
+
     static CumulativeDistributionFunction getCumulativeDistributionFunctionForSimilarityMetric(ISimilarityChecker* similarityCheckerClass) throw(exception);
 
 private:

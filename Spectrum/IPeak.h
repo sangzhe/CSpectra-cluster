@@ -14,7 +14,6 @@ class IPeak: public IPointer{
         virtual float getIntensity() const  = 0;
         virtual int getCount() const = 0;
         virtual bool operator == (const IPeak& O) = 0;
-        virtual ~IPeak()= 0;
 
 
 };

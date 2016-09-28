@@ -73,6 +73,23 @@ double Spectrum::convertIntensity(IPeak &p1) {
 }
 
 
+vector<int> Spectrum::asMajorPeakMZs(int majorPeakCount) {
+
+}
+
+ISpectrum* Spectrum::asMajorPeaks(int majorPeakCount) {
+    return getHighestNPeaks(majorPeakCount);
+}
+
+void Spectrum::guaranteeMajorPeaks(int majorPeakCount) {
+    if (majorPeakMZ.size() != majorPeakCount) {
+        majorPeakMZ.clear();
+        ISpectrum* peaks = asMajorPeaks(majorPeakCount);
+        for (IPeak *peak : peaks->getPeaks()) {
+            majorPeakMZ.push_back((int) peak->getMz());
+        }
+    }
+}
 
 ISpectrum* Spectrum::getHighestNPeaks(int numberRequested) {
     ISpectrum *ret;

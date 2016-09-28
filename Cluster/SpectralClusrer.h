@@ -76,6 +76,10 @@ public:
 
     string toString();
 
+    bool isKnownComparisonMatch(string clusterId);
+
+    list<ComparisonMatch> getComparisonMatches();
+
 
     ~SpectralCluster();
 

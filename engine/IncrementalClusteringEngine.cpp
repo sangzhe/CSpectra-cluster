@@ -233,3 +233,8 @@ int IncrementalClusteringEngine::size() {
 string IncrementalClusteringEngine::toString() {
 
 }
+
+IncrementalClusteringEngine::~IncrementalClusteringEngine() {
+    PointerPool::remove(clusters);
+    delete similarityChecker;
+}

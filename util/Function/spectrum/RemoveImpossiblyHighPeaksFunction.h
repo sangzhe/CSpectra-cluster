@@ -6,12 +6,12 @@
 #define CSPECTRA_CLUSTER_REMOVEIMPOSSIBLYHIGHPEAKSFUNCTION_H
 
 
-#include "../../../Spectrum/ISpectrum.h"
 #include "../../../Spectrum/Spectrum.h"
 
 #include "../../../Spectrum/Mass.h"
+#include "SpectrumFunctoin.h"
 
-class RemoveImpossiblyHighPeaksFunction {
+class RemoveImpossiblyHighPeaksFunction:public SpectrumFunction {
 public:
     static float DEFAULT_TOLERANCE;
     float tolerance;

@@ -22,13 +22,13 @@ class ISpectrum: public ISpectrumQuality{
         virtual double getSumSquareIntensity()  const = 0;
         virtual vector<IPeak*> getPeaks()  const = 0;
         virtual int getPeaksCount()  const = 0;
+        virtual vector<int> asMajorPeakMZs(int majorPeakCount) = 0;
     virtual ISpectrum* getHighestNPeaks(int numberRequested) = 0;
 //        virtual int asMajorPeaksMZs(int majorPeakCount) = 0;
         virtual string getProperty(string key) = 0;
         virtual void setProperty(string key,string value) = 0;
         virtual Properties getProperties()  const = 0;
 
-    virtual ~ISpectrum() = 0;
 
 
 

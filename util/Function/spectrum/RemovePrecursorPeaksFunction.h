@@ -6,12 +6,12 @@
 #define CSPECTRA_CLUSTER_REMOVEPRECURSORPEAKSFUNCTION_H
 
 
-#include "../../../Spectrum/ISpectrum.h"
 #include "../../../Spectrum/Mass.h"
 #include "../../../Spectrum/Spectrum.h"
+#include "SpectrumFunctoin.h"
 
 
-class RemovePrecursorPeaksFunction {
+class RemovePrecursorPeaksFunction:public SpectrumFunction{
 private:
     float fragmentIonTolerance;
 

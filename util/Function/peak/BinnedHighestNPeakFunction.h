@@ -7,15 +7,14 @@
 
 
 #include "../../MZIntensityUtilities.h"
-#include "list"
 #include "math.h"
-#include "../../../Spectrum/IPeak.h"
 #include "../../../Spectrum/Peak.h"
+#include "PeakFunction.h"
 #include <boost/unordered/unordered_set.hpp>
 using namespace boost::unordered;
 using namespace std;
 
-class BinnedHighestNPeakFunction {
+class BinnedHighestNPeakFunction :public PeakFunction{
 public:
     static int MINIMUM_BINNED_MZ;
     static int MAXIMUM_BINNED_MZ;
@@ -30,7 +29,7 @@ public:
 
     BinnedHighestNPeakFunction();
 
-    vector<IPeak*> apply(vector<IPeak*> &originalPeaks);
+    vector<IPeak*> apply(const vector<IPeak*> &originalPeaks);
 
 
 private:

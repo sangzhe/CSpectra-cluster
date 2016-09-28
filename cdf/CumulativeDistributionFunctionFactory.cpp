@@ -4,6 +4,12 @@
 
 #include "CumulativeDistributionFunctionFactory.h"
 
+
+CumulativeDistributionFunction CumulativeDistributionFunctionFactory::getDefaultCumlativeDistributionFunctionForSimilarityMetric(
+        ISimilarityChecker *similarityCheckerClass) throw(exception){
+        return getCumulativeDistributionFunctionForSimilarityMetric(similarityCheckerClass);
+
+}
 CumulativeDistributionFunction CumulativeDistributionFunctionFactory::getCumulativeDistributionFunctionForSimilarityMetric(
         ISimilarityChecker *similarityCheckerClass)  throw(exception){
     if(similarityCheckerClass->getAlgorithmName() == "Combined FisherExact and Intensity rank test"){

@@ -6,10 +6,10 @@
 #define CSPECTRA_CLUSTER_HIGHESTNPEAKFUNCTION_H
 
 #include "../../../Spectrum/Peak.h"
-#include "../../../Spectrum/IPeak.h"
-#include "vector"
+#include "PeakFunction.h"
+
 using namespace std;
-class HighestNPeakFunction {
+class HighestNPeakFunction :public PeakFunction{
 public:
     static  int DEFAULT_MAX_PEAKS;
 

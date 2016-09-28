@@ -32,7 +32,7 @@ BinnedHighestNPeakFunction::BinnedHighestNPeakFunction(int maxPeaks, int binSize
         throw ("Bin overlap must be smaller than the bin size.");
 }
 
-vector<IPeak*> BinnedHighestNPeakFunction::apply(vector<IPeak*> &originalPeaks) {
+vector<IPeak*> BinnedHighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) {
     unordered_set<IPeak*> retained;
     int startPeak = 0;
     for(double binBottom = MAXIMUM_BINNED_MZ;binBottom < MAXIMUM_BINNED_MZ -binSize;binBottom+=(binSize - binOverlap)){
