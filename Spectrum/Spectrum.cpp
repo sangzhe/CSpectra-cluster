@@ -19,7 +19,7 @@ Spectrum::Spectrum(string &pId, int pPrecursorCharge, float pPrecursorMz, IQuali
     this->peaks.clear();
     vector<IPeak*> in = inpeaks;
     peaks.insert(peaks.end(),in.begin(),in.end());
-    PointerPool::add(in);
+    pointer_pool->add(in);
     sort(peaks.begin(),peaks.end(),Peak::cmpPeakMz);
     calculateIntensities();
 }
@@ -41,7 +41,7 @@ Spectrum::Spectrum( const ISpectrum& spectrum,  const vector<IPeak*>& inpeaks, b
 
     peaks.clear();
     peaks.insert(peaks.end(),inpeaks.begin(),inpeaks.end());
-    PointerPool::add(inpeaks);
+    pointer_pool->add(inpeaks);
 
 
     if(!isSortedList)
@@ -102,7 +102,7 @@ ISpectrum* Spectrum::getHighestNPeaks(int numberRequested) {
         for (int i = numberPeaks; i >= numberPeaks; i--) {
             const int num = i;
             highestPeaks.insert(pair<int, ISpectrum*>(num, ret));
-            PointerPool::add(ret);
+            pointer_pool->add(ret);
         }
     }
     return ret;
@@ -116,7 +116,7 @@ Spectrum Spectrum::buildHighestPeaks(int numberRequested) const {
     vector<IPeak*>::iterator iter;
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++){
         holder.push_back(*iter);
-        PointerPool::add(*iter);
+        pointer_pool->add(*iter);
         if(holder.size() >= numberRequested) break;
     }
     Spectrum ret(*this,holder);
@@ -199,13 +199,13 @@ bool Spectrum::operator==(const ISpectrum& O) const{
         pk0 = *iter1;
         pk1 = *iter2;
         if ( ! (*pk0 == *pk1)) {
-            PointerPool::remove(pk0);
-            PointerPool::remove(pk1);
+            pointer_pool->remove(pk0);
+            pointer_pool->remove(pk1);
             return false;
         }
     }
-    PointerPool::remove(pk0);
-    PointerPool::remove(pk1);
+    pointer_pool->remove(pk0);
+    pointer_pool->remove(pk1);
     return true;
 }
 
@@ -231,10 +231,10 @@ bool Spectrum::operator==(const ISpectrum& O) const{
 //}
 
 Spectrum::~Spectrum() {
-    PointerPool::remove(peaks);
+    pointer_pool->remove(peaks);
     unordered_map<int,ISpectrum*>::iterator iter;
     for(iter = highestPeaks.begin();iter != highestPeaks.end();iter++){
-        PointerPool::remove(iter->second);
+        pointer_pool->remove(iter->second);
     }
 }
 

@@ -36,6 +36,7 @@ protected:
     bool peakFiltering;
 
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
     vector<double> extractPeakIntensities(const vector<IPeak*>& peaks);
 };
 

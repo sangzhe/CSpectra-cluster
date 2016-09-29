@@ -7,21 +7,15 @@
 
 #include "string"
 #include <uuid/uuid.h>
+#include "sstream"
+
 
 using namespace std;
 class IPointer{
 public:
-    IPointer(){
-        char str[36];
-        uuid_t uu;
-        uuid_generate_random(uu);
-        uuid_parse(str,uu);
-        uuid = string(str);
-    }
+    IPointer();
 
-    string getUUID(){
-        return uuid;
-    }
+    string getUUID();
 
 private:
     string uuid;

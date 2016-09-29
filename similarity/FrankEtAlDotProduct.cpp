@@ -47,7 +47,7 @@ double FrankEtAlDotProduct::assessSimilarity(IPeakMatches *peakMatches) {
 
     if (normalizedDotProduct > 1) // fix rounding issue
         normalizedDotProduct = 1;
-    PointerPool::remove(peakMatches);//generated in getSharedPeaksAsMatches;
+    pointer_pool->remove(peakMatches);//generated in getSharedPeaksAsMatches;
     return normalizedDotProduct;
 }
 

@@ -6,7 +6,6 @@
 #define CSPECTRA_CLUSTER_CONSENSUSSPECTRUMFACTORY_H
 
 
-#include "IConsensusSpectrumBuilder.h"
 #include "ConsensusSpectrumBuilderFactory.h"
 #include "ConsensusSpectrum.h"
 

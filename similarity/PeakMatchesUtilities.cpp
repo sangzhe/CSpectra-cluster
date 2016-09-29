@@ -3,6 +3,8 @@
 //
 
 #include "PeakMatchesUtilities.h"
+PointerPool* PeakMatchesUtilities::pointer_pool = PoolFactory::getInstance();
+
 
 IPeak *PeakMatchesUtilities::LAST_PEAK = new Peak(IOUtilities::FLOAT_MAX_VALUE, 0);
 
@@ -22,15 +24,15 @@ IPeakMatches* PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1
     } else {
         // simply disable filtering
         filteredSpectrum1 = spectrum1;
-        PointerPool::add(filteredSpectrum1);
+        pointer_pool->add(filteredSpectrum1);
         filteredSpectrum2 = spectrum2;
-        PointerPool::add(filteredSpectrum2);
+        pointer_pool->add(filteredSpectrum2);
 
     }
 
     IPeakMatches *ret = PeakMatchesUtilities::getSharedPeaksAsMatches(filteredSpectrum1, filteredSpectrum2, mzTolerance);
-    PointerPool::remove(filteredSpectrum1);
-    PointerPool::remove(filteredSpectrum2);
+    pointer_pool->remove(filteredSpectrum1);
+    pointer_pool->remove(filteredSpectrum2);
     return ret;
 }
 
@@ -38,7 +40,7 @@ IPeakMatches* PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1
                                                            float mzTolerance) {
     vector<vector<int>> sharedPeakIndices = getSharedPeaks(*spectrum1, *spectrum2, mzTolerance);
     IPeakMatches *ret = new PeakMatches(spectrum1, spectrum2, sharedPeakIndices[0], sharedPeakIndices[1]);
-    PointerPool::add(ret);
+    pointer_pool->add(ret);
     return ret;
 }
 

@@ -6,12 +6,10 @@
 #ifndef CSPECTRA_CLUSTER_ICLUSTER_H
 #define CSPECTRA_CLUSTER_ICLUSTER_H
 
-#include "../Spectrum/Spectrum.h"
 #include "../Consensus/IConsensusSpectrumBuilder.h"
 #include "list"
 #include "ISpectrumHolder.h"
 #include "../util/ComparisonMatch.h"
-#include "../pool/ClusterPointerPool.h"
 
 class IConsensusSpectrumBuilder;
 

@@ -79,6 +79,7 @@ public:
 //    bool operator ==(ICluster& O);
 
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
     static string MethodName;
     list<ComparisonMatch> bestComparisonMatches;
     float lowestBestComparisonSimilarity = 0;

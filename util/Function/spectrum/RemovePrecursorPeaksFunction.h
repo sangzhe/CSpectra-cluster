@@ -13,6 +13,8 @@
 
 class RemovePrecursorPeaksFunction:public SpectrumFunction{
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
+
     float fragmentIonTolerance;
 
 

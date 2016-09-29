@@ -22,6 +22,9 @@ public:
 
     ISpectrum* apply(const ISpectrum& o);
 
+private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
+
 };
 
 

@@ -12,6 +12,7 @@
 
 class FrankEtAlDotProduct : public ISimilarityChecker{
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
     static  int K2011_BIN_SIZE ;
     bool peakFiltering;
     float fragmentIonTolerance;

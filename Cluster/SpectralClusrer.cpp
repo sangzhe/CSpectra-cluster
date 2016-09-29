@@ -98,7 +98,7 @@ void SpectralCluster::addSpectra(const ISpectrum *merged) {
     vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),merged));
     if(iter == all.end()){
         clusteredSpectra.push_back(added);
-        PointerPool::add(added);
+        pointer_pool->add(added);
 
         vector<ISpectrum*> tmp;
         tmp.push_back(added);
@@ -126,7 +126,7 @@ void SpectralCluster::addSpectra(const vector<ISpectrum*> &spectra) {
             if(iter == all.end()){
                 spectrumAdded = true;
                 clusteredSpectra.push_back(added);
-                PointerPool::add(added);
+                pointer_pool->add(added);
 
                 ToAdd.push_back(added);
             }
@@ -158,7 +158,7 @@ void SpectralCluster::removeSpectra(const ISpectrum *removed) {
                 spectraIds.erase(iterator1);
             }
             clusteredSpectra.erase(remove);
-            PointerPool::remove(*remove);
+            pointer_pool->remove(*remove);
         }
     }
 
@@ -168,7 +168,7 @@ void SpectralCluster::addSpectrumHolderListener(SpectrumHolderListener *added) {
     list<SpectrumHolderListener*>::iterator iter(find(spectrumHolderListeners.begin(),spectrumHolderListeners.end(),added));
     if(iter == spectrumHolderListeners.end()){
         spectrumHolderListeners.push_back(added);
-        PointerPool::add(added);
+        pointer_pool->add(added);
     }
 }
 
@@ -176,7 +176,7 @@ void SpectralCluster::removeSpectrumHolderListener(SpectrumHolderListener *remov
     list<SpectrumHolderListener*>::iterator iter(find(spectrumHolderListeners.begin(),spectrumHolderListeners.end(),removed));
     if(iter != spectrumHolderListeners.end()){
         spectrumHolderListeners.push_back(removed);
-        PointerPool::add(removed);
+        pointer_pool->add(removed);
     }
 }
 
@@ -242,6 +242,6 @@ string SpectralCluster::toString() {
 }
 
 SpectralCluster::~SpectralCluster() {
-    PointerPool::remove(consensusSpectrumBuilder);
-    PointerPool::remove(clusteredSpectra);
+    pointer_pool->remove(consensusSpectrumBuilder);
+    pointer_pool->remove(clusteredSpectra);
 }

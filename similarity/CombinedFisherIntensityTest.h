@@ -32,6 +32,8 @@ public:
     string getAlgorithmName();
 
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
+
     bool peakFiltering;
 
 protected:

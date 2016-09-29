@@ -7,6 +7,7 @@
 
 #include "../../../Spectrum/Peak.h"
 #include "PeakFunction.h"
+#include "../../../pool/PoolFactory.h"
 
 using namespace std;
 class HighestNPeakFunction :public PeakFunction{
@@ -18,6 +19,8 @@ public:
     vector<IPeak*> apply(const vector<IPeak*> &originalPeaks);
 
 private:
+    static PointerPool* pointer_pool;
+
     int maxPeaks;
 };
 

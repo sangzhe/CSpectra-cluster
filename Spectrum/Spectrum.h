@@ -12,12 +12,13 @@
 #include "../Property/Properties.h"
 #include "../quality/IQualityScorer.h"
 #include "math.h"
-#include "../pool/ClusterPointerPool.h"
 #include "Peak.h"
+#include "../pool/PoolFactory.h"
 
 
 class Spectrum: public ISpectrum{
     private:
+        PointerPool* pointer_pool = PoolFactory::getInstance();
         static int BAD_QUALITY_MEASURE;
         string id;
         int precursorCharge;

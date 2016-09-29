@@ -7,7 +7,7 @@
 
 
 #include "../../../Spectrum/Peak.h"
-#include "../../../pool/ClusterPointerPool.h"
+#include "../../../pool/PoolFactory.h"
 #include "PeakFunction.h"
 
 
@@ -28,6 +28,8 @@ public:
     int getMinimumNumberOfPeaks();
 
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
+
     float fractionTotalIntensity;
 
     int minimumNumberOfPeaks = 0;

@@ -6,11 +6,10 @@
 #define CSPECTRA_CLUSTER_ICONSENSUSSPECTRUMBUILDER_H
 
 #include "list"
-#include "../Spectrum/Spectrum.h"
+#include "../Spectrum/ISpectrum.h"
 #include "../Spectrum/IPeak.h"
 #include "../Cluster/ISpectrumHolder.h"
 #include "../Cluster/SpectrumHolderListener.h"
-#include "../pool/ClusterPointerPool.h"
 
 
 class IConsensusSpectrumBuilder: public ISpectrumHolder,public SpectrumHolderListener{

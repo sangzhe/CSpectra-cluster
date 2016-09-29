@@ -7,9 +7,12 @@
 
 
 #include "IPeakMatches.h"
+#include "../pool/PoolFactory.h"
 
 class PeakMatches : public IPeakMatches{
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
+
     ISpectrum* spectrum1;
     ISpectrum* spectrum2;
     vector<int> sharedPeakIndecesSpec1;

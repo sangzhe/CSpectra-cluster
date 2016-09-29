@@ -15,6 +15,8 @@
 
 class GreedyIncrementalClusteringEngine: public IIncrementalClusteringEngine {
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
+
     vector<GreedySpectralCluster*> clusters;
     vector<ISpectrum*> filteredConsensusSpectra;
 

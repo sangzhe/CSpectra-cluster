@@ -7,6 +7,7 @@
 
 
 #include "IIncrementalClusteringEngine.h"
+#include "../pool/PoolFactory.h"
 
 class IncrementalClusteringEngine:public IIncrementalClusteringEngine {
 public:
@@ -58,6 +59,7 @@ protected:
     vector<ICluster*> internalGetClusters();
 
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
     vector<ICluster*> clusters;
     ISimilarityChecker* similarityChecker;
     double windowSize;

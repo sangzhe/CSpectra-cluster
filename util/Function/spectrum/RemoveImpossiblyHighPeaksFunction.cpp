@@ -27,8 +27,8 @@ ISpectrum* RemoveImpossiblyHighPeaksFunction::apply(const ISpectrum &o) {
             continue;
         filteredPeaks.push_back(*iterator1);
     }
-    PointerPool::remove(peak);
+    pointer_pool->remove(peak);
     ISpectrum* ret = new Spectrum(o,filteredPeaks,true);
-    PointerPool::add(filteredPeaks);
+    pointer_pool->add(filteredPeaks);
     return ret;
 }

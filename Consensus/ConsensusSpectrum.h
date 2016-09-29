@@ -11,6 +11,7 @@
 #include "../Cluster/ISpectrumHolder.h"
 #include "../util/MZIntensityUtilities.h"
 #include "ConsensusSpectrumFactory.h"
+#include "../Spectrum/Spectrum.h"
 
 
 class ConsensusSpectrum: public IConsensusSpectrumBuilder {
@@ -93,6 +94,7 @@ public:
 
 
 private:
+    static PointerPool* pointer_pool;
     string id;
     vector<IPeak*> allPeaks;
     unordered_set<IPeak*> heldPeaks;

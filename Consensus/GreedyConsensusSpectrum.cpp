@@ -8,6 +8,9 @@ int GreedyConsensusSpectrum::DEFAULT_PEAKS_TO_KEEP = 5;
 
 float GreedyConsensusSpectrum::NOISE_FILTER_INCREMENT = 100;
 
+PointerPool* GreedyConsensusSpectrum::pointer_pool = PoolFactory::getInstance();
+
+
 GreedyConsensusSpectrumFactory* GreedyConsensusSpectrum::FACTORY = new GreedyConsensusSpectrumFactory();
 
 ConsensusSpectrumBuilderFactory* GreedyConsensusSpectrum::buildFactory() {
@@ -38,7 +41,7 @@ GreedyConsensusSpectrum::GreedyConsensusSpectrum(float fragmentTolerance, string
     updateProperties();
 
     this->consensusPeaks.insert(consensusPeaks.end(),peaks.begin(),peaks.end());
-    PointerPool::add(peaks);
+    pointer_pool->add(peaks);
 
     setIsDirty(true);
 
@@ -146,7 +149,7 @@ void GreedyConsensusSpectrum::addPeaksToConsensus(const vector<IPeak*> &peaksToA
             if (mzToAdd < currentExistingPeak->getMz()) {
                 IPeak *newPeak = new Peak(mzToAdd, peakToAdd->getIntensity(), peakToAdd->getCount());
                 newPeaks.push_back(newPeak);
-                PointerPool::add(newPeak);
+                pointer_pool->add(newPeak);
                 posAllPeaks = j;
                 wasAdded = true;
                 break;
@@ -155,8 +158,8 @@ void GreedyConsensusSpectrum::addPeaksToConsensus(const vector<IPeak*> &peaksToA
             if (mzToAdd == currentExistingPeak->getMz()) {
                 IPeak *newPeak = new Peak(currentExistingPeak->getMz(), peakToAdd->getIntensity() + currentExistingPeak->getIntensity(),
                         currentExistingPeak->getCount() + peakToAdd->getCount());
-                PointerPool::add(newPeak);
-                PointerPool::remove(currentExistingPeak);consensusPeaks[j] = newPeak;
+                pointer_pool->add(newPeak);
+                pointer_pool->remove(currentExistingPeak);consensusPeaks[j] = newPeak;
                 posAllPeaks = j;
                 wasAdded = true;
                 break;
@@ -165,7 +168,7 @@ void GreedyConsensusSpectrum::addPeaksToConsensus(const vector<IPeak*> &peaksToA
         if(!wasAdded){
             IPeak *newPeak = new Peak(mzToAdd, peakToAdd->getIntensity(), peakToAdd->getCount());
             newPeaks.push_back(newPeak);
-            PointerPool::add(newPeak);
+            pointer_pool->add(newPeak);
 
         }
     }
@@ -216,8 +219,8 @@ vector<IPeak*> GreedyConsensusSpectrum::adaptPeakIntensities(const vector<IPeak*
 
         IPeak* newPeak = new Peak(peak->getMz(), newIntensity, peak->getCount());
         peaks[i] = newPeak;
-        PointerPool::add(newPeak);
-        PointerPool::remove(peak);
+        pointer_pool->add(newPeak);
+        pointer_pool->remove(peak);
     }
     vector<IPeak*> ret(peaks.begin(),peaks.end());
     return ret;
@@ -260,16 +263,16 @@ vector<IPeak*> GreedyConsensusSpectrum::mergeIdenticalPeaks(const vector<IPeak*>
                 currentPeak = newPeak;
 
             }else{
-                PointerPool::add(currentPeak);
+                pointer_pool->add(currentPeak);
                 newPeakList.push_back(currentPeak);
                 currentPeak = nextPeak;
 
 
             }
         }
-        PointerPool::add(currentPeak);
+        pointer_pool->add(currentPeak);
         newPeakList.push_back(currentPeak);
-        PointerPool::remove(filterdPeaks);
+        pointer_pool->remove(filterdPeaks);
         filterdPeaks.clear();
         filterdPeaks.insert(filterdPeaks.end(),newPeakList.begin(),newPeakList.end());
     }
@@ -293,17 +296,17 @@ void GreedyConsensusSpectrum::clear() {
 
 void GreedyConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, vector<ISpectrum *> &added) {
     addSpectra(added);
-    PointerPool::add(added);
+    pointer_pool->add(added);
 }
 
 void GreedyConsensusSpectrum::onSpectraRemove(ISpectrumHolder *holder, vector<ISpectrum *> &removed) {
     removeSpectra(removed);
-    PointerPool::remove(removed);
+    pointer_pool->remove(removed);
 }
 
 void GreedyConsensusSpectrum::addSpectrumHolderListener(SpectrumHolderListener *added) {
     listeners.push_back(added);
-    PointerPool::add(added);
+    pointer_pool->add(added);
 
 }
 
@@ -311,7 +314,7 @@ void GreedyConsensusSpectrum::removeSpectrumHolderListener(SpectrumHolderListene
     list<SpectrumHolderListener*>::iterator iter(find(listeners.begin(),listeners.end(),removed));
     if(iter != listeners.end()){
         listeners.erase(iter);
-        PointerPool::remove(*iter);
+        pointer_pool->remove(*iter);
     }
 }
 

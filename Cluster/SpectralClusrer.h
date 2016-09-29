@@ -9,9 +9,11 @@
 #include "ICluster.h"
 #include "../Property/Properties.h"
 #include "algorithm"
+#include "../Spectrum/Spectrum.h"
 
 class SpectralCluster: public ICluster{
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
     static string MethodName;
 
     string id;

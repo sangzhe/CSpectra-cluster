@@ -3,7 +3,7 @@
 //
 
 #include "PeakMatches.h"
-#include "../pool/ClusterPointerPool.h"
+#include "../pool/PointerPool.h"
 
 PeakMatches::PeakMatches( ISpectrum* spectrum1,  ISpectrum* spectrum2, vector<int> sharedPeakIndecesSpec1,
                          vector<int> sharedPeakIndecesSpec2) {
@@ -15,8 +15,8 @@ PeakMatches::PeakMatches( ISpectrum* spectrum1,  ISpectrum* spectrum2, vector<in
     this->spectrum2 = spectrum2;
     this->sharedPeakIndecesSpec1 = sharedPeakIndecesSpec1;
     this->sharedPeakIndecesSpec2 = sharedPeakIndecesSpec2;
-    PointerPool::add(spectrum1);
-    PointerPool::add(spectrum2);
+    pointer_pool->add(spectrum1);
+    pointer_pool->add(spectrum2);
 }
 
 vector<IPeak*> PeakMatches::getSharedPeaksFromSpectrumOne() {
@@ -26,7 +26,7 @@ vector<IPeak*> PeakMatches::getSharedPeaksFromSpectrumOne() {
         for (int aSharedPeakIndecesSpec1 : sharedPeakIndecesSpec1) {
             IPeak *sharedPeaks = peaks[aSharedPeakIndecesSpec1];
             sharedPeaksSpec1.push_back(sharedPeaks);
-            PointerPool::add(sharedPeaks);
+            pointer_pool->add(sharedPeaks);
         }
     }
 
@@ -40,7 +40,7 @@ vector<IPeak*> PeakMatches::getSharedPeaksFromSpectrumTwo() {
         for (int aSharedPeakIndecesSpec2 : sharedPeakIndecesSpec2) {
             IPeak *sharedPeaks = peaks[aSharedPeakIndecesSpec2];
             sharedPeaksSpec2.push_back(sharedPeaks);
-            PointerPool::add(sharedPeaks);
+            pointer_pool->add(sharedPeaks);
         }
     }
 
@@ -63,19 +63,19 @@ pair<IPeak*, IPeak*> PeakMatches::getPeakPair(int nIndex){
 }
 
 ISpectrum* PeakMatches::getSpectrumOne() {
-    PointerPool::add(spectrum1);
+    pointer_pool->add(spectrum1);
     return spectrum1;
 }
 
 ISpectrum* PeakMatches::getSpectrumTwo() {
-    PointerPool::add(spectrum2);
+    pointer_pool->add(spectrum2);
     return spectrum2;
 }
 
 PeakMatches::~PeakMatches() {
-    PointerPool::remove(spectrum1);
-    PointerPool::remove(spectrum2);
-    PointerPool::remove(sharedPeaksSpec1);
-    PointerPool::remove(sharedPeaksSpec2);
+    pointer_pool->remove(spectrum1);
+    pointer_pool->remove(spectrum2);
+    pointer_pool->remove(sharedPeaksSpec1);
+    pointer_pool->remove(sharedPeaksSpec2);
 
 }

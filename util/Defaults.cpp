@@ -51,7 +51,6 @@ ISpectrum* Defaults::doDefaultPeakFilter(const ISpectrum& spectrum) {
     RemoveImpossiblyHighPeaksFunction func3 = RemoveImpossiblyHighPeaksFunction();
     ISpectrum *spec3 = func3.apply(*spec2);
     delete spec1,spec2;
-    PointerPool::add(spec3);
     return spec3;
 }
 

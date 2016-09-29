@@ -4,6 +4,7 @@
 
 #include "ParserUtilities.h"
 
+PointerPool* ParserUtilities::pointer_pool = PoolFactory::getInstance();
 string ParserUtilities::BEGIN_IONS = "BEGIN IONS";
  string ParserUtilities::END_IONS = "END IONS";
  string ParserUtilities::BEGIN_CLUSTER = "BEGIN CLUSTER";
@@ -47,7 +48,7 @@ string ParserUtilities::convertClusterToString(ICluster& cluster) {
 
 }
 
-ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
+ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string line) {
     string currentId = "";
     bool storesPeakLists = false;
     vector<ISpectrum*> spectra;
@@ -67,16 +68,17 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
                 ISpectrum *internalComplete = readMGFScan(ss,line);
                 vector<IPeak*> peaks = internalComplete->getPeaks();
                 ISpectrum* internalFilterd = new Spectrum(*internalComplete,peaks);
-                PointerPool::remove(internalComplete);
+                pointer_pool->remove(internalComplete);
                 // perform default peak filtering
 
                 ISpectrum *Filterd = Defaults::doDefaultPeakFilter(*internalFilterd);
+                pointer_pool->add(Filterd);
                 delete internalFilterd;
                 IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
                 string Id = Filterd->getId();
                 ICluster *ret = new SpectralCluster(Id,consensusSpectrumBuilder);
-                PointerPool::add(ret);
-                ret->addSpectra(internalFilterd);
+                pointer_pool->add(ret);
+                ret->addSpectra(Filterd);
 
                 return ret;
             }
@@ -118,7 +120,7 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
                 if(storesPeakLists){
                     IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
                     ret = new SpectralCluster(currentId,consensusSpectrumBuilder);
-                    PointerPool::add(ret);
+                    pointer_pool->add(ret);
                     ret->addSpectra(spectra);
                 }
                 else{
@@ -150,20 +152,35 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string& line) {
 
 }
 
-list<ICluster*> ParserUtilities::readSpectralCluster(string& clusterString) {
-    list<ICluster*> holder ;
+vector<ICluster*> ParserUtilities::readSpectralCluster(string& clusterString) {
     stringstream ss;
     ss << clusterString;
-    string line ="";
-    ICluster* cls =  readSpectralCluster(ss,line);
+
+}
+
+vector<ICluster*> ParserUtilities::readSpectralCluster(stringstream &ss) {
+    vector<ICluster*> holder ;
+    ICluster* cls =  readSpectralCluster(ss,"");
     while (cls != nullptr){
         holder.push_back(cls);
-        cls = readSpectralCluster(ss,line);
+        cls = readSpectralCluster(ss,"");
     }
+    return holder;
+
+}
+
+vector<ISpectrum*> ParserUtilities::readMGFScan(stringstream &ss) {
+    vector<ISpectrum*> holder;
+    ISpectrum* spectrum = readMGFScan(ss,"");
+    while (spectrum != nullptr) {
+        holder.push_back(spectrum);
+        spectrum = readMGFScan(ss,"");
+    }
+
     return holder;
 }
 
-ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
+ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string line) {
     string titleLine = "";
     string sequence = "";
     string protein = "";
@@ -194,7 +211,15 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
             }
             getline(ss,line);
         }
-        if (line == "") return nullptr;
+        if (line == "") {
+//            if there is a blank line between END and BEGIN, fix this
+            getline(ss,line);
+            if(line != ""){
+                return readMGFScan(ss,line);
+            }else {
+                return nullptr;
+            }
+        }
 
         vector<IPeak*> holder;
 
@@ -227,11 +252,14 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                     getline(ss,line);
                     continue;
                 }
-                if(line.substr(0,chargeTitle.length()) == chargeTitle){
+                if(line.substr(0,chargeTitle.length()) == chargeTitle) {
 
                     line = line.substr(chargeTitle.length()); //strip the "+" or "-" behind the value
-                    line = line.substr(0,line.length()-1);
-                    if(line.find(".")){
+                    if (line.find("+") != string::npos || line.find("-") != string::npos) {
+                        line = line.substr(0, line.length() - 1);
+                    }
+
+                    if(line.find(".") != string::npos){
                         dcharge = (int)(0.5 + IOUtilities::StringToFloat(line));
                     }
                     else{
@@ -295,6 +323,8 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
 
                 ISpectrum *spectrum1 = Defaults::doDefaultPeakFilter(*spectrum);
 
+                pointer_pool->add(spectrum1);
+
                 delete spectrum;
 
                 spectrum = spectrum1;
@@ -332,7 +362,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string& line) {
                         float peakIntensity = IOUtilities::StringToFloat(items[1]);
                         IPeak *added =new Peak(peakMass,peakIntensity);
                         holder.push_back(added);
-                        PointerPool::add(added);
+                        pointer_pool->add(added);
                     }catch(exception s){
 //                        handleBadMGFData(line);
                     }
@@ -412,7 +442,7 @@ IConsensusSpectrumBuilder* ParserUtilities::parseConsensusSpectrumBuilder(string
 
         IPeak *peak =new Peak(mz,intens,count);
         peaks.push_back(peak);
-        PointerPool::add(peak);
+        pointer_pool->add(peak);
     }
 
     //build the object

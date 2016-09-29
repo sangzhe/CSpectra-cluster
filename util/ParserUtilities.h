@@ -28,11 +28,16 @@ class ParserUtilities {
         static int MAX_NUMBER_BAD_MGF_LINES;
 
 
-        static list<ICluster*> readSpectralCluster(string& clusterString);
+        static vector<ICluster*> readSpectralCluster(string& clusterString);
 
-        static ICluster* readSpectralCluster( stringstream& ss, string& line);
+        static vector<ICluster*> readSpectralCluster(stringstream& ss);
 
-        static ISpectrum* readMGFScan( stringstream& ss,  string& line);
+        static vector<ISpectrum*> readMGFScan(stringstream& ss);
+
+
+    static ICluster* readSpectralCluster( stringstream& ss, string line);
+
+        static ISpectrum* readMGFScan( stringstream& ss,  string line);
 
         static string convertClusterToString(ICluster& cluster);
 
@@ -41,6 +46,7 @@ class ParserUtilities {
         ~ParserUtilities();
 
     private:
+        static PointerPool* pointer_pool;
         static  string BEGIN_IONS;
         static  string END_IONS;
         static  string BEGIN_CLUSTER;

@@ -28,7 +28,7 @@ CombinedFisherIntensityTest::CombinedFisherIntensityTest(float fragmentIonTolera
 double CombinedFisherIntensityTest::assessSimilarity(ISpectrum *spectrum1, ISpectrum *spectrum2) {
     IPeakMatches *peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1, spectrum2, fragmentIonTolerance, peakFiltering);
     double ret =  assessSimilarity(peakMatches);
-    PointerPool::remove(peakMatches);
+    pointer_pool->remove(peakMatches);
     return ret;
 }
 

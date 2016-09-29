@@ -48,8 +48,8 @@ ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
 
         filteredPeakList.push_back(*iterator1);
     }
-    PointerPool::remove(peak);
+    pointer_pool->remove(peak);
     ISpectrum *filteredSpectrum = new Spectrum(o, filteredPeakList, true);
-    PointerPool::add(filteredPeakList);
+    pointer_pool->add(filteredPeakList);
     return filteredSpectrum;
 }

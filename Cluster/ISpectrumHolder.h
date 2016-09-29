@@ -6,9 +6,9 @@
 #define CSPECTRA_CLUSTER_ISPECTRUMHOLDER_H
 
 #include <list>
-#include "../Spectrum/Spectrum.h"
 #include "math.h"
 #include "../IPointer.h"
+#include "../Spectrum/ISpectrum.h"
 #include "SpectrumHolderListener.h"
 
 class ISpectrumHolder:virtual public IPointer{

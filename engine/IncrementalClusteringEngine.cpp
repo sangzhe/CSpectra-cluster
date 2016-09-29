@@ -51,7 +51,7 @@ void IncrementalClusteringEngine::setCurrentMZ(const double pCurrentMZ) {
 vector<ICluster*> IncrementalClusteringEngine::getClusters() {
     vector<ICluster*> ret(clusters);
     sort(ret.begin(),ret.end(),ICluster::cmp);
-    PointerPool::add(ret);
+    pointer_pool->add(ret);
 }
 
 void IncrementalClusteringEngine::addClusters(ICluster *cluster) {
@@ -81,7 +81,7 @@ vector<ICluster*> IncrementalClusteringEngine::findClustersTooLow(double precurs
         float testPrecursorMz = test->getPrecursorMz();
         if (lowestMZ > testPrecursorMz) {
             clustersToremove.push_back(test);
-            PointerPool::add(test);
+            pointer_pool->add(test);
         }
     }
     if (!clustersToremove.empty())
@@ -96,7 +96,7 @@ void IncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
     if (myClusters.empty()) {   // no checks just add
         ICluster *add = new SpectralCluster(clusterToAdd, Defaults::getDefaultConsensusSpectrumBuilder());
         myClusters.push_back(add);
-        PointerPool::add(add);
+        pointer_pool->add(add);
         numberNotMerge++;
         return;
     }
@@ -149,7 +149,7 @@ void IncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
     } else {
         // create a new cluster
         ICluster* add = new SpectralCluster(clusterToAdd, Defaults::getDefaultConsensusSpectrumBuilder());
-        PointerPool::add(add);
+        pointer_pool->add(add);
         myClusters.push_back(add);
         numberNotMerge++;
     }
@@ -235,6 +235,6 @@ string IncrementalClusteringEngine::toString() {
 }
 
 IncrementalClusteringEngine::~IncrementalClusteringEngine() {
-    PointerPool::remove(clusters);
+    pointer_pool->remove(clusters);
     delete similarityChecker;
 }

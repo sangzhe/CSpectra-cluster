@@ -11,12 +11,14 @@
 #include "../util/IOUtilities.h"
 #include "IPeakMatches.h"
 #include "PeakMatches.h"
-#include "../pool/ClusterPointerPool.h"
+#include "../pool/PointerPool.h"
 
 
 
 class PeakMatchesUtilities {
 private:
+    static PointerPool* pointer_pool;
+
     static IPeak *LAST_PEAK ;
 
 protected:

@@ -35,7 +35,7 @@ vector<IPeak*> FractionTICPeakFunction::apply(const vector<IPeak *>& peaks) {
             break;
 
         filteredPeaks.push_back(p);
-        PointerPool::add(p);
+        pointer_pool->add(p);
         retainedIntensity += p->getIntensity();
         nPeaksRetained++;
     }

@@ -8,6 +8,7 @@
 
 #include "ISimilarityChecker.h"
 #include "boost/math/distributions/hypergeometric.hpp"
+#include "../pool/PoolFactory.h"
 
 
 class HypergeometricScore: public ISimilarityChecker {
@@ -29,6 +30,7 @@ public:
     void setPeakFiltering(bool peakFiltering);
     string getAlgorithmName();
 private:
+    PointerPool* pointer_pool = PoolFactory::getInstance();
     bool peakFiltering;
 
 protected:

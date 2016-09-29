@@ -10,6 +10,7 @@
 #include "ConsensusSpectrumBuilderFactory.h"
 #include "GreedyConsensusSpectrumFactory.h"
 #include "../util/Function/peak/BinnedHighestNPeakFunction.h"
+#include "../Spectrum/Spectrum.h"
 
 class GreedyConsensusSpectrumFactory;
 
@@ -90,6 +91,7 @@ protected:
     void setIsDirty(bool isDirty);
 
 private:
+    static PointerPool* pointer_pool;
     string id;
     bool Dirty = true;
     vector<IPeak*> consensusPeaks;

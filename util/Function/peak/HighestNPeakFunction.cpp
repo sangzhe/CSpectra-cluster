@@ -3,10 +3,10 @@
 //
 
 #include "HighestNPeakFunction.h"
-#include "../../../pool/ClusterPointerPool.h"
 
 int HighestNPeakFunction::DEFAULT_MAX_PEAKS = 100;
 
+PointerPool* HighestNPeakFunction::pointer_pool = PoolFactory::getInstance();
 HighestNPeakFunction::HighestNPeakFunction() {
     new (this)HighestNPeakFunction(DEFAULT_MAX_PEAKS);
 }
@@ -28,7 +28,7 @@ vector<IPeak*> HighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) 
             ret.push_back(*iter);
         }
     }
-    PointerPool::remove(originalPeaks);
-    PointerPool::add(ret);
+    pointer_pool->remove(originalPeaks);
+    pointer_pool->add(ret);
     return ret;
 }
