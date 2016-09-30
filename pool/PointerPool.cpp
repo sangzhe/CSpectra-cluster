@@ -2,6 +2,7 @@
 // Created by SangZhe on 2016/9/29.
 //
 
+#include <iostream>
 #include "PointerPool.h"
 
 
@@ -12,9 +13,14 @@ void PointerPool::add(IPointer* A){
         int num = counter[A->getUUID()];
         num++;
         counter[A->getUUID()] = num;
+        std::cout<< "add "<< A->getUUID() <<endl;
+
+
     }else{
         p.insert(A);
         counter[A->getUUID()] = 1;
+        std::cout<< "add reference"<< A->getUUID() <<endl;
+
     }
 }
 
@@ -43,6 +49,7 @@ void PointerPool::remove(IPointer *R){
         if(counter[R->getUUID()] == 0){
             p.erase(R);
             counter.erase(R->getUUID());
+            std::cout<< "delete "<< R->getUUID() <<endl;
             delete R;
             R = nullptr;
         }else{
@@ -72,4 +79,10 @@ void PointerPool::remove(const vector<ICluster*>& clusters){
 
 int PointerPool::size() {
     return p.size();
+}
+
+void PointerPool::info() {
+    for(pair<string,int> x:counter){
+        std::cout<< x.first <<"\t------------\t"<<x.second<<endl;
+    }
 }

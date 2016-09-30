@@ -4,8 +4,12 @@
 
 #include "PoolFactory.h"
 
-PointerPool* PoolFactory::p = new PointerPool();
+PointerPool* PoolFactory::p = nullptr;
 
 PointerPool* PoolFactory::getInstance(){
+    if (nullptr == p)
+    {
+        p = new PointerPool();
+    }
     return p;
 }

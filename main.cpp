@@ -16,5 +16,8 @@ int main() {
 
     vector<ISpectrum*> spectra = ParserUtilities::readMGFScan(ss);
 
+    int s = pointer_pool->size();
+
+
 }
 

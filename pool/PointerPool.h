@@ -40,6 +40,8 @@ public:
 
     int size();
 
+    void info();
+
 };
 
 
