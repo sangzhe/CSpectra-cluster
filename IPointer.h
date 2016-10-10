@@ -15,7 +15,7 @@ class IPointer{
 public:
     IPointer();
 
-    string getUUID();
+    string getUUID() const;
 
 private:
     string uuid;

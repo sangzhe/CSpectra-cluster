@@ -5,12 +5,11 @@
 #ifndef CSPECTRA_CLUSTER_PEAK_H
 #define CSPECTRA_CLUSTER_PEAK_H
 
-#include "IPeak.h"
 #include "string"
 
 using namespace std;
 
-class Peak: public IPeak{
+class Peak{
 private:
     float massChargeRatio;
     float intensity;
@@ -23,7 +22,7 @@ public:
     Peak(const float& massChargeRatio, const float& intensity,int count);
 
 
-    Peak(const IPeak& copied);
+    Peak(const Peak& copied);
 
 
     float getMz()const ;
@@ -32,22 +31,24 @@ public:
 
     int getCount() const ;
 
-    static int cmpPeak( IPeak* A,  IPeak* B);
+    static Peak null;
 
-    static int cmpPeakMz( IPeak* A,  IPeak* B);
+    static bool cmpPeak( const Peak& A,  const Peak& B);
 
-    static int cmpPeakIntensity( IPeak* A,  IPeak* B);
+    static bool cmpPeakMz( const Peak& A,  const Peak& B);
+
+    static bool cmpPeakIntensity( const Peak& A,  const Peak& B);
 
     string toString();
 
-    bool operator == (const IPeak& O) ;
+    bool operator == (const Peak& O) const;
 
     ~Peak(){};
-//    bool operator < (const IPeak& O) const;
+    bool operator < (const Peak& O) const;
 
-//    friend size_t hash_value(const IPeak &p) ;
+    friend size_t hash_value(const Peak &p)  ;
 //
-//    Peak& operator =(const IPeak& O);
+    Peak& operator =(const Peak& O) ;
 
 };
 

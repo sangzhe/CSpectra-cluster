@@ -51,22 +51,22 @@ double HypergeometricScore::assessSimilarityAsPValue(IPeakMatches *peakMatches) 
 }
 
 int HypergeometricScore::calculateNumberOfBins(IPeakMatches *peakMatches) {
-    vector<IPeak*> peaks1 = peakMatches->getSpectrumOne()->getPeaks();
-    vector<IPeak*> peaks2 = peakMatches->getSpectrumTwo()->getPeaks();
+    vector<Peak> peaks1 = peakMatches->getSpectrumOne()->getPeaks();
+    vector<Peak> peaks2 = peakMatches->getSpectrumTwo()->getPeaks();
 
     // set the maximum shared m/z value
     float minMz, maxMz; // minimum and maximum overlapping m/z
 
-    if (peaks1[0]->getMz() < peaks2[0]->getMz()) {
-        minMz = peaks1[0]->getMz();
+    if (peaks1[0].getMz() < peaks2[0].getMz()) {
+        minMz = peaks1[0].getMz();
     } else {
-        minMz = peaks2[0]->getMz();
+        minMz = peaks2[0].getMz();
     }
 
-    if (peaks1[peaks1.size() - 1]->getMz() > peaks2[peaks2.size() - 1]->getMz()) {
-        maxMz = peaks1[peaks1.size() - 1]->getMz();
+    if (peaks1[peaks1.size() - 1].getMz() > peaks2[peaks2.size() - 1].getMz()) {
+        maxMz = peaks1[peaks1.size() - 1].getMz();
     } else {
-        maxMz = peaks2[peaks2.size() - 1]->getMz();
+        maxMz = peaks2[peaks2.size() - 1].getMz();
     }
 
     int numberOfBins = (int)round((maxMz - minMz) / fragmentIonTolerance);

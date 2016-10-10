@@ -19,16 +19,14 @@ ISpectrum* RemoveImpossiblyHighPeaksFunction::apply(const ISpectrum &o) {
      float monoisotopicMass = Mass::getMonoisotopicMass(o.getPrecursorMz(), o.getPrecursorCharge());
      float maxMass = monoisotopicMass + Mass::PROTON + tolerance;
 
-    vector<IPeak*> filteredPeaks;
-    vector<IPeak*> peak = o.getPeaks();
-    vector<IPeak*>::iterator iterator1;
+    vector<Peak> filteredPeaks;
+    vector<Peak> peak = o.getPeaks();
+    vector<Peak>::iterator iterator1;
     for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
-        if ((*iterator1)->getMz() > maxMass)
+        if ((*iterator1).getMz() > maxMass)
             continue;
         filteredPeaks.push_back(*iterator1);
     }
-    pointer_pool->remove(peak);
     ISpectrum* ret = new Spectrum(o,filteredPeaks,true);
-    pointer_pool->add(filteredPeaks);
     return ret;
 }

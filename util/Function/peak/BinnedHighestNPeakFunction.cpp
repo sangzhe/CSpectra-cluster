@@ -32,15 +32,15 @@ BinnedHighestNPeakFunction::BinnedHighestNPeakFunction(int maxPeaks, int binSize
         throw ("Bin overlap must be smaller than the bin size.");
 }
 
-vector<IPeak*> BinnedHighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) {
-    unordered_set<IPeak*> retained;
+vector<Peak> BinnedHighestNPeakFunction::apply(const vector<Peak> &originalPeaks) {
+    unordered_set<Peak> retained;
     int startPeak = 0;
     for(double binBottom = MAXIMUM_BINNED_MZ;binBottom < MAXIMUM_BINNED_MZ -binSize;binBottom+=(binSize - binOverlap)){
         startPeak = handleBin(originalPeaks,startPeak,retained,binBottom);
         if(startPeak > originalPeaks.size()) break;
     }
-    vector<IPeak*> ret;
-    unordered_set<IPeak*>::iterator iter;
+    vector<Peak> ret;
+    unordered_set<Peak>::iterator iter;
     for(iter = retained.begin();iter != retained.end();iter++){
         ret.push_back(*iter);
     }
@@ -49,25 +49,25 @@ vector<IPeak*> BinnedHighestNPeakFunction::apply(const vector<IPeak*> &originalP
 
 }
 
-int BinnedHighestNPeakFunction::handleBin(vector<IPeak *> allpeaks, int startpeak, unordered_set<IPeak *> retained,
+int BinnedHighestNPeakFunction::handleBin(vector<Peak> allpeaks, int startpeak, unordered_set<Peak> retained,
                                           double binBottom) {
     int startIndexNextBin = startpeak; // the index of the next bin's peak
     double binEnd = binBottom + binSize; // end of this bin
     double nextBinStartMZ = binEnd - binOverlap; // start of next bin
 
     int index = startpeak;
-    IPeak* currentPeak = nullptr;
-    vector<IPeak*> byIntensity;
-    vector<IPeak*>::iterator iter;
+    Peak currentPeak;
+    vector<Peak> byIntensity;
+    vector<Peak>::iterator iter;
     for(iter =allpeaks.begin();iter != allpeaks.end();iter++){
         index++;
-        IPeak* nextPeak = *iter;
+        Peak nextPeak = *iter;
 
 
 //        ToDo problem?
-        if(currentPeak != nullptr){
-            if(currentPeak->getMz() > nextPeak->getMz()){
-                if(fabs(currentPeak->getMz() - nextPeak->getMz()) > 1.2 * MZIntensityUtilities::SMALL_MZ_DIFFERENCE)
+        if(!(currentPeak == Peak())){
+            if(currentPeak.getMz() > nextPeak.getMz()){
+                if(fabs(currentPeak.getMz() - nextPeak.getMz()) > 1.2 * MZIntensityUtilities::SMALL_MZ_DIFFERENCE)
                     throw("Peaks are NOT Sorted by MZ");
             }
         }
@@ -75,7 +75,7 @@ int BinnedHighestNPeakFunction::handleBin(vector<IPeak *> allpeaks, int startpea
 
         // store all peaks that belong to this bin
         currentPeak = nextPeak;
-        float currentPeakMz = currentPeak->getMz();
+        float currentPeakMz = currentPeak.getMz();
         // ignore if it's before this bin
         if (currentPeakMz < binBottom)
             continue;
@@ -95,7 +95,8 @@ int BinnedHighestNPeakFunction::handleBin(vector<IPeak *> allpeaks, int startpea
     sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity);
 
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++) {
-        retained.insert(*iter);
+        Peak toAdd = *iter;
+        retained.insert(toAdd);
         if (++numberAdded >= maxPeaks) break;
     }
 

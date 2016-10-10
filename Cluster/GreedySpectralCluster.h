@@ -44,12 +44,12 @@ public:
 
     void addCluster(ICluster* cluster);
 
-    void addSpectra(const ISpectrum* merged);
+    void addSpectra(ISpectrum* merged);
     void addSpectra(const vector<ISpectrum*>& spectra);
 
 
     bool isRemovedSupported();
-    void removeSpectra(const ISpectrum* removed);
+    void removeSpectra(ISpectrum* removed);
     void removeSpectra(const vector<ISpectrum*> &spectra);
 
     string getProperty(string key);

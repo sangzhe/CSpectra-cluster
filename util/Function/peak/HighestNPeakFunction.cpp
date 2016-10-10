@@ -15,12 +15,12 @@ HighestNPeakFunction::HighestNPeakFunction(int maxPeaks) {
     this->maxPeaks = maxPeaks;
 }
 
-vector<IPeak*> HighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) {
-    vector<IPeak*> byIntensity = originalPeaks;
+vector<Peak> HighestNPeakFunction::apply(const vector<Peak> &originalPeaks) {
+    vector<Peak> byIntensity = originalPeaks;
     sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity);
-    vector<IPeak*> ret;
+    vector<Peak> ret;
 
-    vector<IPeak*>::iterator iter;
+    vector<Peak>::iterator iter;
     for(iter = byIntensity.begin();iter != byIntensity.end();iter++){
         if(ret.size() >= maxPeaks){
             break;
@@ -28,7 +28,5 @@ vector<IPeak*> HighestNPeakFunction::apply(const vector<IPeak*> &originalPeaks) 
             ret.push_back(*iter);
         }
     }
-    pointer_pool->remove(originalPeaks);
-    pointer_pool->add(ret);
     return ret;
 }

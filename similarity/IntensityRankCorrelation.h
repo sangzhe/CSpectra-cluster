@@ -37,7 +37,7 @@ protected:
 
 private:
     PointerPool* pointer_pool = PoolFactory::getInstance();
-    vector<double> extractPeakIntensities(const vector<IPeak*>& peaks);
+    vector<double> extractPeakIntensities(const vector<Peak>& peaks);
 };
 
 

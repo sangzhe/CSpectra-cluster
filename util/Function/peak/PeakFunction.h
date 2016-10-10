@@ -6,10 +6,10 @@
 #define CSPECTRA_CLUSTER_PEAKFUNCTION_H
 
 #include <vector>
-#include "../../../Spectrum/IPeak.h"
+#include "../../../Spectrum/Peak.h"
 
 class PeakFunction{
 public:
-    virtual vector<IPeak*> apply(const vector<IPeak*> &originalPeaks) = 0;
+    virtual vector<Peak> apply(const vector<Peak> &originalPeaks) = 0;
 };
 #endif //CSPECTRA_CLUSTER_PEAKFUNCTION_H

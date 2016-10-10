@@ -9,14 +9,36 @@ int main() {
 //    vector<ICluster *> a = ParserUtilities::readSpectralCluster(test_cluster);
 //    cout << "end" << endl;
 
-    ifstream fin("/Users/sangzhe/ClionProjects/CSpectra-cluster/test.mgf");
+    ifstream fin("/Users/sangzhe/ClionProjects/CSpectra-cluster/cluster_spec_4776.mgf");
     stringstream ss;
     ss << fin.rdbuf();
     PointerPool* pointer_pool = PoolFactory::getInstance();
 
+
+    time_t time_1,time_2;
+    time_1 = time(NULL);
+
     vector<ISpectrum*> spectra = ParserUtilities::readMGFScan(ss);
+    for(ISpectrum* sp:spectra){
+        string id = sp->getId();
+    }
+
+    time_2 = time(NULL);
+
+    cout << time_2 - time_1 <<endl;
+
+    ISpectrum * xxx;
 
     int s = pointer_pool->size();
+
+
+    GreedySpectralCluster *spectralCluster = new GreedySpectralCluster("testId");
+
+    spectralCluster->addSpectra(spectra);
+    xxx = spectralCluster->getConsensusSpectrum();
+    ISpectrum* yy = spectralCluster->getConsensusSpectrum();
+
+
 
 
 }

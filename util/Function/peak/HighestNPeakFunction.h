@@ -16,7 +16,7 @@ public:
 
     HighestNPeakFunction(int maxPeaks);
     HighestNPeakFunction();
-    vector<IPeak*> apply(const vector<IPeak*> &originalPeaks);
+    vector<Peak> apply(const vector<Peak> &originalPeaks);
 
 private:
     static PointerPool* pointer_pool;

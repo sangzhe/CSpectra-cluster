@@ -19,28 +19,24 @@ PeakMatches::PeakMatches( ISpectrum* spectrum1,  ISpectrum* spectrum2, vector<in
     pointer_pool->add(spectrum2);
 }
 
-vector<IPeak*> PeakMatches::getSharedPeaksFromSpectrumOne() {
+vector<Peak> PeakMatches::getSharedPeaksFromSpectrumOne() {
     if(sharedPeaksSpec1.empty()){
-        vector<IPeak*> peaklist = spectrum1->getPeaks();
-        vector<IPeak*> peaks(peaklist.begin(),peaklist.end());
+        vector<Peak> peaklist = spectrum1->getPeaks();
         for (int aSharedPeakIndecesSpec1 : sharedPeakIndecesSpec1) {
-            IPeak *sharedPeaks = peaks[aSharedPeakIndecesSpec1];
+            Peak sharedPeaks = peaklist[aSharedPeakIndecesSpec1];
             sharedPeaksSpec1.push_back(sharedPeaks);
-            pointer_pool->add(sharedPeaks);
         }
     }
 
     return sharedPeaksSpec1;
 }
 
-vector<IPeak*> PeakMatches::getSharedPeaksFromSpectrumTwo() {
+vector<Peak> PeakMatches::getSharedPeaksFromSpectrumTwo() {
     if(sharedPeaksSpec2.empty()){
-        vector<IPeak*> peaklist = spectrum2->getPeaks();
-        vector<IPeak*> peaks(peaklist.begin(),peaklist.end());
+        vector<Peak> peaklist = spectrum2->getPeaks();
         for (int aSharedPeakIndecesSpec2 : sharedPeakIndecesSpec2) {
-            IPeak *sharedPeaks = peaks[aSharedPeakIndecesSpec2];
+            Peak sharedPeaks = peaklist[aSharedPeakIndecesSpec2];
             sharedPeaksSpec2.push_back(sharedPeaks);
-            pointer_pool->add(sharedPeaks);
         }
     }
 
@@ -51,14 +47,14 @@ int PeakMatches::getNumberOfSharedPeaks() {
     return sharedPeakIndecesSpec1.size();
 }
 
-pair<IPeak*, IPeak*> PeakMatches::getPeakPair(int nIndex){
+pair<Peak, Peak> PeakMatches::getPeakPair(int nIndex){
     if (nIndex < 0)
     throw("PeakPair index must be greater than 0");
     if (nIndex >= sharedPeakIndecesSpec1.size())
 //        ToDo fix string add
 //        throw("Request PeakPair with index '" + nIndex + "' from " + sharedPeakIndecesSpec1.size() + " matches");
 
-    return pair<IPeak*, IPeak*>(spectrum1->getPeaks()[sharedPeakIndecesSpec1[nIndex]],
+    return pair<Peak, Peak>(spectrum1->getPeaks()[sharedPeakIndecesSpec1[nIndex]],
                                   spectrum2->getPeaks()[sharedPeakIndecesSpec2[nIndex]]);
 }
 
@@ -75,7 +71,5 @@ ISpectrum* PeakMatches::getSpectrumTwo() {
 PeakMatches::~PeakMatches() {
     pointer_pool->remove(spectrum1);
     pointer_pool->remove(spectrum2);
-    pointer_pool->remove(sharedPeaksSpec1);
-    pointer_pool->remove(sharedPeaksSpec2);
 
 }

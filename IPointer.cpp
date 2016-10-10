@@ -5,7 +5,6 @@
 #include "IPointer.h"
 
 IPointer::IPointer() {
-    char str[36];
     uuid_t uu;
     uuid_generate_random(uu);
     stringstream ss;
@@ -14,6 +13,6 @@ IPointer::IPointer() {
 //    uuid = string(str);
 }
 
-string IPointer::getUUID() {
+string IPointer::getUUID() const{
     return uuid;
 }

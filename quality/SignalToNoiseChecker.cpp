@@ -21,16 +21,16 @@ double SignalToNoiseChecker::calculateQualityScore(const ISpectrum& spectrum) {
 
     double totalIntensity = highestNPeaks->getTotalIntensity();
     double highestPeak = 0;
-    vector<IPeak*> highestPeaks = highestNPeaks->getPeaks();
-    vector<IPeak*>::iterator iter;
+    vector<Peak> highestPeaks = highestNPeaks->getPeaks();
+    vector<Peak>::iterator iter;
     for(iter=highestPeaks.begin();iter != highestPeaks.end();iter++){
-        IPeak *peak = *iter;
-        highestPeak = max((double)peak->getIntensity(),highestPeak);
+        Peak peak = *iter;
+        highestPeak = max((double)peak.getIntensity(),highestPeak);
     }
 
 
     double meanHigh = (totalIntensity - highestPeak) / (NUMBER_HIGH_PEAKS -1);
-    vector<IPeak*> peaks = spectrum.getPeaks();
+    vector<Peak> peaks = spectrum.getPeaks();
     sort(peaks.begin(),peaks.end(),Peak::cmpPeakIntensity);
 
     double median;
@@ -38,8 +38,8 @@ double SignalToNoiseChecker::calculateQualityScore(const ISpectrum& spectrum) {
     int peakSize = peaks.size();
     if(peakSize % 2 == 1){
         int index =peakSize / 2 ;
-        vector<IPeak*>::iterator iter;
-        IPeak *peak;
+        vector<Peak>::iterator iter;
+        Peak peak;
         int i =0;
         for(iter = peaks.begin();iter != peaks.end(); iter++){
             if ( i == index ) {
@@ -48,14 +48,14 @@ double SignalToNoiseChecker::calculateQualityScore(const ISpectrum& spectrum) {
             }
             else i++;
         }
-        median = peak->getIntensity();
+        median = peak.getIntensity();
     }
     else{
         int index2 = (peakSize / 2 );
         int index1 = index2 - 1 ;
-        vector<IPeak*>::iterator iter;
-        IPeak *peak1;
-        IPeak *peak2;
+        vector<Peak>::iterator iter;
+        Peak peak1;
+        Peak peak2;
         int i = 0;
         for(iter = peaks.begin();iter != peaks.end();iter++){
             if( i == index1 ){
@@ -67,8 +67,8 @@ double SignalToNoiseChecker::calculateQualityScore(const ISpectrum& spectrum) {
             }
             else i++;
         }
-        double intensity1 = peak1->getIntensity();
-        double intensity2 =  peak2->getIntensity();
+        double intensity1 = peak1.getIntensity();
+        double intensity2 =  peak2.getIntensity();
         median = (intensity1 + intensity2) / 2 ;
     }
     return meanHigh / median ;

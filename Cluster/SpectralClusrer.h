@@ -64,11 +64,11 @@ public:
 
     void setProperty(string key,string value);
 
-    void addSpectra(const ISpectrum* merged);
+    void addSpectra( ISpectrum* merged);
 
     void addSpectra(const vector<ISpectrum*>& spectra);
 
-    void removeSpectra(const ISpectrum* removed);
+    void removeSpectra( ISpectrum* removed);
 
     void removeSpectra(const vector<ISpectrum*> &spectra) ;
 

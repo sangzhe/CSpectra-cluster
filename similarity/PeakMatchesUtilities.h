@@ -6,7 +6,6 @@
 #define CSPECTRA_CLUSTER_PEAKMATCHESUTILITIES_H
 
 
-#include "../Spectrum/IPeak.h"
 #include "../Spectrum/Peak.h"
 #include "../util/IOUtilities.h"
 #include "IPeakMatches.h"
@@ -19,7 +18,7 @@ class PeakMatchesUtilities {
 private:
     static PointerPool* pointer_pool;
 
-    static IPeak *LAST_PEAK ;
+    static Peak LAST_PEAK ;
 
 protected:
     PeakMatchesUtilities(){};

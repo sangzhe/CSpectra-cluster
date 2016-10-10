@@ -25,11 +25,11 @@ public:
     static ConsensusSpectrumBuilderFactory* FACTORY;
     static ConsensusSpectrumBuilderFactory* buildFactory();
 
-    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const vector<IPeak*>& peaks) ;
+    ConsensusSpectrum(string& id,const  int& nSpectra,const float& sumPrecusorMz,const float& sumPrecursorIntens,const int& sumCharge,const vector<Peak>& peaks) ;
 
-    void addSpectra(const ISpectrum* merged) ;
+    void addSpectra( ISpectrum* merged) ;
 
-    void removeSpectra(const ISpectrum* removed) ;
+    void removeSpectra( ISpectrum* removed) ;
 
     void onSpectraAdd(ISpectrumHolder* holder,vector<ISpectrum*>& added);
 
@@ -54,21 +54,21 @@ public:
 
     double getSumPrecursorIntensity()const ;
 
-    vector<IPeak*> getInternalPeaks()const ;
+    vector<Peak> getInternalPeaks()const ;
 
-    void addPeaks(const vector<IPeak*>& peaksToAdd);
+    void addPeaks(const vector<Peak>& peaksToAdd);
 
-    void removePeaks(const vector<IPeak*> &peaksToRemove);
+    void removePeaks(const vector<Peak> &peaksToRemove);
 
-    void storeHeldPeaks(const vector<IPeak*>& peaksToAdd);
+    void storeHeldPeaks(const vector<Peak>& peaksToAdd);
 
     void addHeldPeaks();
 
-    void internalAddPeaks(const vector<IPeak*>& peaksToAdd);
+    void internalAddPeaks(const vector<Peak>& peaksToAdd);
 
     void update();
 
-    static vector<IPeak*> findConsensusPeaks(const vector<IPeak*>& input,const int& peaksToKeep, int& nSpectra) ;
+    static vector<Peak> findConsensusPeaks(const vector<Peak>& input,const int& peaksToKeep, int& nSpectra) ;
 
     bool isDirty;
 
@@ -96,9 +96,9 @@ public:
 private:
     static PointerPool* pointer_pool;
     string id;
-    vector<IPeak*> allPeaks;
-    unordered_set<IPeak*> heldPeaks;
-    vector<IPeak*> consensusPeaks;
+    vector<Peak> allPeaks;
+    unordered_set<Peak> heldPeaks;
+    vector<Peak> consensusPeaks;
 
 
     ConsensusSpectrum(string& id);
@@ -125,11 +125,11 @@ protected:
     static  int MZ_PRECISION;
     void setDirty(bool isDirty) ;
 
-    static vector<IPeak*> mergeIdenticalPeaks(const vector<IPeak*>& inPeaks);
+    static vector<Peak> mergeIdenticalPeaks(const vector<Peak>& inPeaks);
 
-    static vector<IPeak*> adaptPeakIntensities(const vector<IPeak*>& inp, int nSpectra);
+    static vector<Peak> adaptPeakIntensities(const vector<Peak>& inp, int nSpectra);
 
-    static vector<IPeak*> filterNoise(const vector<IPeak*>& inp);
+    static vector<Peak> filterNoise(const vector<Peak>& inp);
 
     list<SpectrumHolderListener*> listeners;
 

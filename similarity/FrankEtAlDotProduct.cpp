@@ -28,7 +28,7 @@ double FrankEtAlDotProduct::assessSimilarity(IPeakMatches *peakMatches) {
     double dotProduct = 0;
 
     for (int i = 0; i < peakMatches->getNumberOfSharedPeaks(); i++) {
-        pair<IPeak*, IPeak*> matchedPeaks = peakMatches->getPeakPair(i);
+        pair<Peak, Peak> matchedPeaks = peakMatches->getPeakPair(i);
 
         dotProduct += convertIntensity(matchedPeaks.first) * convertIntensity(matchedPeaks.second);
     }
@@ -72,8 +72,8 @@ double FrankEtAlDotProduct::assessSimilarity(ISpectrum *spectrum1, ISpectrum *sp
     return assessSimilarity(peakMatches);
 }
 
-double FrankEtAlDotProduct::convertIntensity(IPeak *p1) {
-    double intensity = p1->getIntensity();
+double FrankEtAlDotProduct::convertIntensity(Peak& p1) {
+    double intensity = p1.getIntensity();
     if (intensity == 0)
         return 0;
     return 1 + log(intensity);

@@ -17,15 +17,15 @@ private:
     ISpectrum* spectrum2;
     vector<int> sharedPeakIndecesSpec1;
     vector<int> sharedPeakIndecesSpec2;
-    vector<IPeak*> sharedPeaksSpec1;
-    vector<IPeak*> sharedPeaksSpec2;
+    vector<Peak> sharedPeaksSpec1;
+    vector<Peak> sharedPeaksSpec2;
 
 public:
     PeakMatches(ISpectrum* spectrum1, ISpectrum* spectrum2, vector<int> sharedPeakIndecesSpec1, vector<int> sharedPeakIndecesSpec2);
-    vector<IPeak*> getSharedPeaksFromSpectrumOne();
-    vector<IPeak*> getSharedPeaksFromSpectrumTwo();
+    vector<Peak> getSharedPeaksFromSpectrumOne();
+    vector<Peak> getSharedPeaksFromSpectrumTwo();
     int getNumberOfSharedPeaks();
-    pair<IPeak*, IPeak*> getPeakPair(int nIndex);
+    pair<Peak, Peak> getPeakPair(int nIndex);
     ISpectrum* getSpectrumOne();
     ISpectrum* getSpectrumTwo();
 

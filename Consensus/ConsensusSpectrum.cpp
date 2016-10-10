@@ -41,21 +41,22 @@ ConsensusSpectrum::ConsensusSpectrum(string &id) {
 }
 
 ConsensusSpectrum::ConsensusSpectrum(string &id, const int &nSpectra, const float &sumPrecusorMz, const float &sumPrecursorIntens,
-                                     const int &sumCharge, const vector<IPeak*> &peaks)  {
+                                     const int &sumCharge, const vector<Peak> &peaks)  {
     this->id = id;
     this->nSpectra = nSpectra;
     this->sumPrecursorMz = sumPrecusorMz;
     this->sumPrecursorIntens = sumPrecursorIntens;
     this->sumCharge = sumCharge;
 
-    consensusPeaks.insert(consensusPeaks.end(),peaks.begin(),peaks.end());
-    pointer_pool->add(peaks);
+    for(const Peak& peak:peaks){
+        consensusPeaks.push_back(peak);
+    }
 
 
     setDirty(true);
 }
 
-vector<IPeak*> ConsensusSpectrum::getInternalPeaks() const {
+vector<Peak> ConsensusSpectrum::getInternalPeaks() const {
     return consensusPeaks;
 }
 
@@ -78,8 +79,8 @@ void ConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, vector<ISpectrum*>
     pointer_pool->add(added);
     addSpectra(added);
 }
-void ConsensusSpectrum::addSpectra(const ISpectrum *merged)  {
-    vector<IPeak*> spectrumPeaks = merged->getPeaks();
+void ConsensusSpectrum::addSpectra( ISpectrum *merged)  {
+    vector<Peak> spectrumPeaks = merged->getPeaks();
     addPeaks(spectrumPeaks);
     sumCharge += merged->getPrecursorCharge();
     sumPrecursorMz += merged->getPrecursorMz();
@@ -107,8 +108,8 @@ void ConsensusSpectrum::removeSpectra(const vector<ISpectrum*> &spectra) {
 
 }
 
-void ConsensusSpectrum::removeSpectra(const ISpectrum *removed) {
-    vector<IPeak*> spectrumPeaks = removed->getPeaks();
+void ConsensusSpectrum::removeSpectra( ISpectrum *removed) {
+    vector<Peak> spectrumPeaks = removed->getPeaks();
     removePeaks(spectrumPeaks);
 
     sumCharge -= removed->getPrecursorCharge();
@@ -118,47 +119,44 @@ void ConsensusSpectrum::removeSpectra(const ISpectrum *removed) {
     nSpectra--;
 }
 
-void ConsensusSpectrum::removePeaks(const vector<IPeak*> &peaksToRemove) {
+void ConsensusSpectrum::removePeaks(const vector<Peak> &peaksToRemove) {
     int posAllPeaks = 0;
-    vector<IPeak*> in = peaksToRemove;
+    vector<Peak> in = peaksToRemove;
     int original_size = in.size();
-    for(vector<IPeak*>::iterator iter = in.begin();iter != in.end();iter++){
-        IPeak* peakToRemove = *iter;
-        double mzToRemove = peakToRemove->getMz();
+    for(vector<Peak>::iterator iter = in.begin();iter != in.end();iter++){
+        Peak peakToRemove = *iter;
+        double mzToRemove = peakToRemove.getMz();
         if (USE_ROUNDING)
             mzToRemove = MZIntensityUtilities::round(mzToRemove, MZ_PRECISION);
         for(int j = posAllPeaks;j < allPeaks.size();j++){
-            IPeak* currentExistingPeak = allPeaks[j];
-            if (mzToRemove < currentExistingPeak->getMz()) {
+            Peak currentExistingPeak = allPeaks[j];
+            if (mzToRemove < currentExistingPeak.getMz()) {
                 posAllPeaks = j;
                 break;
             }
-            if (mzToRemove == currentExistingPeak->getMz()) {
-                IPeak* newPeak = new Peak(currentExistingPeak->getMz(),currentExistingPeak->getIntensity() - peakToRemove->getIntensity(),currentExistingPeak->getCount() - 1);
+            if (mzToRemove == currentExistingPeak.getMz()) {
+                Peak newPeak(currentExistingPeak.getMz(),currentExistingPeak.getIntensity() - peakToRemove.getIntensity(),currentExistingPeak.getCount() - 1);
                 allPeaks[j] = newPeak;
-                pointer_pool->add(newPeak);
-                pointer_pool->remove(currentExistingPeak);
                 posAllPeaks = j;
                 break;
             }
         }
     }
 
-    vector<IPeak*> tmp;
-    for (IPeak* p : allPeaks) {
-        if (p->getCount() > 0)
+    vector<Peak> tmp;
+    for (Peak p : allPeaks) {
+        if (p.getCount() > 0)
             tmp.push_back(p);
-        else
-            pointer_pool->remove(p);
     }
-    pointer_pool->remove(allPeaks);
     allPeaks.clear();
-    allPeaks.insert(allPeaks.end(),tmp.begin(),tmp.end());
+    for(Peak& peak:tmp){
+        allPeaks.push_back(peak);
+    }
 }
 
 void ConsensusSpectrum::addHeldPeaks() {
-    vector<IPeak*> added;
-    unordered_set<IPeak*>::iterator iter;
+    vector<Peak> added;
+    unordered_set<Peak>::iterator iter;
     for(iter = heldPeaks.begin();iter != heldPeaks.end();iter++){
         added.push_back(*iter);
     }
@@ -167,13 +165,13 @@ void ConsensusSpectrum::addHeldPeaks() {
     heldPeaks.clear();
 }
 
-void ConsensusSpectrum::internalAddPeaks(const vector<IPeak*> &peaksToAdd) {
-    vector<IPeak*> in = peaksToAdd;
+void ConsensusSpectrum::internalAddPeaks(const vector<Peak> &peaksToAdd) {
+    vector<Peak> in = peaksToAdd;
     int posAllPeaks = 0;
-    vector<IPeak*> newPeaks;
-    for(vector<IPeak*>::iterator iter = in.begin();iter != in.end();iter++){
-        IPeak* peakToAdd = *iter;
-        double mzToAdd = peakToAdd->getMz();
+    vector<Peak> newPeaks;
+    for(vector<Peak>::iterator iter = in.begin();iter != in.end();iter++){
+        Peak peakToAdd = *iter;
+        double mzToAdd = peakToAdd.getMz();
 
         if (USE_ROUNDING)
             mzToAdd = MZIntensityUtilities::round(mzToAdd, MZ_PRECISION);
@@ -181,45 +179,42 @@ void ConsensusSpectrum::internalAddPeaks(const vector<IPeak*> &peaksToAdd) {
         bool wasAdded = false;
 
     for(int j = posAllPeaks;j < allPeaks.size();j++){
-        IPeak* currentExistingPeak = allPeaks[j];
+        Peak currentExistingPeak = allPeaks[j];
 
-        if (mzToAdd < currentExistingPeak->getMz()) {
-            IPeak* newPeak = new Peak((float) mzToAdd, peakToAdd->getIntensity(), peakToAdd->getCount());
+        if (mzToAdd < currentExistingPeak.getMz()) {
+            Peak newPeak((float) mzToAdd, peakToAdd.getIntensity(), peakToAdd.getCount());
             newPeaks.push_back(newPeak);
-            pointer_pool->add(newPeak);
             posAllPeaks = j;
             wasAdded = true;
             break;
         }
 
-        if (mzToAdd == currentExistingPeak->getMz()) {
-            IPeak* newPeak = new Peak(
-                    currentExistingPeak->getMz(),
-                    peakToAdd->getIntensity() + currentExistingPeak->getIntensity(),
-                    currentExistingPeak->getCount() + peakToAdd->getCount());
-            pointer_pool->add(newPeak);
+        if (mzToAdd == currentExistingPeak.getMz()) {
+            Peak newPeak(
+                    currentExistingPeak.getMz(),
+                    peakToAdd.getIntensity() + currentExistingPeak.getIntensity(),
+                    currentExistingPeak.getCount() + peakToAdd.getCount());
 
             allPeaks[j] = newPeak;
-            pointer_pool->remove(currentExistingPeak);
             posAllPeaks = j;
             wasAdded = true;
             break;
         }
         if (!wasAdded){
-            IPeak* newPeak = new Peak((float) mzToAdd, peakToAdd->getIntensity(), peakToAdd->getCount());
-            pointer_pool->add(newPeak);
+            Peak newPeak((float) mzToAdd, peakToAdd.getIntensity(), peakToAdd.getCount());
             newPeaks.push_back(newPeak);
         }
     }
     }
-
-    allPeaks.insert(allPeaks.end(),newPeaks.begin(),newPeaks.end());
+    for(Peak& peak:newPeaks){
+        allPeaks.push_back(peak);
+    }
     sort(allPeaks.begin(),allPeaks.end(),Peak::cmpPeakMz);
 }
 
-vector<IPeak*> ConsensusSpectrum::findConsensusPeaks(const vector<IPeak*> &input, const int &peaksToKeep, int &nSpectra){
+vector<Peak> ConsensusSpectrum::findConsensusPeaks(const vector<Peak> &input, const int &peaksToKeep, int &nSpectra){
     // Step 1: merge identical peaks
-    vector<IPeak*> ret = mergeIdenticalPeaks(input);
+    vector<Peak> ret = mergeIdenticalPeaks(input);
     // Step 2: adapt the peak intensities based on the probability that the peak has been observed
     ret = adaptPeakIntensities(ret,nSpectra);
     // Step 3: filter the spectrum
@@ -227,28 +222,30 @@ vector<IPeak*> ConsensusSpectrum::findConsensusPeaks(const vector<IPeak*> &input
     return ret;
 }
 
-vector<IPeak*> ConsensusSpectrum::mergeIdenticalPeaks( const vector<IPeak*> &inPeaks) {
-    vector<IPeak*> filterdPeaks;
+vector<Peak> ConsensusSpectrum::mergeIdenticalPeaks( const vector<Peak> &inPeaks) {
+    vector<Peak> filterdPeaks;
     if(inPeaks.size() == 0) return filterdPeaks;
 
-    filterdPeaks.insert(filterdPeaks.end(),inPeaks.begin(),inPeaks.end());
+    for(const Peak& peak:inPeaks){
+        filterdPeaks.push_back(peak);
+    }
 
     for(float range = MZ_THRESHOLD_STEP;range <= FINAL_MZ_THRESHOLD;range += MZ_THRESHOLD_STEP){
-        vector<IPeak*> newPeakList;
-        IPeak* currentPeak = *filterdPeaks.begin();
+        vector<Peak> newPeakList;
+        Peak currentPeak = *filterdPeaks.begin();
 
-        vector<IPeak*>::iterator iter = filterdPeaks.begin();
+        vector<Peak>::iterator iter = filterdPeaks.begin();
         iter++;
         for(iter;iter != filterdPeaks.end(); iter++){
-            IPeak* nextPeak = *iter;
+            Peak nextPeak = *iter;
 
-            float nextPeakMz = nextPeak->getMz();
-            float currentPeakMz = currentPeak->getMz();
+            float nextPeakMz = nextPeak.getMz();
+            float currentPeakMz = currentPeak.getMz();
             float testLimit = currentPeakMz +range;
 
             if(nextPeakMz <= testLimit){
-                double nextPeakIntensity = nextPeak->getIntensity();
-                double currentPeakIntensity = currentPeak->getIntensity();
+                double nextPeakIntensity = nextPeak.getIntensity();
+                double currentPeakIntensity = currentPeak.getIntensity();
                 double totalIntensity = nextPeakIntensity + currentPeakIntensity;
                 double nextPeakFraction = nextPeakIntensity /totalIntensity;
                 double currentPeakFraction = currentPeakIntensity / totalIntensity;
@@ -257,9 +254,9 @@ vector<IPeak*> ConsensusSpectrum::mergeIdenticalPeaks( const vector<IPeak*> &inP
 
                 double intensity = currentPeakIntensity + nextPeakIntensity;
 
-                int count = currentPeak->getCount() + nextPeak->getCount();
+                int count = currentPeak.getCount() + nextPeak.getCount();
 
-                IPeak *newPeak  = new Peak((float)weightedMz,(float)intensity,count);
+                Peak newPeak((float)weightedMz,(float)intensity,count);
 
                 currentPeak = newPeak;
             }else{
@@ -269,30 +266,28 @@ vector<IPeak*> ConsensusSpectrum::mergeIdenticalPeaks( const vector<IPeak*> &inP
             }
         }
         newPeakList.push_back(currentPeak);
-        pointer_pool->remove(inPeaks);
         filterdPeaks.clear();
-        filterdPeaks.insert(filterdPeaks.end(),newPeakList.begin(),newPeakList.end());
-        pointer_pool->add(newPeakList);
+        for(Peak& peak:newPeakList){
+            filterdPeaks.push_back(peak);
+        }
     }
     return filterdPeaks;
 }
 
-vector<IPeak*> ConsensusSpectrum::adaptPeakIntensities(const vector<IPeak*> &inp, int nSpectra) {
+vector<Peak> ConsensusSpectrum::adaptPeakIntensities(const vector<Peak> &inp, int nSpectra) {
 //    int originalCount;
 //    ToDo add PeakUtilities class
 //    originalCount = PeakUtilities.getTotalCount(inp);
-    vector<IPeak*> ret = inp;
-    vector<IPeak*>::iterator iter;
+    vector<Peak> ret = inp;
+    vector<Peak>::iterator iter;
     for(iter = ret.begin();iter != ret.end();iter++){
-        IPeak *peak = *iter;
-        float peakProbability = (float)peak->getCount() / (float)nSpectra;
-        float newIntensity = (float)(peak->getIntensity() * (0.95 +0.05 * pow(1+peakProbability,5)));
+        Peak peak = *iter;
+        float peakProbability = (float)peak.getCount() / (float)nSpectra;
+        float newIntensity = (float)(peak.getIntensity() * (0.95 +0.05 * pow(1+peakProbability,5)));
 
         ret.erase(iter);
-        pointer_pool->remove(peak);
 
-        IPeak* newPeak = new Peak(peak->getMz(),newIntensity,peak->getCount());
-        pointer_pool->add(newPeak);
+        Peak newPeak(peak.getMz(),newIntensity,peak.getCount());
 
         ret.push_back(newPeak);
     }
@@ -304,13 +299,11 @@ vector<IPeak*> ConsensusSpectrum::adaptPeakIntensities(const vector<IPeak*> &inp
     return ret;
 }
 
-vector<IPeak*> ConsensusSpectrum::filterNoise(const vector<IPeak*> &inp) {
-    vector<IPeak*> in = inp;
+vector<Peak> ConsensusSpectrum::filterNoise(const vector<Peak> &inp) {
+    vector<Peak> in = inp;
     sort(in.begin(),in.end(),Peak::cmpPeakMz);
     BinnedHighestNPeakFunction func = BinnedHighestNPeakFunction(DEFAULT_PEAKS_TO_KEEP,(int)NOISE_FILTER_INCREMENT,0);
     in = func.apply(in);
-    pointer_pool->remove(inp);
-    pointer_pool->add(in);
 
 //    filteredSpectrum = noiseFilter(inp);
     return in;
@@ -326,7 +319,7 @@ void ConsensusSpectrum::clear() {
     setDirty(true);
 }
 
-void ConsensusSpectrum::addPeaks(const vector<IPeak*> &peaksToAdd) {
+void ConsensusSpectrum::addPeaks(const vector<Peak> &peaksToAdd) {
     if(nSpectra < SIZE_TO_ADD_EVERY_TIME){
         internalAddPeaks(peaksToAdd);
         return;
@@ -343,19 +336,19 @@ void ConsensusSpectrum::addPeaks(const vector<IPeak*> &peaksToAdd) {
     }
 }
 
-void ConsensusSpectrum::storeHeldPeaks(const vector<IPeak*> &peaksToAdd) {
+void ConsensusSpectrum::storeHeldPeaks(const vector<Peak> &peaksToAdd) {
     if(nSpectra < SIZE_TO_ADD_EVERY_TIME) throw("cannot add without a fairly large cluster");
 
     if(lowestConcensusPeak == 0)  getConsensusSpectrum();
 
-    vector<IPeak*> in = peaksToAdd;
+    vector<Peak> in = peaksToAdd;
     float minimuxKeptPeak = lowestConcensusPeak * FRACTION_OF_LOWEST_PEAK_TOKEEP;
 
-    vector<IPeak*>::iterator iter;
+    vector<Peak>::iterator iter;
     for(iter = in.begin();iter != peaksToAdd.end();iter++){
-        if((*iter)->getIntensity() > minimuxKeptPeak){
-            heldPeaks.insert(*iter);
-            pointer_pool->add(*iter);
+        if((*iter).getIntensity() > minimuxKeptPeak){
+            Peak toAdd = *iter;
+            heldPeaks.insert(toAdd);
         }
     }
 
@@ -372,7 +365,7 @@ void ConsensusSpectrum::update() {
         averagePrecursorIntens = 0;
     }
     if(allPeaks.size() < 1){
-        vector<IPeak*> emptylist;
+        vector<Peak> emptylist;
         if(consensusSpectrum != nullptr){
             delete consensusSpectrum;
             consensusSpectrum = nullptr;
@@ -381,14 +374,16 @@ void ConsensusSpectrum::update() {
         setDirty(false);
         return;
     }
-    vector<IPeak*> newPeaks = findConsensusPeaks(allPeaks,DEFAULT_PEAKS_TO_KEEP,nSpectra);
+    vector<Peak> newPeaks = findConsensusPeaks(allPeaks,DEFAULT_PEAKS_TO_KEEP,nSpectra);
 
     consensusPeaks.clear();
-    consensusPeaks.insert(consensusPeaks.end(),newPeaks.begin(),newPeaks.end());
+    for(Peak& peak:newPeaks){
+        consensusPeaks.push_back(peak);
+    }
     float minimumConsensusPeak = 0x1.fffffeP+127f;
-    vector<IPeak*>::iterator iter;
+    vector<Peak>::iterator iter;
     for(iter = consensusPeaks.begin();iter != consensusPeaks.end();iter++){
-        float intensity = (*iter)->getIntensity();
+        float intensity = (*iter).getIntensity();
         if( intensity < minimumConsensusPeak && intensity > 0) minimumConsensusPeak = intensity;
         lowestConcensusPeak = minimumConsensusPeak;
 
@@ -452,10 +447,6 @@ string ConsensusSpectrum::getMethodName() {
 ConsensusSpectrum::~ConsensusSpectrum() {
     delete consensusSpectrum,FACTORY;
     consensusSpectrum,FACTORY= nullptr;
-    pointer_pool->remove(allPeaks);
-    pointer_pool->remove(consensusPeaks);
-    for(IPeak* p:heldPeaks){
-        pointer_pool->remove(p);
-    }
+
 }
 

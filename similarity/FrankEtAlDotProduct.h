@@ -17,7 +17,7 @@ private:
     bool peakFiltering;
     float fragmentIonTolerance;
     int numberOfPeaksToCompare;
-    double convertIntensity(IPeak* p1);
+    double convertIntensity(Peak& p1);
     int calculateK2008(float precursor1, float precursor2, int charge1, int charge2);
     int calculateK2011(float precursor1, float precursor2);
     string algrithmName = "FrankEtAlDotProduct";

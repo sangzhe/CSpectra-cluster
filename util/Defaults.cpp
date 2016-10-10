@@ -39,17 +39,33 @@ IQualityScorer* Defaults::getDefaultQualityScorer() {
 
 }
 
+//ISpectrum* Defaults::doDefaultPeakFilter(const ISpectrum& spectrum) {
+//    RemovePrecursorPeaksFunction func1 = RemovePrecursorPeaksFunction(fragmentIonTolerance);
+//    ISpectrum* spec1 = func1.apply(spectrum);
+//
+//    vector<Peak> new_peak = spec1->getPeaks();
+//    HighestNPeakFunction func2 = HighestNPeakFunction(150);
+//    new_peak = func2.apply(new_peak);
+//    ISpectrum* spec2 = new Spectrum(*spec1,new_peak);
+//
+//    RemoveImpossiblyHighPeaksFunction func3 = RemoveImpossiblyHighPeaksFunction();
+//    ISpectrum *spec3 = func3.apply(*spec2);
+//    delete spec1,spec2;
+//    return spec3;
+//}
+
 ISpectrum* Defaults::doDefaultPeakFilter(const ISpectrum& spectrum) {
-    RemovePrecursorPeaksFunction func1 = RemovePrecursorPeaksFunction(fragmentIonTolerance);
+    RemoveImpossiblyHighPeaksFunction func1 = RemoveImpossiblyHighPeaksFunction();
     ISpectrum* spec1 = func1.apply(spectrum);
 
-    vector<IPeak*> new_peak = spec1->getPeaks();
-    HighestNPeakFunction func2 = HighestNPeakFunction(150);
-    new_peak = func2.apply(new_peak);
-    ISpectrum* spec2 = new Spectrum(*spec1,new_peak);
+    RemovePrecursorPeaksFunction func2 = RemovePrecursorPeaksFunction(fragmentIonTolerance);
+    ISpectrum* spec2 = func2.apply(*spec1);
 
-    RemoveImpossiblyHighPeaksFunction func3 = RemoveImpossiblyHighPeaksFunction();
-    ISpectrum *spec3 = func3.apply(*spec2);
+    vector<Peak> new_peak = spec2->getPeaks();
+    HighestNPeakFunction func3 = HighestNPeakFunction(150);
+    new_peak = func3.apply(new_peak);
+    ISpectrum* spec3 = new Spectrum(*spec1,new_peak);
+
     delete spec1,spec2;
     return spec3;
 }

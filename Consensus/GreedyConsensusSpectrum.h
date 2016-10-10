@@ -28,12 +28,12 @@ public:
 
     GreedyConsensusSpectrum(float fragmentTolerance, string id);
 
-    GreedyConsensusSpectrum(float fragmentTolerance, string id, int nSpectra, double sumPrecursorMz, double sumPrecursorIntens, int sumCharge,const vector<IPeak*> peaks);
+    GreedyConsensusSpectrum(float fragmentTolerance, string id, int nSpectra, double sumPrecursorMz, double sumPrecursorIntens, int sumCharge,const vector<Peak> peaks);
 
-    void addSpectra(const ISpectrum* merged);
+    void addSpectra( ISpectrum* merged);
     void addSpectra(const vector<ISpectrum*>& spectra);
     bool isRemovedSupported();
-    void removeSpectra(const ISpectrum* removed);
+    void removeSpectra( ISpectrum* removed);
     void removeSpectra(const vector<ISpectrum*> &spectra);
     void addConsensusSpectrum( IConsensusSpectrumBuilder& consensusSpectrumToAdd);
 
@@ -54,18 +54,19 @@ public:
     double getSumPrecursorIntensity()const;
 
     string getMethodName();
+    ~GreedyConsensusSpectrum();
 
 
 protected:
     float fragmentTolerance;
-    int nSpectra;
+    int nSpectra = 0;
     float averagePrecursorMz;
-    double sumPrecursorMz;
+    double sumPrecursorMz =0;
     float averagePrecursorIntens;
-    double sumPrecursorIntens;
+    double sumPrecursorIntens = 0;
     int averageCharge;
-    int sumCharge;
-    Spectrum* consensusSpectrum;
+    int sumCharge = 0;
+    Spectrum* consensusSpectrum = nullptr;
 
     list<SpectrumHolderListener*> listeners;
 
@@ -74,17 +75,17 @@ protected:
 
     void updateConsensusSpectrum();
 
-    void addPeaksToConsensus(const vector<IPeak*>& peaksToAdd);
+    void addPeaksToConsensus(const vector<Peak>& peaksToAdd);
 
     void updateProperties();
 
-    static vector<IPeak*> findConsensusPeaks(const vector<IPeak*>& input, int nSpectra);
+    static vector<Peak> findConsensusPeaks(const vector<Peak>& input, int nSpectra);
 
-    static vector<IPeak*> filterNoise( const vector<IPeak*>& inp);
+    static vector<Peak> filterNoise( const vector<Peak>& inp);
 
-    static vector<IPeak*> adaptPeakIntensities(const vector<IPeak*>& inp, int nSpectra);
+    static vector<Peak> adaptPeakIntensities(const vector<Peak>& inp, int nSpectra);
 
-    vector<IPeak*> mergeIdenticalPeaks(const vector<IPeak*>& inPeaks)const;
+    vector<Peak> mergeIdenticalPeaks(const vector<Peak>& inPeaks)const;
 
     bool isDirty() ;
 
@@ -93,8 +94,8 @@ protected:
 private:
     static PointerPool* pointer_pool;
     string id;
-    bool Dirty = true;
-    vector<IPeak*> consensusPeaks;
+    bool Dirty = false;
+    vector<Peak> consensusPeaks;
 
 
 

@@ -7,7 +7,7 @@
 
 #include "list"
 #include "../Spectrum/ISpectrum.h"
-#include "../Spectrum/IPeak.h"
+#include "../Spectrum/Peak.h"
 #include "../Cluster/ISpectrumHolder.h"
 #include "../Cluster/SpectrumHolderListener.h"
 

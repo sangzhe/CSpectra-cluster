@@ -7,20 +7,23 @@
 
 
 void PointerPool::add(IPointer* A){
+    try {
+        unordered_set<string>::iterator iter(find(p.begin(), p.end(), A->getUUID()));
+        if (iter != p.end()) {
+            int num = counter[A->getUUID()];
+            num++;
+            counter[A->getUUID()] = num;
+//        std::cout<< "add "<< A->getUUID() <<endl;
 
-    unordered_set<IPointer*>::iterator iter(find(p.begin(),p.end(),A));
-    if(iter != p.end()){
-        int num = counter[A->getUUID()];
-        num++;
-        counter[A->getUUID()] = num;
-        std::cout<< "add "<< A->getUUID() <<endl;
 
+        } else {
+            p.insert(A->getUUID());
+            counter[A->getUUID()] = 1;
+//        std::cout<< "add reference"<< A->getUUID() <<endl;
 
-    }else{
-        p.insert(A);
-        counter[A->getUUID()] = 1;
-        std::cout<< "add reference"<< A->getUUID() <<endl;
-
+        }
+    }catch(exception e){
+        cout<< e.what() <<endl;
     }
 }
 
@@ -29,25 +32,25 @@ void PointerPool::add(const vector<ICluster*>& clusters){
         PointerPool::add((IPointer*)cluster);
     }
 }
-void PointerPool::add(const vector<IPeak*>& peaks){
-    for(IPeak* peak:peaks){
-        add(peak);
-    }
-}
 
 void PointerPool::add(const vector<ISpectrum*>& spectra){
-    for(ISpectrum *spectrum:spectra){
-        add(spectra);
+    try {
+        for (ISpectrum *spectrum:spectra) {
+            add(spectra);
+        }
+    }catch(exception e){
+        cout<<e.what()<<endl;
     }
+
 }
 
 void PointerPool::remove(IPointer *R){
-    unordered_set<IPointer*>::iterator iter(find(p.begin(),p.end(),R));
+    unordered_set<string>::iterator iter(find(p.begin(),p.end(),R->getUUID()));
     if(iter != p.end()){
         int num = counter[R->getUUID()];
         num--;
         if(counter[R->getUUID()] == 0){
-            p.erase(R);
+            p.erase(R->getUUID());
             counter.erase(R->getUUID());
             std::cout<< "delete "<< R->getUUID() <<endl;
             delete R;
@@ -60,11 +63,7 @@ void PointerPool::remove(IPointer *R){
     }
 }
 
-void PointerPool::remove(const vector<IPeak*>& peaks){
-    for(IPeak* peak:peaks){
-        remove(peak);
-    }
-}
+
 
 void PointerPool::remove(const vector<ISpectrum*>& spectra){
     for(ISpectrum* spectrum:spectra){

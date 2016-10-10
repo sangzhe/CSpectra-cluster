@@ -18,21 +18,19 @@ private:
 
     boost::unordered::unordered_map<string,int> counter;
 
-    unordered_set<IPointer*> p;
+    unordered_set<string> p;
 public:
 
     void add(IPointer* A);
 
     void add(const vector<ICluster*>& clusters);
 
-    void add(const vector<IPeak*>& peaks);
 
 
     void add(const vector<ISpectrum*>& spectra);
 
     void remove(IPointer *R);
 
-    void remove(const vector<IPeak*>& peaks);
 
     void remove(const vector<ISpectrum*>& spectra);
 

@@ -31,11 +31,11 @@ ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
      float minPrecursor = o.getPrecursorMz() - fragmentIonTolerance;
      float maxPrecursor = o.getPrecursorCharge() + fragmentIonTolerance;
 
-    vector<IPeak*> filteredPeakList;
-    vector<IPeak*> peak = o.getPeaks();
-    vector<IPeak*>::iterator iterator1;
+    vector<Peak> filteredPeakList;
+    vector<Peak> peak = o.getPeaks();
+    vector<Peak>::iterator iterator1;
     for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
-        float peakMz = (*iterator1)->getMz();
+        float peakMz = (*iterator1).getMz();
         // ignore any peak that could be a neutral loss
         if (isWithinRange(minWaterLoss, maxWaterLoss, peakMz))
             continue;
@@ -48,8 +48,6 @@ ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
 
         filteredPeakList.push_back(*iterator1);
     }
-    pointer_pool->remove(peak);
     ISpectrum *filteredSpectrum = new Spectrum(o, filteredPeakList, true);
-    pointer_pool->add(filteredPeakList);
     return filteredSpectrum;
 }

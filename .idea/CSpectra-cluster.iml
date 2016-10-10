@@ -64,13 +64,13 @@
       <sourceFolder url="file://$MODULE_DIR$/similarity/KendallCorrelation.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrumFactory.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/IConsensusSpectrumBuilder.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumFactory.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumBuilderFactory.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrumFactory.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumBuilderFactory.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrum.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumFactory.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrum.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Consensus/ConsensusSpectrumFactory.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Consensus/GreedyConsensusSpectrum.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/SpectrumHolderListener.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Cluster/ISpectrumHolder.h" isTestSource="false" />
@@ -87,7 +87,6 @@
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/ISpectrumQuality.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Spectrum.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Mass.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Spectrum/IPeak.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Peak.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Spectrum/Mass.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />

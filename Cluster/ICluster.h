@@ -64,10 +64,10 @@ class ICluster:public ISpectrumHolder{
 
 //        virtual bool operator ==(ICluster &O) = 0;
 
-    virtual void addSpectra(const ISpectrum* merged) = 0;
+    virtual void addSpectra(ISpectrum* merged) = 0;
     virtual void addSpectra(const vector<ISpectrum*>& spectra) = 0;
     virtual bool isRemovedSupported() = 0;
-    virtual void removeSpectra(const  ISpectrum* removed) = 0;
+    virtual void removeSpectra(ISpectrum* removed) = 0;
     virtual void removeSpectra(const vector<ISpectrum*> &spectra) = 0;
 
 

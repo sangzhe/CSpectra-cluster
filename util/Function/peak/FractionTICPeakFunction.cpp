@@ -16,27 +16,26 @@ FractionTICPeakFunction::FractionTICPeakFunction(float fractionTotalIntensity, i
     this->minimumNumberOfPeaks = minimumNumberOfPeaks;
 }
 
-vector<IPeak*> FractionTICPeakFunction::apply(const vector<IPeak *>& peaks) {
+vector<Peak> FractionTICPeakFunction::apply(const vector<Peak>& peaks) {
     // calculate the total intensity
     double totalIntensity = 0;
-    for (IPeak *p : peaks)
-        totalIntensity += p->getIntensity();
+    for (const Peak &p : peaks)
+        totalIntensity += p.getIntensity();
 
     // sort according to intensity (descending order)
-    vector<IPeak*> sortedPeaks = peaks;
+    vector<Peak> sortedPeaks = peaks;
     sort(sortedPeaks.begin(),sortedPeaks.end(), Peak::cmpPeakIntensity);
 
-    vector<IPeak*> filteredPeaks;
+    vector<Peak> filteredPeaks;
     double retainedIntensity = 0;
     int nPeaksRetained = 0;
 
-    for (IPeak *p : sortedPeaks) {
+    for (Peak& p : sortedPeaks) {
         if (retainedIntensity / totalIntensity > fractionTotalIntensity && nPeaksRetained >= minimumNumberOfPeaks)
             break;
 
         filteredPeaks.push_back(p);
-        pointer_pool->add(p);
-        retainedIntensity += p->getIntensity();
+        retainedIntensity += p.getIntensity();
         nPeaksRetained++;
     }
 

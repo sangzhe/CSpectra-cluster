@@ -37,10 +37,10 @@ double IntensityRankCorrelation::assessSimilarity(IPeakMatches *peakMatches) {
     return -log(pValue);
 }
 
-vector<double> IntensityRankCorrelation::extractPeakIntensities(const vector<IPeak *> &peaks) {
+vector<double> IntensityRankCorrelation::extractPeakIntensities(const vector<Peak> &peaks) {
     vector<double> intensities = vector<double>(peaks.size());
     for (int i = 0; i < peaks.size(); i++) {
-        intensities[i] = (double) peaks[i]->getIntensity();
+        intensities[i] = (double) peaks[i].getIntensity();
     }
 
     return intensities;

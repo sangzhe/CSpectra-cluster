@@ -18,7 +18,6 @@ set(SOURCE_FILES
         Consensus/IConsensusSpectrumBuilder.h
         Property/Properties.cpp
         Property/Properties.h
-        Spectrum/IPeak.h
         Spectrum/ISpectrumQuality.h
         quality/IQualityScorer.h
         Spectrum/Spectrum.cpp
