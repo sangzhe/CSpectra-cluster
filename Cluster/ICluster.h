@@ -25,7 +25,7 @@ class ICluster:public ISpectrumHolder{
         virtual IConsensusSpectrumBuilder* getConsensusSpectrumBuilder() = 0;
         virtual vector<ISpectrum*> getClusteredSpectra() const= 0;
         virtual int getClusteredSpectraCount() = 0;
-        virtual unordered_set<string> getSpectralIds()= 0 ;
+        virtual list<string> getSpectralIds()= 0 ;
         virtual Properties getProperties() = 0;
         virtual string getProperty(string key) = 0;
         virtual void setProperty(string key,string value) = 0;
@@ -36,28 +36,28 @@ class ICluster:public ISpectrumHolder{
 
         virtual bool isKnownComparisonMatch(string clusterId) = 0 ;
 
-        static int cmp(ICluster* A, ICluster* B){
+        static bool cmp(ICluster* A, ICluster* B){
 //            ToDo compare cluster: sorting
             if (A == B)
-                return 0;
+                return true;
             try {
                 int ret = IOUtilities::compare(A->getPrecursorMz(), B->getPrecursorMz());
                 if (ret != 0)
-                    return ret;
+                    return (ret == -1);
 
                 if (B->getClusteredSpectraCount() != A->getClusteredSpectraCount()) {
-                    return A->getClusteredSpectraCount() < B->getClusteredSpectraCount() ? -1 : 1;
+                    return (A->getClusteredSpectraCount() < B->getClusteredSpectraCount());
                 }
 
                 string spectra = A->getSpectralId();
                 string otherSpectra = B->getSpectralId();
-                return spectra.compare(otherSpectra);
+                return (spectra.compare(otherSpectra) == -1);
 
             } catch (exception) {
                 //  give up use hash code
             }
 
-            return 0;
+            return true;
         }
 
 

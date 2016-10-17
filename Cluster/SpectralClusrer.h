@@ -16,14 +16,14 @@ private:
     PointerPool* pointer_pool = PoolFactory::getInstance();
     static string MethodName;
 
-    string id;
+    string id = "";
 
     list<SpectrumHolderListener*> spectrumHolderListeners;
 
     vector<ISpectrum*> clusteredSpectra;
 
     Properties properties;
-    unordered_set<string> spectraIds;
+    list<string> spectralIds;
     IConsensusSpectrumBuilder* consensusSpectrumBuilder;
 
     void notifySpectrumHolderListeners(bool isAdd, vector<ISpectrum*> spectra);
@@ -33,7 +33,7 @@ public:
 
     SpectralCluster(string id, IConsensusSpectrumBuilder* consensusSpectrumBuilder);
 
-    unordered_set<string> getSpectralIds();
+    list<string> getSpectralIds();
 
     string getMethodName();
 

@@ -14,7 +14,7 @@ public:
 
 private:
     static long sum(long n);
-    static int compare(pair<double,double> pair1,pair<double,double> pair2);
+    static bool compare(pair<double,double> pair1,pair<double,double> pair2);
 };
 
 

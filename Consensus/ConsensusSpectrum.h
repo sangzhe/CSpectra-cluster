@@ -70,7 +70,6 @@ public:
 
     static vector<Peak> findConsensusPeaks(const vector<Peak>& input,const int& peaksToKeep, int& nSpectra) ;
 
-    bool isDirty;
 
     void addSpectra(const vector<ISpectrum*> &spectra);
 
@@ -95,7 +94,7 @@ public:
 
 private:
     static PointerPool* pointer_pool;
-    string id;
+    string id ="";
     vector<Peak> allPeaks;
     unordered_set<Peak> heldPeaks;
     vector<Peak> consensusPeaks;
@@ -107,23 +106,24 @@ private:
 
 
 protected:
-    int nSpectra;
-    bool Dirty;
-    float averagePrecursorMz;
-    float sumPrecursorMz;
-    float averagePrecursorIntens;
-    float sumPrecursorIntens;
-    float lowestConcensusPeak;
-    int averageCharge;
-    int sumCharge;
-    Spectrum* consensusSpectrum;
+    int nSpectra = 0;
+    bool Dirty = false;
+    float averagePrecursorMz = 0;
+    float sumPrecursorMz = 0;
+    float averagePrecursorIntens = 0;
+    float sumPrecursorIntens = 0;
+    float lowestConcensusPeak = 0;
+    int averageCharge = 0;
+    int sumCharge = 0;
+    Spectrum* consensusSpectrum = nullptr;
     const string methodName;
     const string methodVersion;
     static  float FINAL_MZ_THRESHOLD;
     static  float MZ_THRESHOLD_STEP;
     static  bool USE_ROUNDING;
     static  int MZ_PRECISION;
-    void setDirty(bool isDirty) ;
+    bool isDirty();
+    void setDirty(bool Dirty) ;
 
     static vector<Peak> mergeIdenticalPeaks(const vector<Peak>& inPeaks);
 

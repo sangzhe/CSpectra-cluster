@@ -24,7 +24,7 @@ CumulativeDistributionFunction CumulativeDistributionFunctionFactory::getCumulat
 
 CumulativeDistributionFunction CumulativeDistributionFunctionFactory::getCumulativeDistributionFunctionForResource(
         string resource)  throw(exception){
-    string filepath = "../recources/" + resource;
+    string filepath = "/Users/sangzhe/ClionProjects/CSpectra-cluster/resources/" + resource;
     ifstream fin(filepath.data());
     string ret = "";
     string line;

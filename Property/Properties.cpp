@@ -12,7 +12,13 @@ void Properties::setProperty(string &key, string &value) {
 
 
 string Properties::getProperty(string key) {
-    return propertyMap.at(key);
+    string ret;
+    try{
+        ret = propertyMap.at(key);
+    }catch(out_of_range){
+        ret = "";
+    }
+    return ret;
 }
 
 unordered_map<string,string> Properties::getMap() {

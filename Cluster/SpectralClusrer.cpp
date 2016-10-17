@@ -18,15 +18,17 @@ SpectralCluster::SpectralCluster(ICluster *copied, IConsensusSpectrumBuilder *co
 SpectralCluster::SpectralCluster(string id, IConsensusSpectrumBuilder* consensusSpectrumBuilder) {
     this->id = id;
     this->consensusSpectrumBuilder = consensusSpectrumBuilder;
+    addSpectrumHolderListener(this->consensusSpectrumBuilder);
 }
 
-unordered_set<string> SpectralCluster::getSpectralIds() {
-    if(this->spectraIds.empty()){
+list<string> SpectralCluster::getSpectralIds() {
+    if(this->spectralIds.empty()){
        for(ISpectrum* spectrum:clusteredSpectra){
-           spectraIds.insert(spectrum->getId());
+           spectralIds.push_back(spectrum->getId());
        }
-        return spectraIds;
     }
+    return spectralIds;
+
 }
 
 string SpectralCluster::getMethodName() {
@@ -35,19 +37,20 @@ string SpectralCluster::getMethodName() {
 
 string SpectralCluster::getSpectralId() {
     string sb;
-    unordered_set<string> spectraIds = getSpectralIds();
-    if(spectraIds.size() > 1){
-        unordered_set<string>::iterator iter = spectraIds.begin();
+    list<string> spectralIds = getSpectralIds();
+    if(!spectralIds.empty()){
+        list<string>::iterator iter = spectralIds.begin();
+        string x = *iter;
         sb.append(*iter);
         iter++;
-        for(iter;iter != spectraIds.end();iter++){
+        for(iter;iter != spectralIds.end();iter++){
             sb.append(",");
             sb.append(*iter);
         }
         return sb;
     }
     else {
-        return *spectraIds.begin();
+        return *spectralIds.begin();
     }
 }
 string SpectralCluster::getId() {
@@ -91,17 +94,16 @@ int SpectralCluster::getClusteredSpectraCount() {
 }
 
 void SpectralCluster::addSpectra( ISpectrum *merged) {
-    string Id = merged->getId();
-    spectraIds.insert(Id);
     vector<ISpectrum*> all = clusteredSpectra;
     vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),merged));
     if(iter == all.end()){
         clusteredSpectra.push_back(merged);
         pointer_pool->add(merged);
-
-        vector<ISpectrum*> tmp = vector<ISpectrum*>();
-        tmp.push_back(merged);
-        notifySpectrumHolderListeners(true,tmp);
+        string Id = merged->getId();
+        spectralIds.push_back(Id);
+        vector<ISpectrum*> added;
+        added.push_back(merged);
+        notifySpectrumHolderListeners(true,added);
 
     }
 //    if (*find(clusteredSpectra.begin(), clusteredSpectra.end(), added)) {
@@ -119,7 +121,7 @@ void SpectralCluster::addSpectra(const vector<ISpectrum*> &spectra) {
         for(iter = in.begin();iter != in.end();iter++){
             ISpectrum *added = *iter;
             string Id = added->getId();
-            spectraIds.insert(Id);
+            spectralIds.push_back(Id);
             vector<ISpectrum*> all = clusteredSpectra;
             vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),added));
             if(iter == all.end()){
@@ -154,9 +156,9 @@ void SpectralCluster::removeSpectra(ISpectrum *removed) {
         vector<Peak> removePeaks = (*remove)->getPeaks();
         vector<Peak> removedPeaks = removed->getPeaks();
         if(removePeaks == removedPeaks && (*remove)->getPrecursorMz() == removed->getPrecursorMz()){
-            unordered_set<string>::iterator iterator1 = find(spectraIds.begin(),spectraIds.end(),(*remove)->getId());
-            if(iterator1 != spectraIds.end()){
-                spectraIds.erase(iterator1);
+            list<string>::iterator iterator1 = find(spectralIds.begin(),spectralIds.end(),(*remove)->getId());
+            if(iterator1 != spectralIds.end()){
+                spectralIds.erase(iterator1);
             }
             clusteredSpectra.erase(remove);
             pointer_pool->remove(*remove);

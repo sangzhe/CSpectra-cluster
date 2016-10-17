@@ -5,7 +5,10 @@
 #include "Peak.h"
 #include "../util/IOUtilities.h"
 
-Peak Peak::null = Peak();
+
+Peak::Peak() {
+    this->empty = true;
+}
 
 Peak::Peak(const float& massChargeRatio, const float& intensity) {
     new(this)Peak(massChargeRatio,intensity,1);
@@ -18,6 +21,7 @@ Peak::Peak(const float& massChargeRatio, const float& intensity, int count) {
 }
 
 Peak::Peak(const Peak& copied) {
+
     this->massChargeRatio = copied.getMz();
     this->intensity = copied.getIntensity();
     this->count = copied.getCount();
@@ -26,6 +30,10 @@ Peak::Peak(const Peak& copied) {
 
 int Peak::getCount()const  {
     return count;
+}
+
+bool Peak::isEmpty() const{
+    return empty;
 }
 
 float Peak::getIntensity() const {
@@ -41,15 +49,15 @@ bool Peak::cmpPeak(const Peak& A,const Peak& B) {
     float Bmz = B.getMz();
 
     int ret = IOUtilities::compare(Amz,Bmz);
-    if(ret != 0) return (ret != 1);
+    if(ret != 0) return (ret == -1);
 
     float Aintent = A.getIntensity();
     float Bintent = B.getIntensity();
 
     ret = IOUtilities::compare(Aintent,Bintent);
-    if(ret != 0) (ret != 1);
+    if(ret != 0) return (ret == -1);
 
-    return 0;
+    return false;
 }
 
 bool Peak::cmpPeakMz(const Peak&A, const Peak&B) {
@@ -60,12 +68,13 @@ bool Peak::cmpPeakMz(const Peak&A, const Peak&B) {
 }
 
 bool Peak::cmpPeakIntensity(const Peak& A, const Peak& B) {
+//    descending sort
     Peak a = A;
     Peak b = B;
-    if (a == Peak::null){
-        return (b == Peak::null);
+    if (a.isEmpty()){
+        return (b.isEmpty());
     }
-    if(b == Peak::null){
+    if(b.isEmpty()){
         return 1;
     }
     if(a.getIntensity() != b.getIntensity()){

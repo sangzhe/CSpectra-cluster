@@ -21,8 +21,8 @@ public:
     HypergeometricScore();
     HypergeometricScore(float fragmentIonTolerance);
     HypergeometricScore(float fragmentIonTolerance, bool peakFiltering);
-    double assessSimilarity(IPeakMatches* peakMatches);
-    double assessSimilarityAsPValue(IPeakMatches* peakMatches);
+    double assessSimilarity(const PeakMatches& peakMatches);
+    double assessSimilarityAsPValue(const PeakMatches& peakMatches);
     double assessSimilarity(ISpectrum* spectrum1, ISpectrum* spectrum2);
     void setFragmentIonTolerance(float fragmentIonTolerance);
     float getFragmentIonTolerance();
@@ -30,13 +30,12 @@ public:
     void setPeakFiltering(bool peakFiltering);
     string getAlgorithmName();
 private:
-    PointerPool* pointer_pool = PoolFactory::getInstance();
     bool peakFiltering;
 
 protected:
     float fragmentIonTolerance;
-    int calculateNumberOfBins(IPeakMatches* peakMatches);
-    double calculateSimilarityProbablity(int numberOfSharedPeaks, int numberOfPeaksFromSpec1, int numberOfPeaksFromSpec2, int numberOfBins);
+    int calculateNumberOfBins(const PeakMatches& peakMatches);
+    virtual double calculateSimilarityProbablity(int numberOfSharedPeaks, int numberOfPeaksFromSpec1, int numberOfPeaksFromSpec2, int numberOfBins);
     double calculateSimilarityScore(int numberOfSharedPeaks, int numberOfPeaksFromSpec1, int numberOfPeaksFromSpec2, int numberOfBins);
 
 

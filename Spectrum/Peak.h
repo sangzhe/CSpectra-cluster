@@ -11,12 +11,13 @@ using namespace std;
 
 class Peak{
 private:
-    float massChargeRatio;
-    float intensity;
-    int count;
+    float massChargeRatio = 0;
+    float intensity = 0;
+    int count = 0;
+    bool empty = false;
 
 public:
-    Peak(){};
+    Peak();
     Peak(const float& massChargeRatio, const float& intensity);
 
     Peak(const float& massChargeRatio, const float& intensity,int count);
@@ -31,8 +32,7 @@ public:
 
     int getCount() const ;
 
-    static Peak null;
-
+    bool isEmpty() const;
     static bool cmpPeak( const Peak& A,  const Peak& B);
 
     static bool cmpPeakMz( const Peak& A,  const Peak& B);

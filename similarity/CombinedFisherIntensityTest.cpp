@@ -26,14 +26,13 @@ CombinedFisherIntensityTest::CombinedFisherIntensityTest(float fragmentIonTolera
 }
 
 double CombinedFisherIntensityTest::assessSimilarity(ISpectrum *spectrum1, ISpectrum *spectrum2) {
-    IPeakMatches *peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1, spectrum2, fragmentIonTolerance, peakFiltering);
+    PeakMatches peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1, spectrum2, fragmentIonTolerance, peakFiltering);
     double ret =  assessSimilarity(peakMatches);
-    pointer_pool->remove(peakMatches);
     return ret;
 }
 
 
-double CombinedFisherIntensityTest::assessSimilarity(IPeakMatches *peakMatches) {
+double CombinedFisherIntensityTest::assessSimilarity(const PeakMatches& peakMatches) {
     double fisherExactP = fisherExactTest.assessSimilarityAsPValue(peakMatches);
     double intensityRankP = intensityRankCorrelation.assessSimilarityAsPValue(peakMatches);
     // combine the p-values using Fisher's method

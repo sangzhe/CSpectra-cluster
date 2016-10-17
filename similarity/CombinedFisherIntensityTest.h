@@ -24,7 +24,7 @@ public:
     CombinedFisherIntensityTest(float fragmentIonTolerance);
     CombinedFisherIntensityTest(float fragmentIonTolerance, bool peakFiltering);
     double assessSimilarity(ISpectrum* spectrum1, ISpectrum* spectrum2);
-    double assessSimilarity(IPeakMatches* peakMatches);
+    double assessSimilarity(const PeakMatches& peakMatches);
     bool isPeakFiltering();
     void setPeakFiltering(bool peakFiltering);
     void setFragmentIonTolerance(float fragmentIonTolerance);
@@ -32,8 +32,6 @@ public:
     string getAlgorithmName();
 
 private:
-    PointerPool* pointer_pool = PoolFactory::getInstance();
-
     bool peakFiltering;
 
 protected:

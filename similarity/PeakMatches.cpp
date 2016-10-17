@@ -43,11 +43,11 @@ vector<Peak> PeakMatches::getSharedPeaksFromSpectrumTwo() {
     return sharedPeaksSpec2;
 }
 
-int PeakMatches::getNumberOfSharedPeaks() {
+int PeakMatches::getNumberOfSharedPeaks() const{
     return sharedPeakIndecesSpec1.size();
 }
 
-pair<Peak, Peak> PeakMatches::getPeakPair(int nIndex){
+pair<Peak, Peak> PeakMatches::getPeakPair(int nIndex) const{
     if (nIndex < 0)
     throw("PeakPair index must be greater than 0");
     if (nIndex >= sharedPeakIndecesSpec1.size())
@@ -58,18 +58,13 @@ pair<Peak, Peak> PeakMatches::getPeakPair(int nIndex){
                                   spectrum2->getPeaks()[sharedPeakIndecesSpec2[nIndex]]);
 }
 
-ISpectrum* PeakMatches::getSpectrumOne() {
-    pointer_pool->add(spectrum1);
-    return spectrum1;
+ISpectrum& PeakMatches::getSpectrumOne() const{
+//    pointer_pool->add(spectrum1);
+    return *spectrum1;
 }
 
-ISpectrum* PeakMatches::getSpectrumTwo() {
-    pointer_pool->add(spectrum2);
-    return spectrum2;
+ISpectrum& PeakMatches::getSpectrumTwo() const{
+//    pointer_pool->add(spectrum2);
+    return *spectrum2;
 }
 
-PeakMatches::~PeakMatches() {
-    pointer_pool->remove(spectrum1);
-    pointer_pool->remove(spectrum2);
-
-}

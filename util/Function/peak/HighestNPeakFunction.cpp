@@ -6,7 +6,6 @@
 
 int HighestNPeakFunction::DEFAULT_MAX_PEAKS = 100;
 
-PointerPool* HighestNPeakFunction::pointer_pool = PoolFactory::getInstance();
 HighestNPeakFunction::HighestNPeakFunction() {
     new (this)HighestNPeakFunction(DEFAULT_MAX_PEAKS);
 }

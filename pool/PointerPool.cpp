@@ -28,20 +28,17 @@ void PointerPool::add(IPointer* A){
 }
 
 void PointerPool::add(const vector<ICluster*>& clusters){
-    for(ICluster* cluster: clusters){
-        PointerPool::add((IPointer*)cluster);
+    vector<ICluster*> inClusters = clusters;
+    for(ICluster* cluster:inClusters){
+        add(cluster);
     }
 }
 
-void PointerPool::add(const vector<ISpectrum*>& spectra){
-    try {
-        for (ISpectrum *spectrum:spectra) {
-            add(spectra);
-        }
-    }catch(exception e){
-        cout<<e.what()<<endl;
+void PointerPool::add(const vector<ISpectrum*>& spectra) {
+    vector<ISpectrum*> inSpectra = spectra;
+    for(ISpectrum* spectrum:inSpectra){
+        add(spectrum);
     }
-
 }
 
 void PointerPool::remove(IPointer *R){
@@ -49,7 +46,7 @@ void PointerPool::remove(IPointer *R){
     if(iter != p.end()){
         int num = counter[R->getUUID()];
         num--;
-        if(counter[R->getUUID()] == 0){
+        if(num == 0){
             p.erase(R->getUUID());
             counter.erase(R->getUUID());
             std::cout<< "delete "<< R->getUUID() <<endl;
@@ -66,12 +63,14 @@ void PointerPool::remove(IPointer *R){
 
 
 void PointerPool::remove(const vector<ISpectrum*>& spectra){
-    for(ISpectrum* spectrum:spectra){
+    vector<ISpectrum*> inSpectra = spectra;
+    for(ISpectrum* spectrum:inSpectra){
         remove(spectrum);
     }
 }
 void PointerPool::remove(const vector<ICluster*>& clusters){
-    for(ICluster* cluster: clusters){
+    vector<ICluster*> inClusters = clusters;
+    for(ICluster* cluster: inClusters){
         PointerPool::remove((IPointer*)cluster);
     }
 }

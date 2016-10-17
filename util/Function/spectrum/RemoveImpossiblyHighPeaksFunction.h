@@ -14,7 +14,6 @@
 class RemoveImpossiblyHighPeaksFunction:public SpectrumFunction {
 public:
     static float DEFAULT_TOLERANCE;
-    float tolerance;
 
     RemoveImpossiblyHighPeaksFunction(float tolerance);
 
@@ -23,7 +22,7 @@ public:
     ISpectrum* apply(const ISpectrum& o);
 
 private:
-    PointerPool* pointer_pool = PoolFactory::getInstance();
+    float tolerance;
 
 };
 

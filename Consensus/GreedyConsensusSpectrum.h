@@ -58,13 +58,13 @@ public:
 
 
 protected:
-    float fragmentTolerance;
+    float fragmentTolerance = 0;
     int nSpectra = 0;
-    float averagePrecursorMz;
+    float averagePrecursorMz = 0;
     double sumPrecursorMz =0;
-    float averagePrecursorIntens;
+    float averagePrecursorIntens = 0;
     double sumPrecursorIntens = 0;
-    int averageCharge;
+    int averageCharge = 0;
     int sumCharge = 0;
     Spectrum* consensusSpectrum = nullptr;
 
@@ -93,8 +93,8 @@ protected:
 
 private:
     static PointerPool* pointer_pool;
-    string id;
-    bool Dirty = false;
+    string id = "";
+    bool Dirty = true;
     vector<Peak> consensusPeaks;
 
 

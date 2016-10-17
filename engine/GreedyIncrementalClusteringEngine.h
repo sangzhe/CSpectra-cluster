@@ -27,7 +27,7 @@ private:
     PeakFunction* spectrumFilterFunction;
     ClusterPredicate* clusterComparisonPredicate;
 
-    int currentMZAsInt;
+    int currentMZAsInt =0 ;
     int minNumberOfComparisons;
 
     ISpectrum* filterSpectrum(ISpectrum* spectrumToFilter);

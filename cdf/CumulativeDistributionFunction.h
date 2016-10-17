@@ -20,8 +20,8 @@ public:
     bool isSaveMatch(double similarity, int nComparisons, double maximumMixtureProbability);
 protected:
     int getBinForScore(double score);
-    long totalComparisons;
-    double scoreIncrements;
+    long totalComparisons = 0;
+    double scoreIncrements = 0;
     vector<double> proportionPeptidesBelowScore;
 };
 

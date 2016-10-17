@@ -6,12 +6,12 @@
 #define CSPECTRA_CLUSTER_ISIMILARITYCHECKER_H
 
 #include "../Spectrum/ISpectrum.h"
-#include "IPeakMatches.h"
+#include "PeakMatches.h"
 
 class ISimilarityChecker{
 public:
     virtual double assessSimilarity( ISpectrum* spectrum1, ISpectrum* spectrum2) = 0;
-    virtual double assessSimilarity(IPeakMatches* peakMatches) = 0;
+    virtual double assessSimilarity(const PeakMatches& peakMatches) = 0;
     virtual bool isPeakFiltering() = 0;
     virtual void setPeakFiltering(bool peakFiltering) = 0;
     virtual void setFragmentIonTolerance(float fragmentIonTolerance) = 0;

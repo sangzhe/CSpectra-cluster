@@ -8,10 +8,15 @@ long KendallCorrelation::sum(long n) {
     return n * (n + 1L) / 2L;
 }
 
-int KendallCorrelation::compare(pair<double, double> pair1, pair<double, double> pair2) {
+bool KendallCorrelation::compare(pair<double, double> pair1, pair<double, double> pair2) {
 //    int compareFirst = ((Double)pair1.getFirst()).compareTo((Double)pair2.getFirst());
     int compareFirst = IOUtilities::compare(pair1.first,pair2.first);
-    return compareFirst != 0?compareFirst:IOUtilities::compare(pair1.second,pair2.second);
+    if(compareFirst != 0) return (compareFirst == -1);
+
+    int compareSecond = IOUtilities::compare(pair1.second,pair2.second);
+    if(compareSecond != 0) return (compareSecond == -1);
+
+    return false;
 }
 
 double KendallCorrelation::correlation(vector<double> xArray, vector<double> yArray) {

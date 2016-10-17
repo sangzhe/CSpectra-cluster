@@ -24,13 +24,14 @@
       <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemoveImpossiblyHighPeaksFunction.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Function/spectrum/RemovePrecursorPeaksFunction.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ClusterUtilities.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/MZIntensityUtilities.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/MZIntensityUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/ParserUtilities.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Defaults.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/Defaults.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Predicate/cluster_comparison/IsKnownComparisonsPredicate.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Predicate/cluster_comparison/IsKnownComparisonsPredicate.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Predicate/cluster_comparison/ClusterPredicate.h" isTestSource="false" />
@@ -39,13 +40,13 @@
       <sourceFolder url="file://$MODULE_DIR$/util/Predicate/spectrum_comparison/ShareMajorPeaksPredicate.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Predicate/spectrum_comparison/SpectrumPredicate.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/util/Predicate/spectrum_comparison/ShareMajorPeaksPredicate.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/Defaults.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/IOUtilities.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/util/Defaults.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/MZIntensityUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ClusterUtilities.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/MZIntensityUtilities.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/util/ComparisonMatch.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/IPointer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/FisherExactTest.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/similarity/IPeakMatches.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/CombinedFisherIntensityTest.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/ISimilarityChecker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/similarity/FrankEtAlDotProduct.cpp" isTestSource="false" />

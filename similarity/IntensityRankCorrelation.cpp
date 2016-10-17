@@ -25,13 +25,12 @@ IntensityRankCorrelation::IntensityRankCorrelation(float fragmentIonTolerance, b
 }
 
 double IntensityRankCorrelation::assessSimilarity(ISpectrum *spectrum1, ISpectrum *spectrum2) {
-    IPeakMatches *peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1,spectrum2,fragmentIonTolerance, peakFiltering);
+    PeakMatches peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1,spectrum2,fragmentIonTolerance, peakFiltering);
     double ret =  assessSimilarity(peakMatches);
-    pointer_pool->remove(peakMatches);
     return  ret;
 }
 
-double IntensityRankCorrelation::assessSimilarity(IPeakMatches *peakMatches) {
+double IntensityRankCorrelation::assessSimilarity(const PeakMatches& peakMatches) {
     double pValue = assessSimilarityAsPValue(peakMatches);
 
     return -log(pValue);
@@ -46,16 +45,17 @@ vector<double> IntensityRankCorrelation::extractPeakIntensities(const vector<Pea
     return intensities;
 }
 
-double IntensityRankCorrelation::assessSimilarityAsPValue(IPeakMatches *peakMatches) {
+double IntensityRankCorrelation::assessSimilarityAsPValue(const PeakMatches& peakMatches) {
     KendallCorrelation kendallCoreelation;
+    PeakMatches PeakMatches = peakMatches;
 
     // if there are no shared peaks, return 1 to indicate that it's random
-    if (peakMatches->getNumberOfSharedPeaks() < 1)
+    if (peakMatches.getNumberOfSharedPeaks() < 1)
         return 1;
 
     // only use the intensities
-    vector<double> intensitiesSpec1 = extractPeakIntensities(peakMatches->getSharedPeaksFromSpectrumOne());
-    vector<double> intensitiesSpec2 = extractPeakIntensities(peakMatches->getSharedPeaksFromSpectrumTwo());
+    vector<double> intensitiesSpec1 = extractPeakIntensities(PeakMatches.getSharedPeaksFromSpectrumOne());
+    vector<double> intensitiesSpec2 = extractPeakIntensities(PeakMatches.getSharedPeaksFromSpectrumTwo());
 
     double correlation = kendallCoreelation.correlation(intensitiesSpec1, intensitiesSpec2);
 
@@ -66,7 +66,7 @@ double IntensityRankCorrelation::assessSimilarityAsPValue(IPeakMatches *peakMatc
 
     // convert correlation into probability using the distribution used in Peptidome
     // Normal Distribution with mean = 0 and SD^2 = 2(2k + 5)/9k(k − 1)
-    double k = (double) peakMatches->getNumberOfSharedPeaks();
+    double k = (double) peakMatches.getNumberOfSharedPeaks();
 
     // this cannot be calculated for only 1 shared peak
     if (k == 1)

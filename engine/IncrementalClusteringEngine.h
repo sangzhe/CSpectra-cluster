@@ -41,7 +41,7 @@ public:
 
     vector<ICluster*> addClusterIncremental(ICluster* added);
 
-    static unordered_set<string> getSharedSpectraIds(const unordered_set<string>& firstIds,  ICluster* c2);
+    static list<string> getSharedSpectraIds(const list<string>& firstIds,  ICluster* c2);
 
     static double getProportionSharedSpectraIds( ICluster* cluster1,   ICluster* cluster2);
 

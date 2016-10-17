@@ -3,12 +3,11 @@
 //
 
 #include "PeakMatchesUtilities.h"
-PointerPool* PeakMatchesUtilities::pointer_pool = PoolFactory::getInstance();
 
 
 Peak PeakMatchesUtilities::LAST_PEAK(IOUtilities::FLOAT_MAX_VALUE, 0);
 
-IPeakMatches* PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1, ISpectrum *spectrum2,
+PeakMatches PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1, ISpectrum *spectrum2,
                                                             float mzTolerance, bool applyNPeaksFilter) {
     // get similar peaks
     ISpectrum *filteredSpectrum1, *filteredSpectrum2;
@@ -24,30 +23,26 @@ IPeakMatches* PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1
     } else {
         // simply disable filtering
         filteredSpectrum1 = spectrum1;
-        pointer_pool->add(filteredSpectrum1);
         filteredSpectrum2 = spectrum2;
-        pointer_pool->add(filteredSpectrum2);
 
     }
 
-    IPeakMatches *ret = PeakMatchesUtilities::getSharedPeaksAsMatches(filteredSpectrum1, filteredSpectrum2, mzTolerance);
-    pointer_pool->remove(filteredSpectrum1);
-    pointer_pool->remove(filteredSpectrum2);
+    PeakMatches ret = PeakMatchesUtilities::getSharedPeaksAsMatches(filteredSpectrum1, filteredSpectrum2, mzTolerance);
+//    delete filteredSpectrum1,filteredSpectrum2;
     return ret;
 }
 
-IPeakMatches* PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1, ISpectrum *spectrum2,
+PeakMatches PeakMatchesUtilities::getSharedPeaksAsMatches(ISpectrum *spectrum1, ISpectrum *spectrum2,
                                                            float mzTolerance) {
-    vector<vector<int>> sharedPeakIndices = getSharedPeaks(*spectrum1, *spectrum2, mzTolerance);
-    IPeakMatches *ret = new PeakMatches(spectrum1, spectrum2, sharedPeakIndices[0], sharedPeakIndices[1]);
-    pointer_pool->add(ret);
+    vector<vector<int>> sharedPeakIndices = getSharedPeaks(spectrum1, spectrum2, mzTolerance);
+    PeakMatches ret(spectrum1, spectrum2, sharedPeakIndices[0], sharedPeakIndices[1]);
     return ret;
 }
 
-vector<vector<int>> PeakMatchesUtilities::getSharedPeaks(const ISpectrum &spectrum1, const ISpectrum &spectrum2,
+vector<vector<int>> PeakMatchesUtilities::getSharedPeaks(ISpectrum *spectrum1,  ISpectrum *spectrum2,
                                                          float mzTolerance) {
-    vector<Peak> peaks1 = spectrum1.getPeaks();
-    vector<Peak> peaks2 = spectrum2.getPeaks();
+    vector<Peak> peaks1 = spectrum1->getPeaks();
+    vector<Peak> peaks2 = spectrum2->getPeaks();
 
     vector<int> sharedPeaksIndexes1 ;
     vector<int> sharedPeaksIndexes2 ;
@@ -109,10 +104,10 @@ vector<vector<int>> PeakMatchesUtilities::getSharedPeaks(const ISpectrum &spectr
     return result;
 }
 
-vector<vector<int>> PeakMatchesUtilities::getSharedPeaks2(const ISpectrum &spectrum1, const ISpectrum &spectrum2,
+vector<vector<int>> PeakMatchesUtilities::getSharedPeaks2( ISpectrum *spectrum1, ISpectrum *spectrum2,
                                                           float mzTolerance) {
-    vector<Peak> peaks1 = spectrum1.getPeaks();
-    vector<Peak> peaks2= spectrum2.getPeaks();
+    vector<Peak> peaks1 = spectrum1->getPeaks();
+    vector<Peak> peaks2= spectrum2->getPeaks();
 
     peaks1.push_back(LAST_PEAK);
     peaks2.push_back(LAST_PEAK);

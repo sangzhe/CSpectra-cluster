@@ -34,7 +34,7 @@ class Spectrum: public ISpectrum{
 
         unordered_map<int,ISpectrum*> highestPeaks;
         list<int> majorPeakMZ;
-        int currentMAjorPeakCount;
+        int currentMAjorPeakCount = 0;
 
         void calculateIntensities();
 
@@ -83,6 +83,7 @@ class Spectrum: public ISpectrum{
 
 //        bool operator < ( const Spectrum& O)const;
 
+    static bool cmpSpectrumMZ(ISpectrum* A,ISpectrum *B);
         bool operator == ( const ISpectrum& O)const;
 
 //        Spectrum& operator=( const Spectrum& O);

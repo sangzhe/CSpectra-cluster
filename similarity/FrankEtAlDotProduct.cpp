@@ -24,18 +24,18 @@ FrankEtAlDotProduct::FrankEtAlDotProduct(float fragmentIonTolerance, int numberO
     this->peakFiltering = peakFiltering;
 }
 
-double FrankEtAlDotProduct::assessSimilarity(IPeakMatches *peakMatches) {
+double FrankEtAlDotProduct::assessSimilarity(const PeakMatches& peakMatches) {
     double dotProduct = 0;
 
-    for (int i = 0; i < peakMatches->getNumberOfSharedPeaks(); i++) {
-        pair<Peak, Peak> matchedPeaks = peakMatches->getPeakPair(i);
+    for (int i = 0; i < peakMatches.getNumberOfSharedPeaks(); i++) {
+        pair<Peak, Peak> matchedPeaks = peakMatches.getPeakPair(i);
 
         dotProduct += convertIntensity(matchedPeaks.first) * convertIntensity(matchedPeaks.second);
     }
 
     // normalize the dot product
-    double sumSquareIntensity1 = peakMatches->getSpectrumOne()->getSumSquareIntensity();
-    double sumSquareIntensity2 = peakMatches->getSpectrumTwo()->getSumSquareIntensity();
+    double sumSquareIntensity1 = peakMatches.getSpectrumOne().getSumSquareIntensity();
+    double sumSquareIntensity2 = peakMatches.getSpectrumTwo().getSumSquareIntensity();
 
     double denom = sqrt(sumSquareIntensity1 * sumSquareIntensity2);
     if (denom == 0)
@@ -47,7 +47,6 @@ double FrankEtAlDotProduct::assessSimilarity(IPeakMatches *peakMatches) {
 
     if (normalizedDotProduct > 1) // fix rounding issue
         normalizedDotProduct = 1;
-    pointer_pool->remove(peakMatches);//generated in getSharedPeaksAsMatches;
     return normalizedDotProduct;
 }
 
@@ -67,7 +66,7 @@ double FrankEtAlDotProduct::assessSimilarity(ISpectrum *spectrum1, ISpectrum *sp
         highestPeaksSpectrum2 = spectrum2;
     }
 
-    IPeakMatches *peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(highestPeaksSpectrum1, highestPeaksSpectrum2, (float) this->fragmentIonTolerance);
+    PeakMatches peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(highestPeaksSpectrum1, highestPeaksSpectrum2, (float) this->fragmentIonTolerance);
 
     return assessSimilarity(peakMatches);
 }

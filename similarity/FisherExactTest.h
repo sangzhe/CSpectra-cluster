@@ -12,11 +12,10 @@ class FisherExactTest: public HypergeometricScore {
 public:
     static string algorithmName;
     static string algorithmVersion ;
-    FisherExactTest();
-    FisherExactTest(float peakMzTolerance);
-    FisherExactTest(float peakMzTolerance, bool peakFiltering);
+    FisherExactTest():HypergeometricScore(){};
+    FisherExactTest(float peakMzTolerance):HypergeometricScore(peakMzTolerance){};
+    FisherExactTest(float peakMzTolerance, bool peakFiltering):HypergeometricScore(peakMzTolerance,peakFiltering){};
     string getAlgorithmName();
-protected:
     double calculateSimilarityProbablity(int numberOfSharedPeaks, int numberOfPeaksFromSpec1, int numberOfPeaksFromSpec2, int numberOfBins);
 };
 

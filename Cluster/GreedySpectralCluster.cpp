@@ -23,8 +23,10 @@ GreedySpectralCluster::GreedySpectralCluster(ICluster* cluster) {
         this->lowestBestComparisonSimilarity = existingCluster.lowestBestComparisonSimilarity;
         this->bestComparisonMatchIds = existingCluster.bestComparisonMatchIds;
         // for greedy clusters the consensus spectrum must be copied since it cannot be derived from the actual spectra
-        delete consensusSpectrumBuilder;
-        consensusSpectrumBuilder = nullptr;
+        if(consensusSpectrumBuilder != nullptr) {
+            delete consensusSpectrumBuilder;
+            consensusSpectrumBuilder = nullptr;
+        }
         this->consensusSpectrumBuilder =  (GreedyConsensusSpectrum*)existingCluster.getConsensusSpectrumBuilder();
         addSpectrumHolderListener(this->consensusSpectrumBuilder);
 
@@ -35,18 +37,20 @@ GreedySpectralCluster::GreedySpectralCluster(ICluster* cluster) {
         this->spectraIds.clear();
 
         for(ISpectrum *spectrum:clusteredSpectra){
-            spectraIds.insert(spectrum->getId());
+            spectraIds.push_back(spectrum->getId());
         }
     }else{
-        delete consensusSpectrumBuilder;
-        consensusSpectrumBuilder = nullptr;
+        if(consensusSpectrumBuilder != nullptr) {
+            delete consensusSpectrumBuilder;
+            consensusSpectrumBuilder = nullptr;
+        }
         this->consensusSpectrumBuilder = GreedyConsensusSpectrum::FACTORY->getGreedyConsensusSpectrumBuilder(id);
         addSpectrumHolderListener(this->consensusSpectrumBuilder);
 
 
         if (!cluster->storesPeakLists())
             throw ("Cannot copy cluster without peak lists that is not a GreedyCluster.");
-        addSpectra(clusteredSpectra);
+        addSpectra(cluster->getClusteredSpectra());
     }
 
 }
@@ -67,10 +71,10 @@ GreedySpectralCluster::GreedySpectralCluster(string id, vector<ISpectrum*> clust
     getSpectralIds();
 }
 
-unordered_set<string> GreedySpectralCluster::getSpectralIds(){
+list<string> GreedySpectralCluster::getSpectralIds(){
     if(spectraIds.empty()){
         for(ISpectrum *spectrum:clusteredSpectra){
-            spectraIds.insert(spectrum->getId());
+            spectraIds.push_back(spectrum->getId());
         }
     }
     return spectraIds;
@@ -88,9 +92,9 @@ string GreedySpectralCluster::getId() {
 
 string GreedySpectralCluster::getSpectralId() {
     string sb;
-    unordered_set<string> spectraIds = getSpectralIds();
+    list<string> spectraIds = getSpectralIds();
     if(spectraIds.size() > 1){
-        unordered_set<string>::iterator iter = spectraIds.begin();
+        list<string>::iterator iter = spectraIds.begin();
         sb.append(*iter);
         iter++;
         for(iter;iter != spectraIds.end();iter++){
@@ -128,8 +132,8 @@ ISpectrum* GreedySpectralCluster::getHighestQualitySpectrum() {
     return getConsensusSpectrum();
 }
 
-vector<ISpectrum*> GreedySpectralCluster::getClusteredSpectra() const {
-    return vector<ISpectrum*>(clusteredSpectra);
+vector<ISpectrum*> GreedySpectralCluster::getClusteredSpectra() const{
+    return clusteredSpectra;
 }
 
 
@@ -146,10 +150,10 @@ int GreedySpectralCluster::getClusteredSpectraCount() {
 }
 
 void GreedySpectralCluster::addSpectra(ISpectrum* merged) {
-    unordered_set<string> Ids = spectraIds;
-    unordered_set<string>::iterator iter(find(Ids.begin(),Ids.end(),merged->getId()));
+    list<string> Ids = spectraIds;
+    list<string>::iterator iter(find(Ids.begin(),Ids.end(),merged->getId()));
     if( iter != Ids.end()) return;
-    spectraIds.insert(merged->getId());
+    spectraIds.push_back(merged->getId());
     ISpectrum *withoutPeaks = new Spectrum(*merged,vector<Peak>());
     pointer_pool->add(withoutPeaks);
     clusteredSpectra.push_back(withoutPeaks);
@@ -161,15 +165,13 @@ void GreedySpectralCluster::addSpectra(ISpectrum* merged) {
 
 void GreedySpectralCluster::addSpectra(const vector<ISpectrum*> &spectra) {
     vector<ISpectrum*> Spectra = spectra;
-    vector<ISpectrum*>::iterator iter;
     vector<ISpectrum*> ToAdd;
     bool spectrumAdded = false;
-    for(iter = Spectra.begin();iter != Spectra.end();iter++){
-        ISpectrum* added = *iter;
-        unordered_set<string> Ids = spectraIds;
-        unordered_set<string>::iterator iter(find(Ids.begin(),Ids.end(),added->getId()));
+    for(ISpectrum *added:Spectra){
+        list<string> Ids = spectraIds;
+        list<string>::iterator iter(find(Ids.begin(),Ids.end(),added->getId()));
         if( iter != Ids.end()) continue;
-        spectraIds.insert(added->getId());
+        spectraIds.push_back(added->getId());
         ISpectrum *withoutPeaks = new Spectrum(*added,vector<Peak>());
         pointer_pool->add(withoutPeaks);
         clusteredSpectra.push_back(withoutPeaks);
@@ -225,7 +227,7 @@ void GreedySpectralCluster::addCluster( ICluster *cluster) {
 
         // save the spectra ids
         for (ISpectrum *spectrum : cluster->getClusteredSpectra())
-            spectraIds.insert(spectrum->getId());
+            spectraIds.push_back(spectrum->getId());
 
         notifySpectrumHolderListeners(true, cluster->getClusteredSpectra());   // tell other interested parties  true says this is an add
     }

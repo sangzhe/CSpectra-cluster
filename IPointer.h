@@ -17,6 +17,8 @@ public:
 
     string getUUID() const;
 
+    virtual ~IPointer(){};
+
 private:
     string uuid;
 

@@ -7,17 +7,14 @@
  string FisherExactTest::algorithmName = "Fisher Exact Test";
  string FisherExactTest::algorithmVersion = "0.1";
 
-FisherExactTest::FisherExactTest() {
-    new(this)HypergeometricScore();
-}
-
-FisherExactTest::FisherExactTest(float peakMzTolerance) {
-    new(this)HypergeometricScore(peakMzTolerance);
-}
-
-FisherExactTest::FisherExactTest(float peakMzTolerance, bool peakFiltering) {
-    new(this)HypergeometricScore(peakMzTolerance,peakFiltering);
-}
+//FisherExactTest::FisherExactTest():HypergeometricScore(){
+//}
+//
+//FisherExactTest::FisherExactTest(float peakMzTolerance):HypergeometricScore(peakMzTolerance){
+//}
+//
+//FisherExactTest::FisherExactTest(float peakMzTolerance, bool peakFiltering):HypergeometricScore(peakMzTolerance,peakFiltering) {
+//}
 
 string FisherExactTest::getAlgorithmName() {
     return algorithmName;

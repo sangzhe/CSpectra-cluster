@@ -26,8 +26,7 @@ bool ComparisonMatch::operator<(const ComparisonMatch& o) const{
 }
 
 bool ComparisonMatch::operator==(const ComparisonMatch &O) const{
-    if(IOUtilities::compare(similarity,O.similarity) == 0) return true;
-    else return false;
+    return (IOUtilities::compare(similarity,O.similarity) == 0);
 }
 
 ComparisonMatch& ComparisonMatch::operator=(const ComparisonMatch &O) {

@@ -24,35 +24,35 @@ HypergeometricScore::HypergeometricScore(float fragmentIonTolerance, bool peakFi
     this->peakFiltering = peakFiltering;
 }
 
-double HypergeometricScore::assessSimilarity(IPeakMatches *peakMatches) {
+double HypergeometricScore::assessSimilarity(const PeakMatches& peakMatches) {
     // if there are no shared peaks, return 0 to indicate that it's random
-    if (peakMatches->getNumberOfSharedPeaks() < 1)
+    if (peakMatches.getNumberOfSharedPeaks() < 1)
         return 1;
 
     int numberOfBins = calculateNumberOfBins(peakMatches);
 
-    return calculateSimilarityScore(peakMatches->getNumberOfSharedPeaks(),
-                                    peakMatches->getSpectrumOne()->getPeaksCount(),
-                                    peakMatches->getSpectrumTwo()->getPeaksCount(),
+    return calculateSimilarityScore(peakMatches.getNumberOfSharedPeaks(),
+                                    peakMatches.getSpectrumOne().getPeaksCount(),
+                                    peakMatches.getSpectrumTwo().getPeaksCount(),
                                     numberOfBins);
 }
 
-double HypergeometricScore::assessSimilarityAsPValue(IPeakMatches *peakMatches) {
+double HypergeometricScore::assessSimilarityAsPValue(const PeakMatches& peakMatches) {
     // if there are no shared peaks, return 0 to indicate that it's random
-    if (peakMatches->getNumberOfSharedPeaks() < 1)
+    if (peakMatches.getNumberOfSharedPeaks() < 1)
         return 1;
 
     int numberOfBins = calculateNumberOfBins(peakMatches);
 
-    return calculateSimilarityProbablity(peakMatches->getNumberOfSharedPeaks(),
-                                         peakMatches->getSpectrumOne()->getPeaksCount(),
-                                         peakMatches->getSpectrumTwo()->getPeaksCount(),
+    return calculateSimilarityProbablity(peakMatches.getNumberOfSharedPeaks(),
+                                         peakMatches.getSpectrumOne().getPeaksCount(),
+                                         peakMatches.getSpectrumTwo().getPeaksCount(),
                                          numberOfBins);
 }
 
-int HypergeometricScore::calculateNumberOfBins(IPeakMatches *peakMatches) {
-    vector<Peak> peaks1 = peakMatches->getSpectrumOne()->getPeaks();
-    vector<Peak> peaks2 = peakMatches->getSpectrumTwo()->getPeaks();
+int HypergeometricScore::calculateNumberOfBins(const PeakMatches& peakMatches) {
+    vector<Peak> peaks1 = peakMatches.getSpectrumOne().getPeaks();
+    vector<Peak> peaks2 = peakMatches.getSpectrumTwo().getPeaks();
 
     // set the maximum shared m/z value
     float minMz, maxMz; // minimum and maximum overlapping m/z
@@ -113,9 +113,8 @@ double HypergeometricScore::calculateSimilarityScore(int numberOfSharedPeaks, in
 }
 
 double HypergeometricScore::assessSimilarity(ISpectrum *spectrum1, ISpectrum *spectrum2) {
-    IPeakMatches *peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1, spectrum2, fragmentIonTolerance, peakFiltering);
+    PeakMatches peakMatches = PeakMatchesUtilities::getSharedPeaksAsMatches(spectrum1, spectrum2, fragmentIonTolerance, peakFiltering);
     double ret =  assessSimilarity(peakMatches);
-    pointer_pool->remove(peakMatches);
     return ret;
 }
 

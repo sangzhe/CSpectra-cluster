@@ -50,8 +50,9 @@ GreedyConsensusSpectrum::GreedyConsensusSpectrum(float fragmentTolerance, string
 };
 
 void GreedyConsensusSpectrum::addSpectra(const vector<ISpectrum*> &spectra) {
-    if(spectra.size() < 1) return;
     vector<ISpectrum*> in = spectra;
+
+    if(in.size() < 1) return;
     vector<ISpectrum*>::iterator iter;
     for(iter = in.begin();iter != in.end();iter++){
         addSpectra(*iter);
@@ -72,9 +73,7 @@ void GreedyConsensusSpectrum::addSpectra( ISpectrum *merged) {
     // merge identical peaks
     vector<Peak> mergedPeaks = mergeIdenticalPeaks(consensusPeaks);
     consensusPeaks.clear();
-    for(Peak& peak:mergedPeaks){
-        consensusPeaks.push_back(peak);
-    }
+    consensusPeaks = mergedPeaks;
 
     sumCharge += merged->getPrecursorCharge();
     sumPrecursorMz += merged->getPrecursorMz();
@@ -193,11 +192,12 @@ void GreedyConsensusSpectrum::updateProperties() {
 }
 
 vector<Peak> GreedyConsensusSpectrum::findConsensusPeaks(const vector<Peak> &input, int nSpectra) {
-    if (input.size() < 1)
-        return input;
+    vector<Peak> peaks = input;
+    if (peaks.size() < 1)
+        return peaks;
 
     // Step 2: adapt the peak intensities based on the probability that the peak has been observed
-    vector<Peak> ret = adaptPeakIntensities(input, nSpectra);
+    vector<Peak> ret = adaptPeakIntensities(peaks, nSpectra);
 
     // Step 3: filter the spectrum
     ret = filterNoise(ret);
@@ -208,7 +208,7 @@ vector<Peak> GreedyConsensusSpectrum::findConsensusPeaks(const vector<Peak> &inp
 vector<Peak> GreedyConsensusSpectrum::filterNoise(const vector<Peak> &inp) {
     vector<Peak> in = inp;
     sort(in.begin(),in.end(),Peak::cmpPeakMz);
-    BinnedHighestNPeakFunction noiseFilter;
+    BinnedHighestNPeakFunction noiseFilter = BinnedHighestNPeakFunction(DEFAULT_PEAKS_TO_KEEP, (int) NOISE_FILTER_INCREMENT, 0);
     in = noiseFilter.apply(in);
     return in;
 
@@ -224,33 +224,31 @@ vector<Peak> GreedyConsensusSpectrum::adaptPeakIntensities(const vector<Peak> &i
         Peak newPeak (peak.getMz(), newIntensity, peak.getCount());
         in[i] = newPeak;
     }
-    vector<Peak> ret = in;
-    return ret;
+    return in;
 }
 
 vector<Peak> GreedyConsensusSpectrum::mergeIdenticalPeaks(const vector<Peak> &inPeaks) const{
-    vector<Peak> filteredPeaks;
-    if(inPeaks.size() == 0) return filteredPeaks;
+    vector<Peak> filteredPeaks = inPeaks;
+    if(inPeaks.size() == 0) return vector<Peak>();
 
-    filteredPeaks = inPeaks;
     float mzThresholdStep = fragmentTolerance / 4; // use 4 rounds to reach the final mz threshold
-    for(float range = mzThresholdStep;range <= fragmentTolerance;range += mzThresholdStep){
+    for(float range = mzThresholdStep;range <= fragmentTolerance;range += mzThresholdStep) {
         vector<Peak> newPeakList;
 
         Peak currentPeak = filteredPeaks[0];
 
-        for(int i = 1; i < filteredPeaks.size(); i++){
+        for (int i = 1; i < filteredPeaks.size(); i++) {
             Peak nextPeak = filteredPeaks[i];
 
             const float nextPeakMz = nextPeak.getMz();
             const float currentPeakMz = currentPeak.getMz();
-            const float testLimit = currentPeakMz +range;
+            const float testLimit = currentPeakMz + range;
 
-            if(nextPeakMz <= testLimit){
+            if (nextPeakMz <= testLimit) {
                 const double nextPeakIntensity = nextPeak.getIntensity();
                 const double currentPeakIntensity = currentPeak.getIntensity();
                 const double totalIntensity = nextPeakIntensity + currentPeakIntensity;
-                const double nextPeakFraction = nextPeakIntensity /totalIntensity;
+                const double nextPeakFraction = nextPeakIntensity / totalIntensity;
                 const double currentPeakFraction = currentPeakIntensity / totalIntensity;
 
                 double weightedMz = (nextPeakFraction * nextPeakMz) + (currentPeakFraction * currentPeakMz);
@@ -259,20 +257,17 @@ vector<Peak> GreedyConsensusSpectrum::mergeIdenticalPeaks(const vector<Peak> &in
 
                 const int count = currentPeak.getCount() + nextPeak.getCount();
 
-                Peak newPeak((float)weightedMz,(float)intensity,count);
+                Peak newPeak((float) weightedMz, (float) intensity, count);
                 currentPeak = newPeak;
 
-            }else{
+            } else {
                 newPeakList.push_back(currentPeak);
                 currentPeak = nextPeak;
-
-
             }
-
         }
         newPeakList.push_back(currentPeak);
         filteredPeaks.clear();
-        for(Peak& peak:newPeakList){
+        for (Peak &peak:newPeakList) {
             filteredPeaks.push_back(peak);
         }
     }
@@ -295,7 +290,7 @@ void GreedyConsensusSpectrum::clear() {
 }
 
 void GreedyConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, vector<ISpectrum *> &added) {
-//        pointer_pool->add(added);
+        pointer_pool->add(added);
         addSpectra(added);
 
 }

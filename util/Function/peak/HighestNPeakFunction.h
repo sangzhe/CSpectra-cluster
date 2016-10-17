@@ -19,7 +19,6 @@ public:
     vector<Peak> apply(const vector<Peak> &originalPeaks);
 
 private:
-    static PointerPool* pointer_pool;
 
     int maxPeaks;
 };

@@ -18,7 +18,7 @@ public:
     GreedySpectralCluster(string id, vector<ISpectrum*> clusteredSpectra, GreedyConsensusSpectrum *consensusSpectrumBuilder, list<ComparisonMatch> &bestComparisonMatches);
 
     string getMethodName();
-    unordered_set<string> getSpectralIds();
+    list<string> getSpectralIds();
 
     string getId();
 
@@ -85,13 +85,13 @@ private:
     float lowestBestComparisonSimilarity = 0;
     unordered_set<string> bestComparisonMatchIds;
     string id;
-    unordered_set<string> spectraIds;
+    list<string> spectraIds;
     Properties properties ;
 
     list<SpectrumHolderListener*> spectrumHolderListeners;
 
     vector<ISpectrum*> clusteredSpectra;
-    GreedyConsensusSpectrum* consensusSpectrumBuilder;
+    GreedyConsensusSpectrum* consensusSpectrumBuilder = nullptr;
     void notifySpectrumHolderListeners(bool isAdd, vector<ISpectrum*> spectra);
 
 

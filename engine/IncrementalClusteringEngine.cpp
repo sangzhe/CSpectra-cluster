@@ -177,16 +177,16 @@ bool IncrementalClusteringEngine::handleFullContainment(ICluster *clusterToAdd) 
     return false;
 }
 
-unordered_set<string> IncrementalClusteringEngine::getSharedSpectraIds(const unordered_set<string> &firstIds,
+list<string> IncrementalClusteringEngine::getSharedSpectraIds(const list<string> &firstIds,
                                                                         ICluster *c2) {
 
-    unordered_set<string> set1(firstIds);
-    unordered_set<string> set2 = c2->getSpectralIds();
-    unordered_set<string> ret;
-    for(string id1:set1){
-        for(string id2: set2){
+    list<string> list1(firstIds);
+    list<string> list2 = c2->getSpectralIds();
+    list<string> ret;
+    for(string id1:list1){
+        for(string id2: list2){
             if (id1 == id2)
-                ret.insert(id1);
+                ret.push_back(id1);
         }
     }
 

@@ -28,7 +28,6 @@ public:
     int getMinimumNumberOfPeaks();
 
 private:
-    PointerPool* pointer_pool = PoolFactory::getInstance();
 
     float fractionTotalIntensity;
 

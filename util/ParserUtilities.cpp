@@ -484,9 +484,10 @@ double ParserUtilities::parsePepMassLine(string& pLine) {
 string ParserUtilities::buildMGFTitle(string line){
     size_t sequenceIndex = line.find(sequenceTitle);
     size_t spectrumIdIndex = line.find(titleAndId);
+    int len = sequenceIndex - titleAndId.length();
 
     if(sequenceIndex != string::npos){
-        if (spectrumIdIndex!=string::npos) return line.substr(spectrumIdIndex+titleAndId.length(),sequenceIndex);
+        if (spectrumIdIndex!=string::npos) return line.substr(spectrumIdIndex+titleAndId.length(),len);
     }
     else return line.substr(spectrumIdIndex+titleAndId.length());
 

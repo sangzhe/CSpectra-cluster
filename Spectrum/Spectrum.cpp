@@ -6,8 +6,6 @@
 
 int Spectrum::BAD_QUALITY_MEASURE = -1;
 
-int currentMAjorPeakCount = 0;
-
 Spectrum::Spectrum() {};
 
 Spectrum::Spectrum(string &pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer,
@@ -92,17 +90,17 @@ void Spectrum::guaranteeMajorPeaks(int majorPeakCount) {
 }
 
 ISpectrum* Spectrum::getHighestNPeaks(int numberRequested) {
+//    Spectra in highestPeaks live with this class;
     ISpectrum *ret;
     try {
         ret = highestPeaks.at(numberRequested);
     }catch (out_of_range) {
-        Spectrum *replace = new Spectrum(buildHighestPeaks(numberRequested));
+        ISpectrum *replace = new Spectrum(buildHighestPeaks(numberRequested));
         ret = replace;
         int numberPeaks = ret->getPeaksCount();
         for (int i = numberPeaks; i >= numberPeaks; i--) {
             const int num = i;
             highestPeaks.insert(pair<int, ISpectrum*>(num, ret));
-            pointer_pool->add(ret);
         }
     }
     return ret;
@@ -179,6 +177,12 @@ double Spectrum::getSumSquareIntensity() const{
 //bool Spectrum::operator<(const Spectrum &O) const{
 //    return (IOUtilities::compare(totalIntensity,O.totalIntensity) == -1);
 //}
+bool Spectrum::cmpSpectrumMZ(ISpectrum* A,ISpectrum *B){
+    float A_MZ = A->getPrecursorMz();
+    float B_MZ = B->getPrecursorMz();
+    return (IOUtilities::compare(A_MZ,B_MZ) == -1) ;
+}
+
 bool Spectrum::operator==(const ISpectrum& O) const{
     if (precursorCharge != O.getPrecursorCharge()) return false;
     if (IOUtilities::compare(O.getPrecursorMz(), precursorMz) != 0) return false;
@@ -225,7 +229,7 @@ bool Spectrum::operator==(const ISpectrum& O) const{
 Spectrum::~Spectrum() {
     unordered_map<int,ISpectrum*>::iterator iter;
     for(iter = highestPeaks.begin();iter != highestPeaks.end();iter++){
-        pointer_pool->remove(iter->second);
+        delete (*iter).second;
     }
 }
 

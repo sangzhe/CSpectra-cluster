@@ -22,8 +22,8 @@ public:
     IntensityRankCorrelation();
     IntensityRankCorrelation(float fragmentIonTolerance);
     IntensityRankCorrelation(float fragmentIonTolerance, bool peakFiltering);
-    double assessSimilarityAsPValue(IPeakMatches* peakMatches);
-    double assessSimilarity(IPeakMatches* peakMatches);
+    double assessSimilarityAsPValue(const PeakMatches& peakMatches);
+    double assessSimilarity(const PeakMatches& peakMatches);
     double assessSimilarity( ISpectrum* spectrum1, ISpectrum* spectrum2);
     bool isPeakFiltering();
     void setPeakFiltering(bool peakFiltering);
@@ -36,7 +36,6 @@ protected:
     bool peakFiltering;
 
 private:
-    PointerPool* pointer_pool = PoolFactory::getInstance();
     vector<double> extractPeakIntensities(const vector<Peak>& peaks);
 };
 

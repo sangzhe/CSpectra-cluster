@@ -36,17 +36,17 @@ private:
     /**
  * Number of peaks per bin
  */
-    int maxPeaks;
+    int maxPeaks = 0;
     /**
      * Bin size in m/z
      */
-    int binSize;
+    int binSize = 0;
     /**
      * Overlap between two bins (default binSize / 2)
      */
-    int binOverlap;
+    int binOverlap = 0;
 
-    int handleBin(vector<Peak> allpeaks, int startpeak, unordered_set<Peak> retained, double binBottom);
+    int handleBin(vector<Peak>& allpeaks, int startpeak, unordered_set<Peak>& retained, double binBottom);
 
 };
 
