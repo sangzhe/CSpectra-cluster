@@ -5,11 +5,11 @@
 #include "IPointer.h"
 
 IPointer::IPointer() {
-    uuid_t uu;
-    uuid_generate_random(uu);
-    stringstream ss;
-    ss << uu;
-    ss >>uuid;
+//    uuid_t uu;
+//    uuid_generate_random(uu);
+//    stringstream ss;
+//    ss << uu;
+//    ss >>uuid;
 //    uuid = string(str);
 }
 

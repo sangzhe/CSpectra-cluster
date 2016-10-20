@@ -35,6 +35,7 @@ private:
     GreedySpectralCluster* convertToGreedyCluster(ICluster* cluster);
 
 public:
+
     GreedyIncrementalClusteringEngine(ISimilarityChecker *sck, float windowSize, double clusteringPrecision,
                                       PeakFunction* spectrumFilterFunction,
                                       ClusterPredicate* clusterComparisonPredicate,

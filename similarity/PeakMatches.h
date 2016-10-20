@@ -28,6 +28,7 @@ public:
     pair<Peak, Peak> getPeakPair(int nIndex) const;
     ISpectrum& getSpectrumOne() const;
     ISpectrum& getSpectrumTwo() const;
+    ~PeakMatches();
 
 };
 

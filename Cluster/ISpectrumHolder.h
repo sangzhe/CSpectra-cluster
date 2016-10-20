@@ -14,10 +14,10 @@
 class ISpectrumHolder:virtual public IPointer{
 public:
     virtual void addSpectra( ISpectrum* merged)  = 0;
-    virtual void addSpectra(const  vector<ISpectrum*>& spectra)  = 0;
+    virtual void addSpectra(  vector<ISpectrum*>& spectra)  = 0;
     virtual bool isRemovedSupported() = 0;
     virtual void removeSpectra(  ISpectrum* removed)  = 0;
-    virtual void removeSpectra( const vector<ISpectrum*> &spectra)  = 0;
+    virtual void removeSpectra(  vector<ISpectrum*> &spectra)  = 0;
     virtual void addSpectrumHolderListener(SpectrumHolderListener* added) = 0;
     virtual void removeSpectrumHolderListener(SpectrumHolderListener* removed) = 0;
 

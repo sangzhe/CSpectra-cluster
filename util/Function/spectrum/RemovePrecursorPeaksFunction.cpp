@@ -12,7 +12,7 @@ bool RemovePrecursorPeaksFunction::isWithinRange(float min, float max, float val
     return (value >= min && value <= max);
 }
 
-ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
+Spectrum RemovePrecursorPeaksFunction::apply( ISpectrum& o) {
     // calculate m/z of neutral losses
      float floatCharge     = (float) o.getPrecursorCharge();
      float waterLoss       = o.getPrecursorMz() - (Mass::WATER_MONO / floatCharge);
@@ -34,7 +34,7 @@ ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
     vector<Peak> filteredPeakList;
     vector<Peak> peak = o.getPeaks();
     vector<Peak>::iterator iterator1;
-    for(iterator1 = peak.begin();iterator1 != peak.end();iterator1++) {
+    for(iterator1 = peak.begin();iterator1 != peak.end();++iterator1) {
         float peakMz = (*iterator1).getMz();
         // ignore any peak that could be a neutral loss
         if (isWithinRange(minWaterLoss, maxWaterLoss, peakMz))
@@ -48,6 +48,6 @@ ISpectrum* RemovePrecursorPeaksFunction::apply(const ISpectrum& o) {
 
         filteredPeakList.push_back(*iterator1);
     }
-    ISpectrum *filteredSpectrum = new Spectrum(o, filteredPeakList, true);
+    Spectrum filteredSpectrum(o, filteredPeakList, true);
     return filteredSpectrum;
 }

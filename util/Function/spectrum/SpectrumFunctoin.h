@@ -5,10 +5,10 @@
 #ifndef CSPECTRA_CLUSTER_SPECTRUMFUNCTOIN_H
 #define CSPECTRA_CLUSTER_SPECTRUMFUNCTOIN_H
 
-#include "../../../Spectrum/ISpectrum.h"
+#include "../../../Spectrum/Spectrum.h"
 
 class SpectrumFunction{
     public:
-    virtual ISpectrum* apply(const ISpectrum& o) = 0;
+    virtual Spectrum apply( ISpectrum& o) = 0;
 };
 #endif //CSPECTRA_CLUSTER_SPECTRUMFUNCTOIN_H

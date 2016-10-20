@@ -21,7 +21,7 @@ public:
 
     FractionTICPeakFunction(float fractionTotalIntensity, int minimumNumberOfPeaks);
 
-    vector<Peak> apply(const vector<Peak>& peaks);
+    vector<Peak> apply( vector<Peak>& peaks);
 
     float getFractionTotalIntensity();
 

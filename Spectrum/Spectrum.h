@@ -20,14 +20,14 @@ class Spectrum: public ISpectrum{
     private:
         PointerPool* pointer_pool = PoolFactory::getInstance();
         static int BAD_QUALITY_MEASURE;
-        string id;
-        int precursorCharge;
-        float precursorMz;
+        string id = "";
+        int precursorCharge = 0;
+        float precursorMz = 0;
         vector<Peak> peaks;
         Properties properties;
 
-        double totalIntensity;
-        double sumSquareIntensity;
+        double totalIntensity = 0;
+        double sumSquareIntensity = 0;
 
         IQualityScorer* qualityScorer;
         double qualityMeasure = BAD_QUALITY_MEASURE;
@@ -40,7 +40,7 @@ class Spectrum: public ISpectrum{
 
         double convertIntensity(Peak& p1);
 
-        Spectrum buildHighestPeaks(int numberRequested) const;
+        Spectrum buildHighestPeaks(int numberRequested) ;
 
         ISpectrum* asMajorPeaks(int majorPeakCount);
 
@@ -53,15 +53,15 @@ class Spectrum: public ISpectrum{
     public:
         Spectrum();
 
-        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer, const vector<Peak>& inpeaks);
+        Spectrum( string& pId, int pPrecursorCharge, float pPrecursorMz, IQualityScorer* qualityScorer,  vector<Peak>& inpeaks);
 
-        Spectrum(const ISpectrum& spectrum);
+        Spectrum( ISpectrum& spectrum);
 
 
 
-        Spectrum( const ISpectrum& spectrum,  const vector<Peak>& inpeaks);
+        Spectrum(  ISpectrum& spectrum,    vector<Peak>& inpeaks);
 
-        Spectrum( const ISpectrum& spectrum,  const vector<Peak>& inpeaks,bool isSortedList);
+        Spectrum(  ISpectrum& spectrum,   vector<Peak>& inpeaks,bool isSortedList);
 
         string getId() const;
 
@@ -73,7 +73,7 @@ class Spectrum: public ISpectrum{
         int getPrecursorCharge() const;
         double getTotalIntensity() const;
         double getSumSquareIntensity() const;
-        vector<Peak> getPeaks() const;
+        vector<Peak> getPeaks();
         int getPeaksCount() const;
         ISpectrum* getHighestNPeaks(int numberRequested);
         vector<int> asMajorPeakMZs(int majorPeakCount);
@@ -84,9 +84,9 @@ class Spectrum: public ISpectrum{
 //        bool operator < ( const Spectrum& O)const;
 
     static bool cmpSpectrumMZ(ISpectrum* A,ISpectrum *B);
-        bool operator == ( const ISpectrum& O)const;
+        bool operator == (  ISpectrum& O)const;
 
-//        Spectrum& operator=( const Spectrum& O);
+        Spectrum& operator=(  Spectrum& O);
 
 //        friend size_t hash_value(const Spectrum &p);
 

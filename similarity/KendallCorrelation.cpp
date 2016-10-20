@@ -20,106 +20,100 @@ bool KendallCorrelation::compare(pair<double, double> pair1, pair<double, double
 }
 
 double KendallCorrelation::correlation(vector<double> xArray, vector<double> yArray) {
-    if(xArray.size() != yArray.size()) {
+    if (xArray.size() != yArray.size()) {
         throw(xArray.size(), yArray.size());
-    } else {
-        int n = xArray.size();
-        long numPairs = sum((long)(n - 1));
-        vector<pair<double,double>> pairs(n);
+    }
 
-        for(int tiedXPairs = 0; tiedXPairs < n; ++tiedXPairs) {
-            pairs[tiedXPairs] = pair<double,double>(xArray[tiedXPairs], yArray[tiedXPairs]);
-        }
+     int n = xArray.size();
+     long numPairs = sum(n - 1);
+
+    vector<pair<double,double>> pairs(n);
+    for (int i = 0; i < n; i++) {
+        pairs[i] = pair<double, double>(xArray[i], yArray[i]);
+    }
+
+    sort(pairs.begin(),pairs.end(),compare);
 
 
-        sort(pairs.begin(),pairs.end(),compare);
-
-        long var26 = 0L;
-        long tiedXYPairs = 0L;
-        long consecutiveXTies = 1L;
-        long consecutiveXYTies = 1L;
-        pair<double,double> prev = pairs[0];
-
-        int swaps;
-        for(swaps = 1; swaps < n; ++swaps) {
-            pair<double,double> pairsDestination = pairs[swaps];
-            if((pairsDestination.first) == (prev.first)) {
-                ++consecutiveXTies;
-                if((pairsDestination.second) == (prev.second)) {
-                    ++consecutiveXYTies;
-                } else {
-                    tiedXYPairs += sum(consecutiveXYTies - 1L);
-                    consecutiveXYTies = 1L;
-                }
+    long tiedXPairs = 0;
+    long tiedXYPairs = 0;
+    long consecutiveXTies = 1;
+    long consecutiveXYTies = 1;
+    pair<double, double> prev = pairs[0];
+    for (int i = 1; i < n; i++) {
+         pair<double, double> curr = pairs[i];
+        if (curr.first == prev.first) {
+            consecutiveXTies++;
+            if (curr.second == prev.second) {
+                consecutiveXYTies++;
             } else {
-                var26 += sum(consecutiveXTies - 1L);
-                consecutiveXTies = 1L;
-                tiedXYPairs += sum(consecutiveXYTies - 1L);
-                consecutiveXYTies = 1L;
+                tiedXYPairs += sum(consecutiveXYTies - 1);
+                consecutiveXYTies = 1;
             }
-
-            prev = pairsDestination;
+        } else {
+            tiedXPairs += sum(consecutiveXTies - 1);
+            consecutiveXTies = 1;
+            tiedXYPairs += sum(consecutiveXYTies - 1);
+            consecutiveXYTies = 1;
         }
+        prev = curr;
+    }
+    tiedXPairs += sum(consecutiveXTies - 1);
+    tiedXYPairs += sum(consecutiveXYTies - 1);
 
-        var26 += sum(consecutiveXTies - 1L);
-        tiedXYPairs += sum(consecutiveXYTies - 1L);
-        swaps = 0;
-        vector<pair<double,double>> var27(n);
+    long swaps = 0;
+    vector<pair<double, double>> pairsDestination(n);
+    for (int segmentSize = 1; segmentSize < n; segmentSize <<= 1) {
+        for (int offset = 0; offset < n; offset += 2 * segmentSize) {
+            int i = offset;
+             int iEnd = min(i + segmentSize, n);
+             int j = iEnd;
+             int jEnd = min(j + segmentSize, n);
 
-        int concordantMinusDiscordant;
-        for(int tiedYPairs = 1; tiedYPairs < n; tiedYPairs <<= 1) {
-            for(int pairsTemp = 0; pairsTemp < n; pairsTemp += 2 * tiedYPairs) {
-                int consecutiveYTies = pairsTemp;
-                int iEnd = min(pairsTemp + tiedYPairs, n);
-                concordantMinusDiscordant = iEnd;
-                int curr = min(iEnd + tiedYPairs, n);
-
-                for(int nonTiedPairsMultiplied = pairsTemp; consecutiveYTies < iEnd || concordantMinusDiscordant < curr; ++nonTiedPairsMultiplied) {
-                    if(consecutiveYTies < iEnd) {
-                        if(concordantMinusDiscordant < curr) {
-                            if((pairs[consecutiveYTies].second) == (pairs[concordantMinusDiscordant].second) <= 0) {
-                                var27[nonTiedPairsMultiplied] = pairs[consecutiveYTies];
-                                ++consecutiveYTies;
-                            } else {
-                                var27[nonTiedPairsMultiplied] = pairs[concordantMinusDiscordant];
-                                ++concordantMinusDiscordant;
-                                swaps += iEnd - consecutiveYTies;
-                            }
+            int copyLocation = offset;
+            while (i < iEnd || j < jEnd) {
+                if (i < iEnd) {
+                    if (j < jEnd) {
+                        if (IOUtilities::compare(pairs[i].second,pairs[j].second) <= 0) {
+                            pairsDestination[copyLocation] = pairs[i];
+                            i++;
                         } else {
-                            var27[nonTiedPairsMultiplied] = pairs[consecutiveYTies];
-                            ++consecutiveYTies;
+                            pairsDestination[copyLocation] = pairs[j];
+                            j++;
+                            swaps += iEnd - i;
                         }
                     } else {
-                        var27[nonTiedPairsMultiplied] = pairs[concordantMinusDiscordant];
-                        ++concordantMinusDiscordant;
+                        pairsDestination[copyLocation] = pairs[i];
+                        i++;
                     }
+                } else {
+                    pairsDestination[copyLocation] = pairs[j];
+                    j++;
                 }
+                copyLocation++;
             }
-
-            vector<pair<double,double>> var29 = pairs;
-            pairs = var27;
-            var27 = var29;
         }
-
-        long var28 = 0L;
-        long var30 = 1L;
-        prev = pairs[0];
-
-        for(concordantMinusDiscordant = 1; concordantMinusDiscordant < n; ++concordantMinusDiscordant) {
-            pair<double,double> var31 = pairs[concordantMinusDiscordant];
-            if((var31.second) == (prev.second)) {
-                ++var30;
-            } else {
-                var28 += sum(var30 - 1L);
-                var30 = 1L;
-            }
-
-            prev = var31;
-        }
-
-        var28 += sum(var30 - 1L);
-        long var32 = numPairs - var26 - var28 + tiedXYPairs - (long)(2 * swaps);
-        double var33 = (double)(numPairs - var26) * (double)(numPairs - var28);
-        return (double)var32 / sqrt(var33);
+        vector<pair<double, double>> pairsTemp = pairs;
+        pairs = pairsDestination;
+        pairsDestination = pairsTemp;
     }
+
+    long tiedYPairs = 0;
+    long consecutiveYTies = 1;
+    prev = pairs[0];
+    for (int i = 1; i < n; i++) {
+         pair<double, double> curr = pairs[i];
+        if (curr.second == prev.second) {
+            consecutiveYTies++;
+        } else {
+            tiedYPairs += sum(consecutiveYTies - 1);
+            consecutiveYTies = 1;
+        }
+        prev = curr;
+    }
+    tiedYPairs += sum(consecutiveYTies - 1);
+
+     long concordantMinusDiscordant = numPairs - tiedXPairs - tiedYPairs + tiedXYPairs - 2 * swaps;
+     double nonTiedPairsMultiplied = (numPairs - tiedXPairs) * (double) (numPairs - tiedYPairs);
+    return concordantMinusDiscordant /sqrt(nonTiedPairsMultiplied);
 }

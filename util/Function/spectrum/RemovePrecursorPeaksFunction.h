@@ -22,7 +22,7 @@ public:
     RemovePrecursorPeaksFunction(float fragmentIonTolerance);
     bool isWithinRange(float min, float max, float value);
 
-    ISpectrum* apply(const ISpectrum& o);
+    Spectrum apply( ISpectrum& o);
 
 
 };

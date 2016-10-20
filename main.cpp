@@ -15,23 +15,25 @@ int main() {
 //    cout << "end" << endl;
 
     ifstream fin("/Users/sangzhe/ClionProjects/CSpectra-cluster/spectra_400.0_4.0.mgf");
+    ifstream fin2("/Users/sangzhe/ClionProjects/CSpectra-cluster/cluster_spec_4776.mgf");
+    ifstream fin3("/Users/sangzhe/ClionProjects/CSpectra-cluster/small.mgf");
+
     stringstream ss;
-    ss << fin.rdbuf();
+    ss << fin2.rdbuf();
     PointerPool* pointer_pool = PoolFactory::getInstance();
 
 
-    time_t time_1,time_2;
+    time_t time_1,time_2,time_3,time_4;
     time_1 = time(NULL);
 
     vector<ISpectrum*> testSpectra = ParserUtilities::readMGFScan(ss);
 
     time_2 = time(NULL);
 
-    sort(testSpectra.begin(),testSpectra.end(),Spectrum::cmpSpectrumMZ);
-    for(ISpectrum* sp:testSpectra){
-        cout<<sp->getPrecursorMz()<<endl;
-    }
     cout << time_2 - time_1 <<endl;
+
+    sort(testSpectra.begin(),testSpectra.end(),Spectrum::cmpSpectrumMZ);
+
 
     vector<ICluster*> Cluster;
     vector<ICluster*> secondCluster;
@@ -39,22 +41,35 @@ int main() {
 
     GreedyIncrementalClusteringEngine *engine = new GreedyIncrementalClusteringEngine(new CombinedFisherIntensityTest(0.5F),4, 0.6, new FractionTICPeakFunction(0.5F, 20));
     GreedyIncrementalClusteringEngine *secondEngine = new GreedyIncrementalClusteringEngine(new CombinedFisherIntensityTest(0.5F),4, 0.95, new FractionTICPeakFunction(0.5F, 20));
+    time_3 = time(NULL);
 
-    for (int i = 0; i < testSpectra.size(); i++) {
-        ISpectrum *s = testSpectra[i];
-        ICluster *spectrumCluster = ClusterUtilities::asCluster(s);
-
-        // use engine
-        vector<ICluster*> removedClusters = engine->addClusterIncremental(spectrumCluster);
-        for(ICluster* cls:removedClusters){
-            Cluster.push_back(cls);
-        }
+    for (vector<ISpectrum*>::iterator i = testSpectra.begin() ; i != testSpectra.end(); ++i) {
+        ISpectrum *s = *i;
+//        ICluster *spectrumCluster1 = ClusterUtilities::asCluster(s);
+//
+//        // use engine
+//        vector<ICluster*> removedClusters = engine->addClusterIncremental(spectrumCluster1);
+//
+//        cout<< "num of clusters: "<< engine->getClusters().size() << endl;
+//        for(ICluster* cls:removedClusters){
+//            Cluster.push_back(cls);
+//        }
 //         use second engine
-        vector<ICluster*> secondRemovedClusters = secondEngine->addClusterIncremental(spectrumCluster);
-        for(ICluster* cls:secondRemovedClusters){
-            secondCluster.push_back(cls);
-        }
+        ICluster *spectrumCluster2 = ClusterUtilities::asCluster(s);
+        vector<ICluster*> secondRemovedClusters = secondEngine->addClusterIncremental(spectrumCluster2);
+//
+//        for(ICluster* cls:secondRemovedClusters){
+//            secondCluster.push_back(cls);
+//        }
+//        for(vector<ICluster*>::iterator i = secondRemovedClusters.begin();i!= secondRemovedClusters.end();++i){
+//            secondCluster.push_back(*i);
+//        }
     }
+    time_4 = time(NULL);
+
+    cout<< time_4 - time_3 << "s"<< endl;
+
+
 
 //    GreedySpectralCluster *spectralCluster = new GreedySpectralCluster("testId");
 //

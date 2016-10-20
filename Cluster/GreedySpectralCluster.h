@@ -15,7 +15,7 @@ public:
 
     GreedySpectralCluster(string id);
     GreedySpectralCluster(ICluster* cluster);
-    GreedySpectralCluster(string id, vector<ISpectrum*> clusteredSpectra, GreedyConsensusSpectrum *consensusSpectrumBuilder, list<ComparisonMatch> &bestComparisonMatches);
+    GreedySpectralCluster(string id, vector<ISpectrum*>& clusteredSpectra, GreedyConsensusSpectrum *consensusSpectrumBuilder, list<ComparisonMatch> &bestComparisonMatches);
 
     string getMethodName();
     list<string> getSpectralIds();
@@ -38,19 +38,19 @@ public:
 
     IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
 
-    vector<ISpectrum*> getClusteredSpectra() const;
+    vector<ISpectrum*> getClusteredSpectra() ;
 
     int getClusteredSpectraCount();
 
     void addCluster(ICluster* cluster);
 
     void addSpectra(ISpectrum* merged);
-    void addSpectra(const vector<ISpectrum*>& spectra);
+    void addSpectra( vector<ISpectrum*>& spectra);
 
 
     bool isRemovedSupported();
     void removeSpectra(ISpectrum* removed);
-    void removeSpectra(const vector<ISpectrum*> &spectra);
+    void removeSpectra( vector<ISpectrum*> &spectra);
 
     string getProperty(string key);
 
@@ -74,6 +74,8 @@ public:
 
     void addSpectrumHolderListener(SpectrumHolderListener* added) ;
     void removeSpectrumHolderListener(SpectrumHolderListener* removed);
+
+    ~GreedySpectralCluster();
 
 
 //    bool operator ==(ICluster& O);

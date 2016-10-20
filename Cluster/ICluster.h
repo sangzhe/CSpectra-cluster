@@ -23,7 +23,7 @@ class ICluster:public ISpectrumHolder{
         virtual int getPrecursorCharge() = 0 ;
         virtual ISpectrum* getConsensusSpectrum() = 0 ;
         virtual IConsensusSpectrumBuilder* getConsensusSpectrumBuilder() = 0;
-        virtual vector<ISpectrum*> getClusteredSpectra() const= 0;
+        virtual vector<ISpectrum*> getClusteredSpectra() = 0;
         virtual int getClusteredSpectraCount() = 0;
         virtual list<string> getSpectralIds()= 0 ;
         virtual Properties getProperties() = 0;
@@ -63,12 +63,11 @@ class ICluster:public ISpectrumHolder{
 
 
 //        virtual bool operator ==(ICluster &O) = 0;
-
+    virtual void addSpectra(vector<ISpectrum*>& spectra) = 0;
     virtual void addSpectra(ISpectrum* merged) = 0;
-    virtual void addSpectra(const vector<ISpectrum*>& spectra) = 0;
     virtual bool isRemovedSupported() = 0;
     virtual void removeSpectra(ISpectrum* removed) = 0;
-    virtual void removeSpectra(const vector<ISpectrum*> &spectra) = 0;
+    virtual void removeSpectra(vector<ISpectrum*> &spectra) = 0;
 
 
 };

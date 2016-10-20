@@ -71,9 +71,9 @@ public:
     static vector<Peak> findConsensusPeaks(const vector<Peak>& input,const int& peaksToKeep, int& nSpectra) ;
 
 
-    void addSpectra(const vector<ISpectrum*> &spectra);
+    void addSpectra( vector<ISpectrum*> &spectra);
 
-    void removeSpectra(const vector<ISpectrum*> &spectra);
+    void removeSpectra( vector<ISpectrum*> &spectra);
 
     void addSpectrumHolderListener(SpectrumHolderListener* added);
     void removeSpectrumHolderListener(SpectrumHolderListener* removed);

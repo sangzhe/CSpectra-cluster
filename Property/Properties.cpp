@@ -28,7 +28,7 @@ unordered_map<string,string> Properties::getMap() {
 unordered_set<string> Properties::getKeySet() {
     unordered_map<string,string>::iterator iter_1;
     if (keyName.size() == 0 ){
-        for(iter_1=propertyMap.begin();iter_1 != propertyMap.end();iter_1++){
+        for(iter_1=propertyMap.begin();iter_1 != propertyMap.end();++iter_1){
             keyName.insert(iter_1->first);
         }
 
@@ -39,7 +39,7 @@ unordered_set<string> Properties::getKeySet() {
 void Properties::putAll(Properties &props) {
     unordered_set<string>::iterator iter;
     unordered_set<string> keys = props.getKeySet();
-    for(iter = keys.begin();iter != keys.end();iter++){
+    for(iter = keys.begin();iter != keys.end();++iter){
         string name = *iter;
         propertyMap.insert(pair<string,string>(name,props.getProperty(name)));
     }

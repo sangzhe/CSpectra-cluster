@@ -49,20 +49,19 @@ GreedyConsensusSpectrum::GreedyConsensusSpectrum(float fragmentTolerance, string
 
 };
 
-void GreedyConsensusSpectrum::addSpectra(const vector<ISpectrum*> &spectra) {
-    vector<ISpectrum*> in = spectra;
+void GreedyConsensusSpectrum::addSpectra( vector<ISpectrum*> &spectra) {
 
-    if(in.size() < 1) return;
+    if(spectra.size() < 1) return;
     vector<ISpectrum*>::iterator iter;
-    for(iter = in.begin();iter != in.end();iter++){
-        addSpectra(*iter);
+    for(ISpectrum* spectrum: spectra){
+        addSpectra(spectrum);
     }
     updateProperties();
 
     setIsDirty(true);
 
     for (SpectrumHolderListener *listener : listeners)
-        listener->onSpectraAdd(this,in);
+        listener->onSpectraAdd(this,spectra);
 
 }
 
@@ -127,7 +126,7 @@ void GreedyConsensusSpectrum::updateConsensusSpectrum() {
     }
 }
 
-void GreedyConsensusSpectrum::removeSpectra(const vector<ISpectrum*> &spectra) {
+void GreedyConsensusSpectrum::removeSpectra( vector<ISpectrum*> &spectra) {
     throw("GreedyConsensusSpectrum does not support removing of spectra.");
 }
 
@@ -290,14 +289,14 @@ void GreedyConsensusSpectrum::clear() {
 }
 
 void GreedyConsensusSpectrum::onSpectraAdd(ISpectrumHolder *holder, vector<ISpectrum *> &added) {
-        pointer_pool->add(added);
+//        pointer_pool->add(added);
         addSpectra(added);
 
 }
 
 void GreedyConsensusSpectrum::onSpectraRemove(ISpectrumHolder *holder, vector<ISpectrum *> &removed) {
     removeSpectra(removed);
-    pointer_pool->remove(removed);
+//    pointer_pool->remove(removed);
 }
 
 void GreedyConsensusSpectrum::addSpectrumHolderListener(SpectrumHolderListener *added) {
@@ -309,8 +308,9 @@ void GreedyConsensusSpectrum::addSpectrumHolderListener(SpectrumHolderListener *
 void GreedyConsensusSpectrum::removeSpectrumHolderListener(SpectrumHolderListener *removed) {
     list<SpectrumHolderListener*>::iterator iter(find(listeners.begin(),listeners.end(),removed));
     if(iter != listeners.end()){
+        IPointer* R = *iter;
         listeners.erase(iter);
-        pointer_pool->remove(*iter);
+        pointer_pool->remove(R);
     }
 }
 
@@ -342,4 +342,10 @@ string GreedyConsensusSpectrum::getMethodName() {
 }
 
 GreedyConsensusSpectrum::~GreedyConsensusSpectrum() {
+    delete FACTORY,consensusSpectrum;
+    FACTORY = nullptr;
+    consensusSpectrum = nullptr;
+    for(SpectrumHolderListener* listener:listeners){
+        pointer_pool->remove(listener);
+    }
 }

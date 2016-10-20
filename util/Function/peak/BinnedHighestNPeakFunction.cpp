@@ -32,17 +32,16 @@ BinnedHighestNPeakFunction::BinnedHighestNPeakFunction(int maxPeaks, int binSize
         throw ("Bin overlap must be smaller than the bin size.");
 }
 
-vector<Peak> BinnedHighestNPeakFunction::apply(const vector<Peak> &originalPeaks) {
-    vector<Peak> Peaks = originalPeaks;
+vector<Peak> BinnedHighestNPeakFunction::apply( vector<Peak> &originalPeaks) {
     unordered_set<Peak> retained;
     int startPeak = 0;
     for(double binBottom = MINIMUM_BINNED_MZ;binBottom < MAXIMUM_BINNED_MZ -binSize;binBottom+=(binSize - binOverlap)){
-        startPeak = handleBin(Peaks,startPeak,retained,binBottom);
-        if(startPeak > Peaks.size()) break;
+        startPeak = handleBin(originalPeaks,startPeak,retained,binBottom);
+        if(startPeak > originalPeaks.size()) break;
     }
     vector<Peak> ret;
     unordered_set<Peak>::iterator iter;
-    for(iter = retained.begin();iter != retained.end();iter++){
+    for(iter = retained.begin();iter != retained.end();++iter){
         ret.push_back(*iter);
     }
 
@@ -60,12 +59,12 @@ int BinnedHighestNPeakFunction::handleBin(vector<Peak>& allpeaks, int startpeak,
     Peak currentPeak;
     vector<Peak> byIntensity;
     vector<Peak>::iterator iter;
-    for(iter =allpeaks.begin();iter != allpeaks.end();iter++){
+    for(iter =allpeaks.begin();iter != allpeaks.end();++iter){
         Peak nextPeak = *iter;
 
 
 //        ToDo problem?
-        if(!(currentPeak == Peak())){
+        if(!(currentPeak.isEmpty())){
             if(currentPeak.getMz() > nextPeak.getMz()){
                 if(fabs(currentPeak.getMz() - nextPeak.getMz()) > 1.2 * MZIntensityUtilities::SMALL_MZ_DIFFERENCE)
                     throw("Peaks are NOT Sorted by MZ");
@@ -94,7 +93,7 @@ int BinnedHighestNPeakFunction::handleBin(vector<Peak>& allpeaks, int startpeak,
     int numberAdded = 0;
     sort(byIntensity.begin(),byIntensity.end(),Peak::cmpPeakIntensity);
 
-    for(iter = byIntensity.begin();iter != byIntensity.end();iter++) {
+    for(iter = byIntensity.begin();iter != byIntensity.end();++iter) {
         Peak toAdd = *iter;
         retained.insert(toAdd);
         if (++numberAdded >= maxPeaks) break;

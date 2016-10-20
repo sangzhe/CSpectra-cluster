@@ -15,8 +15,8 @@ PeakMatches::PeakMatches( ISpectrum* spectrum1,  ISpectrum* spectrum2, vector<in
     this->spectrum2 = spectrum2;
     this->sharedPeakIndecesSpec1 = sharedPeakIndecesSpec1;
     this->sharedPeakIndecesSpec2 = sharedPeakIndecesSpec2;
-    pointer_pool->add(spectrum1);
-    pointer_pool->add(spectrum2);
+//    pointer_pool->add(spectrum1);
+//    pointer_pool->add(spectrum2);
 }
 
 vector<Peak> PeakMatches::getSharedPeaksFromSpectrumOne() {
@@ -66,5 +66,10 @@ ISpectrum& PeakMatches::getSpectrumOne() const{
 ISpectrum& PeakMatches::getSpectrumTwo() const{
 //    pointer_pool->add(spectrum2);
     return *spectrum2;
+}
+
+PeakMatches::~PeakMatches() {
+//    pointer_pool->remove(spectrum1);
+//    pointer_pool->remove(spectrum2);
 }
 

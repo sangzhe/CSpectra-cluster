@@ -47,7 +47,7 @@ public:
 
     ISpectrum* getConsensusSpectrum();
 
-    vector<ISpectrum*> getClusteredSpectra() const;
+    vector<ISpectrum*> getClusteredSpectra() ;
 
     IConsensusSpectrumBuilder* getConsensusSpectrumBuilder();
 
@@ -66,11 +66,11 @@ public:
 
     void addSpectra( ISpectrum* merged);
 
-    void addSpectra(const vector<ISpectrum*>& spectra);
+    void addSpectra( vector<ISpectrum*>& spectra);
 
     void removeSpectra( ISpectrum* removed);
 
-    void removeSpectra(const vector<ISpectrum*> &spectra) ;
+    void removeSpectra( vector<ISpectrum*> &spectra) ;
 
     bool isRemovedSupported();
 

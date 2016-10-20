@@ -31,10 +31,10 @@ public:
     GreedyConsensusSpectrum(float fragmentTolerance, string id, int nSpectra, double sumPrecursorMz, double sumPrecursorIntens, int sumCharge,const vector<Peak> peaks);
 
     void addSpectra( ISpectrum* merged);
-    void addSpectra(const vector<ISpectrum*>& spectra);
+    void addSpectra( vector<ISpectrum*>& spectra);
     bool isRemovedSupported();
     void removeSpectra( ISpectrum* removed);
-    void removeSpectra(const vector<ISpectrum*> &spectra);
+    void removeSpectra( vector<ISpectrum*> &spectra);
     void addConsensusSpectrum( IConsensusSpectrumBuilder& consensusSpectrumToAdd);
 
     ISpectrum* getConsensusSpectrum() ;

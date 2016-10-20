@@ -10,6 +10,6 @@
 
 class PeakFunction{
 public:
-    virtual vector<Peak> apply(const vector<Peak> &originalPeaks) = 0;
+    virtual vector<Peak> apply(vector<Peak> &originalPeaks) = 0;
 };
 #endif //CSPECTRA_CLUSTER_PEAKFUNCTION_H

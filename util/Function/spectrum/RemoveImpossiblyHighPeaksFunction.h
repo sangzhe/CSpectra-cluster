@@ -19,7 +19,7 @@ public:
 
     RemoveImpossiblyHighPeaksFunction();
 
-    ISpectrum* apply(const ISpectrum& o);
+    Spectrum apply( ISpectrum& o);
 
 private:
     float tolerance;

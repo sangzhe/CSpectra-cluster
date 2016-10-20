@@ -84,10 +84,16 @@ vector<ICluster*> IncrementalClusteringEngine::findClustersTooLow(double precurs
             pointer_pool->add(test);
         }
     }
-    if (!clustersToremove.empty())
-//        internalGetClusters().removeAll(clustersToremove);   // might break hear
-//        ToDo:what means?
-
+    if (!clustersToremove.empty()){
+        // might break hear
+        for(ICluster* cluster:clustersToremove){
+            vector<ICluster*>::iterator removedCluster(find(clusters.begin(),clusters.end(),cluster));
+            if(removedCluster != clusters.end()){
+                pointer_pool->remove(*removedCluster);
+                clusters.erase(removedCluster);
+            }
+        }
+    }
     return clustersToremove;
 }
 
@@ -97,6 +103,7 @@ void IncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
         ICluster *add = new SpectralCluster(clusterToAdd, Defaults::getDefaultConsensusSpectrumBuilder());
         myClusters.push_back(add);
         pointer_pool->add(add);
+        pointer_pool->remove(clusterToAdd);
         numberNotMerge++;
         return;
     }
@@ -142,7 +149,7 @@ void IncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
 
         // add to cluster
         vector<ISpectrum*> clusteredSpectra(clusteredSpectra1.size());
-        const vector<ISpectrum*> merged = clusteredSpectra1;
+        vector<ISpectrum*> merged = clusteredSpectra1;
         mostSimilarCluster->addSpectra(merged);
 
         numberGoodMerge++;
@@ -150,6 +157,7 @@ void IncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
         // create a new cluster
         ICluster* add = new SpectralCluster(clusterToAdd, Defaults::getDefaultConsensusSpectrumBuilder());
         pointer_pool->add(add);
+        pointer_pool->remove(clusterToAdd);
         myClusters.push_back(add);
         numberNotMerge++;
     }
@@ -204,7 +212,7 @@ double IncrementalClusteringEngine::getProportionSharedSpectraIds( ICluster *clu
 void IncrementalClusteringEngine::mergeIntoCluster(ICluster *mergeFrom, ICluster *mergeInto) {
     vector<ISpectrum*> clusteredSpectra1 = mergeFrom->getClusteredSpectra();
     vector<ISpectrum*> clusteredSpectra(clusteredSpectra1.size());
-    const vector<ISpectrum*> merged = clusteredSpectra1;
+    vector<ISpectrum*> merged = clusteredSpectra1;
     mergeInto->addSpectra(merged);
     numberLessGoodMerge++;
 }

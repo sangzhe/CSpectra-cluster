@@ -54,20 +54,19 @@ IQualityScorer* Defaults::getDefaultQualityScorer() {
 //    return spec3;
 //}
 
-ISpectrum* Defaults::doDefaultPeakFilter(const ISpectrum& spectrum) {
+ISpectrum* Defaults::doDefaultPeakFilter(ISpectrum& spectrum) {
     RemoveImpossiblyHighPeaksFunction func1 = RemoveImpossiblyHighPeaksFunction();
-    ISpectrum* spec1 = func1.apply(spectrum);
+    Spectrum spec1 = func1.apply(spectrum);
 
     RemovePrecursorPeaksFunction func2 = RemovePrecursorPeaksFunction(fragmentIonTolerance);
-    ISpectrum* spec2 = func2.apply(*spec1);
+    Spectrum spec2 = func2.apply(spec1);
 
-    vector<Peak> new_peak = spec2->getPeaks();
+    vector<Peak> new_peak = spec2.getPeaks();
     HighestNPeakFunction func3 = HighestNPeakFunction(150);
     new_peak = func3.apply(new_peak);
-    ISpectrum* spec3 = new Spectrum(*spec1,new_peak);
+    ISpectrum* ret = new Spectrum(spec2,new_peak);
 
-    delete spec1,spec2;
-    return spec3;
+    return ret;
 }
 
 double Defaults::getSimilarityThreshold() {

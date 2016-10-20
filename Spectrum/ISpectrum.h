@@ -20,7 +20,7 @@ class ISpectrum: public ISpectrumQuality{
         virtual int getPrecursorCharge()  const = 0;
         virtual double getTotalIntensity() const  = 0;
         virtual double getSumSquareIntensity()  const = 0;
-        virtual vector<Peak> getPeaks()  const = 0;
+        virtual vector<Peak> getPeaks()  = 0;
         virtual int getPeaksCount()  const = 0;
         virtual vector<int> asMajorPeakMZs(int majorPeakCount) = 0;
     virtual ISpectrum* getHighestNPeaks(int numberRequested) = 0;

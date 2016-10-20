@@ -25,7 +25,7 @@ class Defaults {
             static  int DEFAULT_MIN_NUMBER_COMPARISONS;
             static float getFragmentIonTolerance();
             static IQualityScorer* getDefaultQualityScorer();
-            static ISpectrum* doDefaultPeakFilter(const ISpectrum& spectrum);
+            static ISpectrum* doDefaultPeakFilter( ISpectrum& spectrum);
             static IConsensusSpectrumBuilder* getDefaultConsensusSpectrumBuilder();
             static ISimilarityChecker* getDefaultSimilarityChecker();
             static double getSimilarityThreshold();

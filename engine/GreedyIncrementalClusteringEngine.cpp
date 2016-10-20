@@ -2,7 +2,12 @@
 // Created by SangZhe on 2016/9/27.
 //
 
+#include <iostream>
 #include "GreedyIncrementalClusteringEngine.h"
+
+
+
+
 
 
 GreedyIncrementalClusteringEngine::GreedyIncrementalClusteringEngine(ISimilarityChecker *sck, float windowSize,
@@ -78,9 +83,13 @@ void GreedyIncrementalClusteringEngine::addClusters(vector<ICluster *> cluster) 
 
 vector<ICluster*> GreedyIncrementalClusteringEngine::addClusterIncremental(ICluster *added) {
     double precursorMz = added->getPrecursorMz();
+
+
     vector<ICluster*> clustersToremove = findClustersTooLow(precursorMz);
+
     // either add as an existing cluster if make a new cluster
     addToClusters(added);
+
     return clustersToremove;
 }
 
@@ -107,7 +116,7 @@ vector<ICluster*> GreedyIncrementalClusteringEngine::findClustersTooLow(double p
         for(int i=0;i<clustersToremove.size();i++){
             vector<GreedySpectralCluster*>::iterator removedCluster(find(clusters.begin(),clusters.end(),clustersToremove[i]));
             if(removedCluster != clusters.end()){
-                pointer_pool->remove(*removedCluster);
+//                pointer_pool->remove(*removedCluster);
                 clusters.erase(removedCluster);
 
             }
@@ -116,7 +125,7 @@ vector<ICluster*> GreedyIncrementalClusteringEngine::findClustersTooLow(double p
         for(int i = 0;i<consensusSpectraToRemove.size();i++){
             vector<ISpectrum*>::iterator removedSpectrum(find(filteredConsensusSpectra.begin(),filteredConsensusSpectra.end(),consensusSpectraToRemove[i]));
             if(removedSpectrum != filteredConsensusSpectra.end()){
-                pointer_pool->remove(*removedSpectrum);
+                delete (*removedSpectrum);
                 filteredConsensusSpectra.erase(removedSpectrum);
             }
         }
@@ -131,16 +140,14 @@ void GreedyIncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
     // if there are no clusters yet, just save it
     if (clusters.empty()) {
         clusters.push_back(greedySpectralCluster);
-        ISpectrum* consen = greedySpectralCluster->getConsensusSpectrum();
         ISpectrum* filteredSpectrum = filterSpectrum(greedySpectralCluster->getConsensusSpectrum());
         filteredConsensusSpectra.push_back(filteredSpectrum);
         return;
     }
 
     ISimilarityChecker* sCheck = getSimilarityChecker();
-    ISpectrum* consensusSpectrumToAdd = clusterToAdd->getConsensusSpectrum();
     // always only compare the N highest peaks
-    ISpectrum* filteredConsensusSpectrumToAdd = filterSpectrum(consensusSpectrumToAdd);
+    ISpectrum* filteredConsensusSpectrumToAdd = filterSpectrum(clusterToAdd->getConsensusSpectrum());
 //        System.out.println("Size of clusterdSpectrum: "+ clusters.size()+"\n");
 
     // add once an acceptable similarity score is found
@@ -150,7 +157,6 @@ void GreedyIncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
     if (nComparisons < minNumberOfComparisons)
         nComparisons = minNumberOfComparisons;
 
-//        long start = System.currentTimeMillis();
 
     for (int i = 0; i < clusters.size(); i++) {
         GreedySpectralCluster* existingCluster = clusters[i];
@@ -179,8 +185,9 @@ void GreedyIncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
 
             // update the existing consensus spectrum
             ISpectrum* removed  = filteredConsensusSpectra[i];
+//            delete removed;
             filteredConsensusSpectra[i] =  filterSpectrum(existingCluster->getConsensusSpectrum());
-            pointer_pool->remove(removed);
+//            pointer_pool->remove(removed);
 
             // since the cluster was added we're done
             return;
@@ -201,6 +208,7 @@ void GreedyIncrementalClusteringEngine::addToClusters(ICluster *clusterToAdd) {
     // process the consensus spectrum
     ISpectrum* filteredConsensusSpectrum = filterSpectrum(greedySpectralCluster->getConsensusSpectrum());
     filteredConsensusSpectra.push_back(filteredConsensusSpectrum);
+    pointer_pool->remove(clusterToAdd);
 }
 
 ISpectrum* GreedyIncrementalClusteringEngine::filterSpectrum(ISpectrum *spectrumToFilter) {
@@ -216,7 +224,9 @@ ISpectrum* GreedyIncrementalClusteringEngine::filterSpectrum(ISpectrum *spectrum
         filteredSpectrum = spectrumToFilter->getHighestNPeaks(highestPeaks);
     }
     else {
-        filteredSpectrum = new Spectrum(*spectrumToFilter, spectrumFilterFunction->apply(spectrumToFilter->getPeaks()));
+        vector<Peak> toFilter =spectrumToFilter->getPeaks();
+        vector<Peak> filterdPeak = spectrumFilterFunction->apply(toFilter);
+        filteredSpectrum = new Spectrum(*spectrumToFilter, filterdPeak);
         filteredSpectrum->setProperty(KnownProperties::N_HIGHEST_PEAKS, IOUtilities::IntToString(filteredSpectrum->getPeaks().size(),""));
     }
 
@@ -232,7 +242,6 @@ GreedySpectralCluster* GreedyIncrementalClusteringEngine::convertToGreedyCluster
     else {
         greedyCluster = new GreedySpectralCluster(cluster);
         pointer_pool->add(greedyCluster);
-        pointer_pool->remove(cluster);
     }
 
     return greedyCluster;

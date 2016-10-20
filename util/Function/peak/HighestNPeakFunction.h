@@ -16,7 +16,7 @@ public:
 
     HighestNPeakFunction(int maxPeaks);
     HighestNPeakFunction();
-    vector<Peak> apply(const vector<Peak> &originalPeaks);
+    vector<Peak> apply( vector<Peak> &originalPeaks);
 
 private:
 

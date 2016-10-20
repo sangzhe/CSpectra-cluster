@@ -42,8 +42,8 @@ string SpectralCluster::getSpectralId() {
         list<string>::iterator iter = spectralIds.begin();
         string x = *iter;
         sb.append(*iter);
-        iter++;
-        for(iter;iter != spectralIds.end();iter++){
+        ++iter;
+        for(iter;iter != spectralIds.end();++iter){
             sb.append(",");
             sb.append(*iter);
         }
@@ -81,7 +81,7 @@ ISpectrum* SpectralCluster::getConsensusSpectrum() {
     return consensusSpectrumBuilder->getConsensusSpectrum();
 }
 
-vector<ISpectrum*> SpectralCluster::getClusteredSpectra() const{
+vector<ISpectrum*> SpectralCluster::getClusteredSpectra() {
     return clusteredSpectra;
 }
 
@@ -94,14 +94,13 @@ int SpectralCluster::getClusteredSpectraCount() {
 }
 
 void SpectralCluster::addSpectra( ISpectrum *merged) {
-    vector<ISpectrum*> all = clusteredSpectra;
-    vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),merged));
-    if(iter == all.end()){
+    vector<ISpectrum*>::iterator iter(find(clusteredSpectra.begin(),clusteredSpectra.end(),merged));
+    if(iter == clusteredSpectra.end()){
         clusteredSpectra.push_back(merged);
         pointer_pool->add(merged);
         string Id = merged->getId();
         spectralIds.push_back(Id);
-        vector<ISpectrum*> added;
+        vector<ISpectrum*> added(0);
         added.push_back(merged);
         notifySpectrumHolderListeners(true,added);
 
@@ -111,20 +110,19 @@ void SpectralCluster::addSpectra( ISpectrum *merged) {
 //    }
 }
 
-void SpectralCluster::addSpectra(const vector<ISpectrum*> &spectra) {
+void SpectralCluster::addSpectra( vector<ISpectrum*>& spectra) {
     if( spectra.size() > 0){
         bool spectrumAdded = false;
 
-        vector<ISpectrum*> in = spectra;
         vector<ISpectrum*>::iterator iter;
         vector<ISpectrum*> ToAdd;
-        for(iter = in.begin();iter != in.end();iter++){
+        for(iter = spectra.begin();iter != spectra.end();++iter){
             ISpectrum *added = *iter;
             string Id = added->getId();
             spectralIds.push_back(Id);
             vector<ISpectrum*> all = clusteredSpectra;
-            vector<ISpectrum*>::iterator iter(find(all.begin(),all.end(),added));
-            if(iter == all.end()){
+            vector<ISpectrum*>::iterator iter_1(find(all.begin(),all.end(),added));
+            if(iter_1 == all.end()){
                 spectrumAdded = true;
                 clusteredSpectra.push_back(added);
                 pointer_pool->add(added);
@@ -138,13 +136,12 @@ void SpectralCluster::addSpectra(const vector<ISpectrum*> &spectra) {
     }
 }
 
-void SpectralCluster::removeSpectra(const vector<ISpectrum*> &spectra) {
+void SpectralCluster::removeSpectra( vector<ISpectrum*> &spectra) {
     if (!isRemovedSupported())
         throw ("Remove not supported");
     if (spectra.size() > 0){
-        vector<ISpectrum*> in = spectra;
         vector<ISpectrum*>::iterator iter;
-        for(iter = in.begin();iter != in.end();iter++){
+        for(iter = spectra.begin();iter != spectra.end();++iter){
             removeSpectra(*iter);
         }
     }
@@ -152,7 +149,7 @@ void SpectralCluster::removeSpectra(const vector<ISpectrum*> &spectra) {
 
 void SpectralCluster::removeSpectra(ISpectrum *removed) {
     vector<ISpectrum*>::iterator remove;
-    for(remove=clusteredSpectra.begin();remove != clusteredSpectra.end();remove++){
+    for(remove=clusteredSpectra.begin();remove != clusteredSpectra.end();++remove){
         vector<Peak> removePeaks = (*remove)->getPeaks();
         vector<Peak> removedPeaks = removed->getPeaks();
         if(removePeaks == removedPeaks && (*remove)->getPrecursorMz() == removed->getPrecursorMz()){
@@ -160,8 +157,8 @@ void SpectralCluster::removeSpectra(ISpectrum *removed) {
             if(iterator1 != spectralIds.end()){
                 spectralIds.erase(iterator1);
             }
-            clusteredSpectra.erase(remove);
             pointer_pool->remove(*remove);
+            clusteredSpectra.erase(remove);
         }
     }
 
@@ -179,7 +176,7 @@ void SpectralCluster::removeSpectrumHolderListener(SpectrumHolderListener *remov
     list<SpectrumHolderListener*>::iterator iter(find(spectrumHolderListeners.begin(),spectrumHolderListeners.end(),removed));
     if(iter != spectrumHolderListeners.end()){
         spectrumHolderListeners.push_back(removed);
-        pointer_pool->add(removed);
+        pointer_pool->remove(removed);
     }
 }
 

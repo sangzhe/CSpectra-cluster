@@ -12,7 +12,7 @@ class Spectrum;
 class IQualityScorer{
 public:
     IQualityScorer(){};
-    virtual double calculateQualityScore(const ISpectrum& spectrum) = 0;
+    virtual double calculateQualityScore( ISpectrum& spectrum) = 0;
 
 };
 #endif //CSPECTRA_CLUSTER_IQUALITYSCORER_H

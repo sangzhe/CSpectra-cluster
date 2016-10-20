@@ -75,9 +75,9 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string line) {
 
                 ISpectrum *Filterd = Defaults::doDefaultPeakFilter(internalFilterd);
 //                pointer_pool->add(Filterd);   To be added in addSpectra
-                IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
+                IConsensusSpectrumBuilder* ConsensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
                 string Id = Filterd->getId();
-                ICluster *ret = new SpectralCluster(Id,consensusSpectrumBuilder);
+                ICluster *ret = new SpectralCluster(Id,ConsensusSpectrumBuilder);
                 pointer_pool->add(ret);
                 ret->addSpectra(Filterd);
 
@@ -119,8 +119,8 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string line) {
             if(line.substr(0,END_CLUSTER.length()) == END_CLUSTER){
                 ICluster* ret;
                 if(storesPeakLists){
-                    IConsensusSpectrumBuilder* consensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
-                    ret = new SpectralCluster(currentId,consensusSpectrumBuilder);
+                    IConsensusSpectrumBuilder* ConsensusSpectrumBuilder = Defaults::getDefaultConsensusSpectrumBuilder();
+                    ret = new SpectralCluster(currentId,ConsensusSpectrumBuilder);
                     pointer_pool->add(ret);
                     ret->addSpectra(spectra);
                 }
@@ -130,10 +130,9 @@ ICluster* ParserUtilities::readSpectralCluster(stringstream& ss, string line) {
                 }
 
                 unordered_set<string>::iterator iter;
-                int i =0;
                 unordered_set<string> keys = properties.getKeySet();
                 if(keys.size() != 0) {
-                    for (iter = keys.begin(); iter != keys.end(); iter++) {
+                    for (iter = keys.begin(); iter != keys.end(); ++iter) {
                         string name = *iter;
                         ret->setProperty(name, properties.getProperty(name));
                     }
@@ -484,7 +483,7 @@ double ParserUtilities::parsePepMassLine(string& pLine) {
 string ParserUtilities::buildMGFTitle(string line){
     size_t sequenceIndex = line.find(sequenceTitle);
     size_t spectrumIdIndex = line.find(titleAndId);
-    int len = sequenceIndex - titleAndId.length();
+    size_t len = sequenceIndex - titleAndId.length();
 
     if(sequenceIndex != string::npos){
         if (spectrumIdIndex!=string::npos) return line.substr(spectrumIdIndex+titleAndId.length(),len);
@@ -512,7 +511,7 @@ bool ParserUtilities::storesPeakListFromClusterLine(string& line) {
     IOUtilities::split(line," ",split);
     for(int index=0;index < split.size();index++){
         if(split[index].substr(0,containPeakList.length()) == containPeakList){
-            return (split[index].substr(containPeakList.length()) != "" ? true:false);
+            return (split[index].substr(containPeakList.length()) != "");
         }
     }
    throw("no ContainsPeaklist= part in ",line);
