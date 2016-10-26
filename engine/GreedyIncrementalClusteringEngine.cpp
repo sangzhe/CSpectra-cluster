@@ -70,7 +70,6 @@ void GreedyIncrementalClusteringEngine::setCurrentMZ(const double &pCurrentMZ) {
 vector<ICluster*> GreedyIncrementalClusteringEngine::getClusters() {
     vector<ICluster*> ret(clusters.begin(),clusters.end());
     sort(ret.begin(),ret.end(),ICluster::cmp);
-    pointer_pool->add(ret);
     return ret;
 }
 

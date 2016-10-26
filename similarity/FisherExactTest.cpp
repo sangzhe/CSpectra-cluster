@@ -25,12 +25,14 @@ double FisherExactTest::calculateSimilarityProbablity(int numberOfSharedPeaks, i
     if (numberOfBins < 1) {
         return 1;
     }
-
     boost::math::hypergeometric_distribution<double> hyperGeometric(numberOfPeaksFromSpec1,numberOfPeaksFromSpec2,numberOfBins);
-
-    double hgtScore = boost::math::pdf<double>(hyperGeometric,numberOfSharedPeaks);
-
-    if (hgtScore == 0) {
+    double hgtScore;
+    try {
+         hgtScore = boost::math::pdf<double>(hyperGeometric, numberOfSharedPeaks);
+    }catch(exception){
+        hgtScore = 0.0;
+    }
+    if (hgtScore == 0.0) {
         return 1;
     }
 

@@ -33,10 +33,11 @@ GreedySpectralCluster::GreedySpectralCluster(ICluster* cluster) {
         pointer_pool->remove(clusteredSpectra);
         clusteredSpectra.clear();
         this->clusteredSpectra= existingCluster.getClusteredSpectra(); // peak lists are already removed
-        pointer_pool->add(clusteredSpectra);
+//        pointer_pool->add(clusteredSpectra);
         this->spectraIds.clear();
 
         for(ISpectrum *spectrum:clusteredSpectra){
+            pointer_pool->add(spectrum);
             spectraIds.push_back(spectrum->getId());
         }
     }else{
@@ -233,11 +234,14 @@ void GreedySpectralCluster::addCluster( ICluster *cluster) {
         // add the spectra and their ids
         clusteredSpectra.insert(clusteredSpectra.end(),cluster->getClusteredSpectra().begin(),cluster->getClusteredSpectra().end());
 
-        pointer_pool->add(cluster->getClusteredSpectra());
+//        pointer_pool->add(cluster->getClusteredSpectra());
 
         // save the spectra ids
-        for (ISpectrum *spectrum : cluster->getClusteredSpectra())
+        for (ISpectrum *spectrum : cluster->getClusteredSpectra()) {
+            pointer_pool->add(spectrum);
             spectraIds.push_back(spectrum->getId());
+
+        }
 
         notifySpectrumHolderListeners(true, cluster->getClusteredSpectra());   // tell other interested parties  true says this is an add
     }

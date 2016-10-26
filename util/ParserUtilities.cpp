@@ -203,7 +203,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string line) {
                 getline(ss,line);
                 continue;
             }
-            if (BEGIN_IONS == line){
+            if (BEGIN_IONS == boost::trim_right_copy_if(line,is_any_of("\r"))){
                 getline(ss,line);
                 break;
             }
@@ -235,8 +235,8 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string line) {
             }
 
             if(line.find("=") != string::npos){
+                line = boost::trim_right_copy_if(line,is_any_of("\r"));
                 if(line.substr(0,titleTile.length()) == titleTile){
-                    titleLine = line;
                     title = buildMGFTitle(line);
                     size_t index = line.find(sequenceTitle);
                     if(index != string::npos){
@@ -308,7 +308,7 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string line) {
 
              //   throw new runtime_error("Cannot parse MGF line"+line);
             }
-            if (END_IONS == line ){
+            if (END_IONS == boost::trim_right_copy_if(line,is_any_of("\r")) ){
                 double mz = massToChargeCalledPpMass;
 
                 string peptide = sequence;
@@ -346,11 +346,14 @@ ISpectrum* ParserUtilities::readMGFScan(stringstream& ss, string line) {
                     spectrum_filtered->setProperty(KnownProperties::PROTEIN_KEY, protein);
                 if (modifications != "")
                     spectrum_filtered->setProperty(KnownProperties::MODIFICATION_KEY, modifications);
-                if (titleLine != "")
+                if (titleLine != ""){}
 //                    handleTitleLine(spectrum, titleLine);
+
                 return spectrum_filtered;
             }
             else {
+
+                line = boost::trim_right_copy_if(line,is_any_of("\r"));
                 IOUtilities::replace(line,"\t", " ");
                 vector<string> items;
                 IOUtilities::split(line," ",items);

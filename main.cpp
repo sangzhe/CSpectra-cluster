@@ -5,6 +5,8 @@
 #include "util/Function/peak/FractionTICPeakFunction.h"
 #include "util/ClusterUtilities.h"
 
+
+
 int main() {
 
 
@@ -14,12 +16,14 @@ int main() {
 //    vector<ICluster *> a = ParserUtilities::readSpectralCluster(test_cluster);
 //    cout << "end" << endl;
 
-    ifstream fin("/Users/sangzhe/ClionProjects/CSpectra-cluster/spectra_400.0_4.0.mgf");
-    ifstream fin2("/Users/sangzhe/ClionProjects/CSpectra-cluster/cluster_spec_4776.mgf");
-    ifstream fin3("/Users/sangzhe/ClionProjects/CSpectra-cluster/small.mgf");
+//    ifstream fin("/Users/sangzhe/ClionProjects/CSpectra-cluster/spectra_400.0_4.0.mgf");
+//    ifstream fin2("/Users/sangzhe/ClionProjects/CSpectra-cluster/cluster_spec_4776.mgf");
+//    ifstream fin3("/Users/sangzhe/ClionProjects/CSpectra-cluster/small.mgf");
+
+    ifstream fin4("/Users/sangzhe/795.mgf");
 
     stringstream ss;
-    ss << fin2.rdbuf();
+    ss << fin4.rdbuf();
     PointerPool* pointer_pool = PoolFactory::getInstance();
 
 
@@ -29,6 +33,7 @@ int main() {
     vector<ISpectrum*> testSpectra = ParserUtilities::readMGFScan(ss);
 
     time_2 = time(NULL);
+    cout << "testSpectra:"<<testSpectra.size() <<endl;
 
     cout << time_2 - time_1 <<endl;
 
@@ -43,8 +48,7 @@ int main() {
     GreedyIncrementalClusteringEngine *secondEngine = new GreedyIncrementalClusteringEngine(new CombinedFisherIntensityTest(0.5F),4, 0.95, new FractionTICPeakFunction(0.5F, 20));
     time_3 = time(NULL);
 
-    for (vector<ISpectrum*>::iterator i = testSpectra.begin() ; i != testSpectra.end(); ++i) {
-        ISpectrum *s = *i;
+    for (ISpectrum* s:testSpectra) {
 //        ICluster *spectrumCluster1 = ClusterUtilities::asCluster(s);
 //
 //        // use engine
@@ -66,6 +70,7 @@ int main() {
 //        }
     }
     time_4 = time(NULL);
+    cout<< "clusters:"<<secondEngine->getClusters().size() << endl;
 
     cout<< time_4 - time_3 << "s"<< endl;
 

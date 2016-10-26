@@ -51,7 +51,6 @@ void IncrementalClusteringEngine::setCurrentMZ(const double pCurrentMZ) {
 vector<ICluster*> IncrementalClusteringEngine::getClusters() {
     vector<ICluster*> ret(clusters);
     sort(ret.begin(),ret.end(),ICluster::cmp);
-    pointer_pool->add(ret);
 }
 
 void IncrementalClusteringEngine::addClusters(ICluster *cluster) {
